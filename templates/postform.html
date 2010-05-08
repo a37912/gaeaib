@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load captcha %}
+
+{% block content %}
+{% block postform %}
+<div class="postarea"> 
+<form method="post" action="post/" enctype="multipart/form-data">
+  <table class="postform">
+    <tbody>
+      {{ post_form.as_table }}
+    </tbody>
+  </table>
+
+  {% if show_captcha %} <center>{% captcha %}</center> {% endif %}
+  <input type="submit"/>
+</form>
+</div>
+
+<hr>
+{% endblock %}
+
+{% block threads %}{% endblock %}
+{% endblock %}
+

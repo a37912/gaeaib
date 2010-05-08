@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load rainbow %}
+{% block title %}index{% endblock %}
+{% block content %}
+<h2>cancer goes here</h2>
+{% for board in boards %}
+  <a href="{{board}}">{{board}}</a> <br/>
+{% endfor %}
+{% endblock %}

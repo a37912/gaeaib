@@ -1,0 +1,30 @@
+{% extends "postform.html" %}
+{% load rainbow %}
+{% block title %}thread{% endblock %}
+{% block threads %}
+
+<h2>Thread {{ thread }}</h2>
+
+<hr/>
+
+{% for post in posts %}
+<div>
+  <p>{{post.post}}</a></p>
+  <p>{{post.rainbow|rainbow}}</p>
+  {% if post.sage %}<b>SAGE</b><br/>{% endif %}
+  {% if post.image %}
+  <p><a href="/image/{{post.image}}">
+    <img src="/image/thumb_{{post.image}}"/></a>
+  </p>
+  {% endif %}
+  {{ post.name }} : 
+  <p>
+  {{ post.text }}
+  </p>
+</div>
+
+<hr/>
+
+{% endfor %}
+
+{% endblock %}
