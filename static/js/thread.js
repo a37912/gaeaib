@@ -14,6 +14,11 @@ $(document).ready(function() {
       html = html.replace(/&gt;&gt;([0-9]+)/g, 
         '<a href="#p$1">&gt;&gt;$1</a>'
       );
+
+      html = html.replace(/(http:\/\/[^ ]*)/g, 
+        '<a href="http://hiderefer.com/?$1">$1</a>' 
+      );
+
       html = html.replace(/\*\*([^\*_]+)\*\*/g, "<b>$1</b>");
       html = html.replace(/__([^\*_]+)__/g, "<b>$1</b>");
 
