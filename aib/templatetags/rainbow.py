@@ -5,7 +5,7 @@ import logging
 
 register = template.Library()
 
-TEMPLATE='<span class="rainbowid"><span style="background: none repeat scroll 0% 0%rgb(%d, %d, %d);">&nbsp;&nbsp;</span>'
+TEMPLATE='<span style="background: none repeat scroll 0% 0%rgb(%d, %d, %d);">&nbsp;&nbsp;</span>'
 
 ## Tag flter: renders color codes to html
 @register.filter(name='rainbow')
