@@ -1,9 +1,16 @@
 $(document).ready(function() {
   $("a.reflink").each(
     function() {
-      $(this).click( function() {
+      $(this).click( function(e) {
         var postid = $(this).attr("postid");
-        $("textarea#id_text").append(">>"+postid+" ");
+        var textarea = $("textarea#id_text").get(0);
+        var text = ">>"+postid+" ";
+
+        textarea.value+=text;
+        textarea.focus();
+
+        e.preventDefault();
+
       });
     }
   ); // each
