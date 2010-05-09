@@ -12,20 +12,32 @@
 <hr/>
 
 {% for post in posts %}
-<div>
-  <p><a class="reflink" name="p{{post.post}}" href="#p{{post.post}}" postid="{{post.post}}" >{{post.post}}</a></p>
-  <p>{{post.rainbow|rainbow}}</p>
-  {% if post.sage %}<b>SAGE</b><br/>{% endif %}
-  {% if post.image %}
-  <p><a href="/image/{{post.image}}">
-    <img src="/image/thumb_{{post.image}}"/></a>
-  </p>
-  {% endif %}
-  {{ post.name }} : 
-  <p class="postdata">{{ post.text }}</p>
-</div>
-
-<hr/>
+<table>
+  <tbody>
+    <tr>
+      <td class="doubledash">&gt;&gt;</td>
+      <td class="reply">
+        <label>{{ post.name }} {{post.rainbow|rainbow}}</label>
+        {% if post.sage %}<label><b>SAGE</b><br/></label>{% endif %}
+        <span class="reflink">
+          <a class="reflink" name="p{{post.post}}" 
+            href="#p{{post.post}}" postid="{{post.post}}" 
+          >#{{post.post}}</a>
+        </span>
+        <br/>
+        {% if post.image %}
+        <span class="filesize">Image: unknow kb 0x0</span>
+        <span>------------------------------------</span>
+        <br/>
+        <a href="/image/{{post.image}}" target="_blank">
+          <img class="thumb" src="/image/thumb_{{post.image}}"/>
+        </a>
+        {% endif %}
+        <blockquote class="postdata">{{ post.text }}</blockquote>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 {% endfor %}
 
