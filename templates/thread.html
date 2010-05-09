@@ -1,6 +1,10 @@
 {% extends "postform.html" %}
 {% load rainbow %}
 {% block title %}thread{% endblock %}
+{% block head %}
+<script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>         
+<script type="text/javascript" src="/static/js/thread.js"></script>
+{% endblock %}
 {% block threads %}
 
 <h2>Thread {{ thread }}</h2>
@@ -9,7 +13,7 @@
 
 {% for post in posts %}
 <div>
-  <p>{{post.post}}</a></p>
+  <p><a class="reflink" href="#p{{post.post}}" postid="{{post.post}}" >{{post.post}}</a></p>
   <p>{{post.rainbow|rainbow}}</p>
   {% if post.sage %}<b>SAGE</b><br/>{% endif %}
   {% if post.image %}
