@@ -124,3 +124,12 @@ a:hover {
 .reflinkpreview {
 	background-color: #F0E0D6 !important;
 }
+
+span.spoiler {
+    background: #F0D0B6;
+      color: #F0D0B6;
+}
+span.spoiler:hover {
+        background: #F0D0B6;
+          color: #800000;
+}

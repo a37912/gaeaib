@@ -33,6 +33,7 @@ $(document).ready(function() {
       html = html.replace(/_([^\*_]+)_/g, "<i>$1</i>");
 
       html = html.replace(/    (.*)/g, "<pre>$1</pre>");
+      html = html.replace(/\%\%(.*)\%\%/g, '<span class="spoiler">$1</pre>');
 
       html = html.replace(/^&gt;([^&].*)/mg, '<p class="unkfunc">&gt;$1</p>');
 
