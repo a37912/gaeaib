@@ -7,27 +7,64 @@
 {% endblock %}
 {% block threads %}
 
-<h2>Thread {{ thread }}</h2>
+{% for thread in threads %}
+<h2>Thread {{ thread.id }}</h2>
 
 <hr/>
 
-{% for post in posts %}
+<div class="oppost">
+{% if thread.op.image %}
+
+<span class="filesize">Image: unknow kb 0x0</span>
+
+<span class="reflink">
+  <a class="reflink" name="p{{thread.op.post}}" 
+    href="#p{{post.post}}" postid="{{thread.op.post}}" 
+  >#{{thread.op.post}}</a>
+</span>
+
+
+<br/>
+<a href="/image/{{thread.op.image}}" target="_blank">
+  <img class="thumb" src="/image/thumb_{{thread.op.image}}"/>
+</a>
+{% endif %}
+
+<label>
+  <span class="postername">{{ thread.op.name }}</span>
+  {{thread.op.rainbow|rainbow}}
+</label>
+
+{% if reply %}
+  <a href="{{ thread.id }}">Reply</a>
+{% endif %}
+
+<br/>
+<blockquote class="postdata">{{ thread.op.text }}</blockquote>
+</div>
+
+{% if thread.skipmsg %}
+<span class="omittedposts">{{ thread.skipmsg }}</span>
+{% endif %}
+
+{% for post in thread.posts %}
 <table>
   <tbody>
     <tr>
       <td class="doubledash">&gt;&gt;</td>
       <td class="reply">
-        <label>{{ post.name }} {{post.rainbow|rainbow}}</label>
+        <label>
+          <span class="commentpostername">{{ post.name }}</span>
+          {{post.rainbow|rainbow}}
+        </label>
         {% if post.sage %}<label><b>SAGE</b><br/></label>{% endif %}
         <span class="reflink">
           <a class="reflink" name="p{{post.post}}" 
             href="#p{{post.post}}" postid="{{post.post}}" 
           >#{{post.post}}</a>
         </span>
-        <br/>
         {% if post.image %}
         <span class="filesize">Image: unknow kb 0x0</span>
-        <span>------------------------------------</span>
         <br/>
         <a href="/image/{{post.image}}" target="_blank">
           <img class="thumb" src="/image/thumb_{{post.image}}"/>
@@ -39,6 +76,7 @@
   </tbody>
 </table>
 
+{% endfor %}
 {% endfor %}
 
 {% endblock %}

@@ -28,6 +28,7 @@ class Image(db.Model):
 # temporary here is list of boards
 boardlist = ['a', 'b', 'mod']
 THREAD_PER_PAGE = 5
+REPLIES_MAIN = 5
 
 ## View: Main page - board list
 #
@@ -55,12 +56,27 @@ def get_threads(board):
 
   ret = []
   for thread in threads:
-    posts = data.get(str(thread))
+    content = data.get(str(thread))
 
-    if not posts:
+    if not content:
       continue
 
-    ret.append( posts[0] )
+    if len(content) > REPLIES_MAIN+1:
+      end = content[-REPLIES_MAIN:]
+      omitt = len(content) - REPLIES_MAIN - 1
+    else:
+      end = content[1:]
+      omitt = 0
+      
+
+    thread_data = {
+        'op' : content[0],
+        'posts' : end,
+        'id' : thread,
+        "skipmsg" : "%d omitted" % omitt if omitt else None,
+      }
+
+    ret.append( thread_data )
 
   return ret
 
@@ -74,10 +90,11 @@ def board(request, board):
   data['board_name'] = board # board name
   data['threads'] = get_threads(board) # last threads
   data['show_captcha'] = True
+  data['reply'] = True
 
   logging.info("board %s %s" % (board, str(memcache.get("thread"))))
 
-  return render("board.html", data)
+  return render("thread.html", data)
 
 ## View: saves new post
 #
@@ -279,10 +296,15 @@ def thread(request, board, thread):
   if not content:
     raise Http404
 
+  thread_data = {
+    'op' : content[0],
+    'posts' : content[1:],
+    'id' : thread,
+  }
+
   data = {}
-  data['posts'] = content
+  data['threads'] = (thread_data,)
   data['post_form'] = PostForm()
-  data['thread'] = thread
 
   return render("thread.html", data)
 
