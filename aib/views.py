@@ -15,9 +15,9 @@ import recaptcha
 # New post or thread form
 class PostForm(forms.Form):
 
-  name = forms.CharField()
+  name = forms.CharField(required=False)
   sage = forms.BooleanField(required=False)
-  text = forms.CharField(widget=forms.Textarea)
+  text = forms.CharField(widget=forms.Textarea, required=False)
   image = forms.FileField(required=False) # FIXME: gae vs pil
 
 # TODO: move out
@@ -122,7 +122,7 @@ def post(request, board, thread):
     )
   else:
     # FIXME: show nice error page
-    return render("board.html", {"new_thread":form})
+    return redirect("/%s" % board)
 
   # TODO: redirect to thread or to board
   return redirect("/%s" % board)
@@ -179,9 +179,16 @@ def save_post(data, board, thread, ip):
   if not new and not posts:
     raise Http404
 
+  # FIXME: move to validation
+  if not (data.get("image") or data.get("text")):
+    raise Http404
+
   save_image(data)
 
   data['rainbow'] = make_rainbow(ip, board, thread)
+
+  # FIXME: move to field
+  data['name'] = data.get("name") or "Anonymous"
 
   if new:
     newpost = thread
