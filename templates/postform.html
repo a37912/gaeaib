@@ -4,10 +4,18 @@
 {% block content %}
 {% block postform %}
 <div class="postarea"> 
-<form method="post" action="post/" enctype="multipart/form-data">
+<form method="post" action="{{upload_url}}" enctype="multipart/form-data">
   <table class="postform">
     <tbody>
       {{ post_form.as_table }}
+      <tr>
+        <th>
+          <label for="id_image">Image: </label>
+        </th>
+        <td>
+          <input type="file" name="image"/>
+        </td>
+      </tr>
     </tbody>
   </table>
 

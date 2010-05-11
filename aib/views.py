@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response as render, redirect
 from django.http import HttpResponse, Http404
 from django import forms
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from google.appengine.api import memcache
 
@@ -10,6 +11,11 @@ from md5 import md5
 from google.appengine.ext import db
 from google.appengine.api import images
 import recaptcha
+from django_blobstore import get_uploads, send_blob
+from google.appengine.ext import blobstore
+
+from traceback import format_exc
+
 
 # TODO: move out
 # New post or thread form
@@ -18,12 +24,11 @@ class PostForm(forms.Form):
   name = forms.CharField(required=False)
   sage = forms.BooleanField(required=False)
   text = forms.CharField(widget=forms.Textarea, required=False)
-  image = forms.FileField(required=False) # FIXME: gae vs pil
 
 # TODO: move out
-class Image(db.Model):
+class Thumb(db.Model):
   data = db.BlobProperty()
-  full_hash = db.StringProperty()
+  full = blobstore.BlobReferenceProperty()
 
 # temporary here is list of boards
 boardlist = ['a', 'b', 'mod']
@@ -91,6 +96,9 @@ def board(request, board):
   data['threads'] = get_threads(board) # last threads
   data['show_captcha'] = True
   data['reply'] = True
+  data['upload_url'] = blobstore.create_upload_url(
+      "/%s/post/" % board,
+  )
 
   logging.info("board %s %s" % (board, str(memcache.get("thread"))))
 
@@ -101,6 +109,7 @@ def board(request, board):
 # @param board - string board name
 # @param thread - thread id where to post or "new"
 def post(request, board, thread):
+  logging.info("post called")
 
   # TODO: redirect to rickroll
   if request.method != 'POST':
@@ -117,6 +126,15 @@ def post(request, board, thread):
 
     # if ok, save
     logging.info("data valid")
+    try:
+      save_image(request, form.cleaned_data)
+    except:
+      logging.error(
+         format_exc() 
+      )
+    finally:
+      logging.info("after save image")
+
     save_post(form.cleaned_data, board, thread, 
         request.META.get("REMOTE_ADDR")
     )
@@ -183,8 +201,6 @@ def save_post(data, board, thread, ip):
   if not (data.get("image") or data.get("text")):
     raise Http404
 
-  save_image(data)
-
   data['rainbow'] = make_rainbow(ip, board, thread)
 
   # FIXME: move to field
@@ -244,51 +260,53 @@ def thread_clean(board):
 
   memcache.set("threadlist-%s" % board, threads[:THREAD_PER_PAGE-1])
 
+THUMB_WIDTH = 250
+THUMB_HEIGH = 250
+
 ## Helper: saves image to db
 #
 # @param data - post data
-def save_image(data):
+def save_image(request, data):
 
   # check, if there is image
-  image = data.get("image")
-  logging.info("data: %s, image %s" % (str(data), str(image)))
+  image = get_uploads(request, field_name="image")
   if not image:
+    logging.info("no image")
     return
 
-  # read data
-  image = image.read()
+  [image] = image
 
-  # make hash
-  image_hash = md5(image).hexdigest()
-
-  # save main image to db
-  image_db = Image(data=image, full_hash=image_hash, key_name=image_hash)
-  image_db.put()
-
-  # save main image to cache
-  memcache.set("image_%s" % image_hash, image)
-
-  logging.info("saved %s" % str(image_db.key().name()))
+  # zomg
+  full_data = blobstore.fetch_data(image.key(), 0, 50000) 
+  full_info = images.Image(image_data=full_data)
+  logging.info("image size: %d x %d" %( full_info.width, full_info.height))
 
   # resize
-  full = images.Image(image)
-  full.resize(width=250, height=250)
-  full.im_feeling_lucky()
-  thumb = full.execute_transforms(output_encoding=images.JPEG)
+  full = images.Image(blob_key=str(image.key()))
 
-  # save thumb to db
-  thumb_db = Image(data=thumb, 
-      full_hash=image_hash,
-      key_name="thumb_%s" % image_hash)
-  thumb_db.put()
+  if full_info.width > THUMB_WIDTH or full_info.height > THUMB_HEIGH:
+    full.resize(width=250, height=250)
+    full.im_feeling_lucky()
+    thumb = full.execute_transforms(output_encoding=images.JPEG)
 
-  # save thumb to cache
-  memcache.set("image_thumb_%s" % image_hash, thumb)
+    # save thumb to db
+    thumb_db = Thumb(data=thumb, full=image,)
+    key = thumb_db.put()
 
-  logging.info("saved %s" % str(thumb_db.key().name()))
+    # format addr
+    thumb_addr = "thumb/" + str(key)
+  else:
+    thumb_addr = "image/" + str(image.key())
+
 
   # replace image with hash
-  data['image'] = image_hash
+  data['image'] = {
+      "key" : str(image.key()),
+      "content_type" : image.content_type,
+      "size" : image.size,
+      "thumb" : thumb_addr,
+      "xy" : "%dx%d" %(full_info.width, full_info.height),
+  }
 
 
 ## View: show all posts in thread
@@ -312,6 +330,9 @@ def thread(request, board, thread):
   data = {}
   data['threads'] = (thread_data,)
   data['post_form'] = PostForm()
+  data['upload_url'] = blobstore.create_upload_url(
+      "/%s/%d/post/" % (board, thread),
+  )
 
   return render("thread.html", data)
 
@@ -319,25 +340,20 @@ def thread(request, board, thread):
 ## View load image
 #
 # @param image_hash - requested image hash
-def image(request, image_hash):
+def image(request, image_key):
+  blobinfo = blobstore.BlobInfo(blobstore.BlobKey(image_key))
 
-  logging.info("load %s" % image_hash)
-
-  data = memcache.get("image_%s" % image_hash)
-
-  if not data:
-    logging.info("cache miss")
+  logging.info("requested %s got %s" % (
+    str(image_key),
+    str(blobinfo)
+    )
+  )
   
-    image = Image.get_by_key_name(image_hash)
+  return send_blob(request, blobinfo)
 
-    if not image:
-      raise Http404
+def thumb(request, thumb_key):
+  thumb = db.get(db.Key(thumb_key))
 
-    data = image.data
-    memcache.set("image_%s" % image_hash, data)
-  else:
-    logging.info("cache hit")
-
-  return HttpResponse(data, mimetype="image/jpeg")
+  return HttpResponse(thumb.data, mimetype="image")
 
 

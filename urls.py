@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     (r'^(?P<board>\w+)/(?P<thread>\d+)/$', 'aib.views.thread'),
     (r'^(?P<board>\w+)/(?P<thread>\d+)/post/$', 'aib.views.post'),
 
-    (r'^image/(?P<image_hash>(thumb_|)[0-9a-f]{32})', 'aib.views.image'),
+    (r'^image/(?P<image_key>[^/]+)/$', 'aib.views.image'),
+    (r'^thumb/(?P<thumb_key>[^/]+)/$', 'aib.views.thumb'),
 
 )

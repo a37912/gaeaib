@@ -15,7 +15,8 @@
 <div class="oppost">
 {% if thread.op.image %}
 
-<span class="filesize">Image: unknow kb 0x0</span>
+<span class="filesize">Image {{thread.op.image.content_type}}: 
+  {{ thread.op.image.size }} {{ thread.op.image.xy }}</span>
 
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
@@ -25,8 +26,8 @@
 
 
 <br/>
-<a href="/image/{{thread.op.image}}" target="_blank">
-  <img class="thumb" src="/image/thumb_{{thread.op.image}}"/>
+<a href="/image/{{thread.op.image.key}}" target="_blank">
+  <img class="thumb" src="/{{thread.op.image.thumb}}"/>
 </a>
 {% endif %}
 
@@ -64,11 +65,12 @@
           >#{{post.post}}</a>
         </span>
         {% if post.image %}
-        <span class="filesize">Image: unknow kb 0x0</span>
+  <span class="filesize">Image {{post.image.content_type}}: 
+  {{ post.image.size }} {{ post.image.xy }}</span>
         <br/>
-        <a href="/image/{{post.image}}" target="_blank">
-          <img class="thumb" src="/image/thumb_{{post.image}}"/>
-        </a>
+<a href="/image/{{post.image.key}}" target="_blank">
+  <img class="thumb" src="/{{post.image.thumb}}"/>
+</a>
         {% endif %}
         <blockquote class="postdata">{{ post.text }}</blockquote>
       </td>
@@ -77,6 +79,8 @@
 </table>
 
 {% endfor %}
+<div style="clear: left"></div>
+<hr/>
 {% endfor %}
 
 {% endblock %}
