@@ -13,6 +13,3 @@ def rainbow(codes):
       lambda x,a:a+x,
       map( lambda color: TEMPLATE %tuple(color), codes)
   )
-
-environment = get_env()
-environment.filters['rainbow'] = rainbow

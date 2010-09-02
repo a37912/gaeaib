@@ -32,7 +32,8 @@
 
 <label>
   <span class="postername">{{ thread.op.name }}</span>
-  {{thread.op.rainbow|rainbow}}
+  {{thread.op.rainbow_html}}
+  {{thread.op.time}}
 </label>
 
 {% if reply %}
@@ -55,9 +56,10 @@
       <td class="reply">
         <label>
           <span class="commentpostername">{{ post.name }}</span>
-          {{post.rainbow|rainbow}}
+          {{post.rainbow_html}}
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
+        {{post.time}}
         <span class="reflink">
           <a class="reflink" name="p{{post.post}}" 
             href="#p{{post.post}}" postid="{{post.post}}" 

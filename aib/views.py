@@ -1,5 +1,6 @@
 import logging
 from md5 import md5
+from datetime import datetime
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -178,7 +179,9 @@ def save_post(data, board, thread, ip):
   if not (data.get("image") or data.get("text")):
     raise Http404
 
-  data['rainbow'] = make_rainbow(ip, board, thread)
+  rb = make_rainbow(ip, board, thread)
+  data['rainbow'] = rb
+  data['rainbow_html'] = rainbow.rainbow(rb)
 
   # FIXME: move to field
   data['name'] = data.get("name") or "Anonymous"
@@ -191,6 +194,9 @@ def save_post(data, board, thread, ip):
   # save thread and post number
   data['post'] = newpost
   data['thread'] = thread
+  now = datetime.now()
+  data['time'] = now.strftime("%Y-%m-%d, %H:%m")
+  data['timestamp'] = int(now.strftime("%s"))
 
   posts.append(data)
 
