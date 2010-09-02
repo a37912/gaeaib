@@ -1,9 +1,5 @@
 {% extends "postform.html" %}
 {% block title %}thread{% endblock %}
-{% block head %}
-<script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>         
-<script type="text/javascript" src="/static/js/thread.js"></script>
-{% endblock %}
 {% block threads %}
 
 {% for thread in threads %}
@@ -15,18 +11,18 @@
 {% if thread.op.image %}
 
 <span class="filesize">Image {{thread.op.image.content_type}}: 
-  {{ thread.op.image.size }} {{ thread.op.image.xy }}</span>
+  {{ thread.op.image.size }}</span>
 
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
-    href="#p{{post.post}}" postid="{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}" 
   >#{{thread.op.post}}</a>
 </span>
 
 
 <br/>
-<a href="/image/{{thread.op.image.key}}" target="_blank">
-  <img class="thumb" src="/{{thread.op.image.thumb}}"/>
+<a href="{{thread.op.image.full}}" target="_blank">
+  <img class="thumb" src="{{thread.op.image.thumb}}"/>
 </a>
 {% endif %}
 
@@ -67,10 +63,10 @@
         </span>
         {% if post.image %}
   <span class="filesize">Image {{post.image.content_type}}: 
-  {{ post.image.size }} {{ post.image.xy }}</span>
+  {{ post.image.size }}</span>
         <br/>
-<a href="/image/{{post.image.key}}" target="_blank">
-  <img class="thumb" src="/{{post.image.thumb}}"/>
+<a href="{{post.image.full}}" target="_blank">
+  <img class="thumb" src="{{post.image.thumb}}"/>
 </a>
         {% endif %}
         <blockquote class="postdata">{{ post.text }}</blockquote>

@@ -29,6 +29,27 @@ def get_rules():
       endpoint = "board",
       handler = "aib.views.Post"
     ),
+    Rule(
+      "/post_url",
+      endpoint = "posturl",
+      handler = "aib.views.PostUrl",
+    ),
+
+    Rule(
+      "/post_img",
+      endpoint = "postimg",
+      handler = "aib.views.PostImage",
+    ),
+    Rule(
+      "/post_img/<img>",
+      endpoint = "postimg",
+      handler = "aib.views.PostImage",
+    ),
+    Rule(
+      "/img/<img>",
+      endpoint = "img",
+      handler = "aib.views.ViewImage",
+    ),
 
 
   ]

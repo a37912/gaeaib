@@ -3,7 +3,7 @@
 {% block content %}
 {% block postform %}
 <div class="postarea"> 
-<form method="post" action="post/" enctype="multipart/form-data">
+<form method="post" action="post/" >
  <table class="postform"> 
     <tbody> 
       <tr>
@@ -23,11 +23,14 @@
           <label for="id_image">Image: </label> 
         </th> 
         <td> 
-          <input type="file" name="image"/> 
+          <input id="upload_img" type="file" name="image"/> 
+          <img id="view_img" style="display: none" src="" />
         </td> 
       </tr> 
     </tbody> 
   </table> 
+
+  <input type="hidden" id="upload_key" name="key"></input>
  
   <input type="submit"/>
 </form>
@@ -39,3 +42,48 @@
 {% block threads %}{% endblock %}
 {% endblock %}
 
+{% block scripts %}
+<script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>         
+<script type="text/javascript" src="/static/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/static/js/thread.js"></script>
+
+<script>
+  function upload_to(url) {
+    $.ajaxFileUpload(
+      {
+        url: url,
+        secureuri:false,
+        fileElementId:'upload_img',
+        dataType: 'json',
+        success: function (data, status) 
+        {
+          $("#upload_img").remove();
+          $("#upload_key").val(data.img);
+          var img = $("#view_img");
+          img.attr("src", "/img/"+data.img);
+          img.show();
+        },
+        error: function (data, status, e) 
+        {
+          alert(data);
+          alert(status + " err " + e);
+        }
+      }
+    )
+  }
+
+  $("#upload_img").change(
+  function() {
+    $.ajax(
+      {
+        url: "/post_url",
+        success: function(data) {
+          upload_to(data)
+        }
+      }
+    )
+  }
+  )
+</script>
+
+{% endblock %}

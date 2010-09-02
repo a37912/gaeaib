@@ -7,11 +7,12 @@ from google.appengine.ext import db
 from google.appengine.api import images
 from google.appengine.ext import blobstore
 
-from tipfy import RequestHandler, Response, redirect
+from tipfy import RequestHandler, redirect, Response, NotFound
 from tipfy.ext.jinja2 import render_response
+from tipfy.ext.blobstore import BlobstoreDownloadMixin, BlobstoreUploadMixin
 
 from wtforms import Form
-from wtforms.fields import TextField
+from wtforms.fields import TextField, BooleanField
 
 from traceback import format_exc
 
@@ -24,8 +25,10 @@ import rainbow
 class PostForm(Form):
 
   name = TextField()
-  sage = TextField()
+  sage = BooleanField()
   text = TextField()
+  key = TextField()
+
 
 # temporary here is list of boards
 boardlist = ['a', 'b', 'mod']
@@ -117,7 +120,6 @@ class Post(RequestHandler):
       # if ok, save
       logging.info("data valid %r" %( form.data,))
       try:
-        #save_image(request, form.cleaned_data)
         save_post(form.data, board, thread, ip)
       except:
         logging.error(
@@ -172,12 +174,7 @@ def save_post(data, board, thread, ip):
     posts = []
 
   if not new and not posts:
-    raise Http404
-
-  # FIXME: move to validation
-  logging.info("data: %r" % data)
-  if not (data.get("image") or data.get("text")):
-    raise Http404
+    raise NotFound()
 
   rb = make_rainbow(ip, board, thread)
   data['rainbow'] = rb
@@ -197,6 +194,19 @@ def save_post(data, board, thread, ip):
   now = datetime.now()
   data['time'] = now.strftime("%Y-%m-%d, %H:%m")
   data['timestamp'] = int(now.strftime("%s"))
+
+  img_key = data.get("key")
+
+  if img_key:
+    blob_key = blobstore.BlobKey(img_key)
+    blob_info = blobstore.BlobInfo.get(blob_key)
+
+    data['image'] = {
+        "size" : blob_info.size,
+        "content_type" : blob_info.content_type,
+        "full" : images.get_serving_url(img_key),
+        "thumb" : images.get_serving_url(img_key, 200),
+    }
 
   posts.append(data)
 
@@ -242,54 +252,6 @@ def thread_clean(board):
   memcache.delete_multi(to_remove, key_prefix="posts-%s-" % board)
 
   memcache.set("threadlist-%s" % board, threads[:THREAD_PER_PAGE-1])
-
-THUMB_WIDTH = 250
-THUMB_HEIGH = 250
-
-## Helper: saves image to db
-#
-# @param data - post data
-def save_image(request, data):
-
-  # check, if there is image
-  image = get_uploads(request, field_name="image")
-  if not image:
-    logging.info("no image")
-    return
-
-  [image] = image
-
-  # zomg
-  full_data = blobstore.fetch_data(image.key(), 0, 50000) 
-  full_info = images.Image(image_data=full_data)
-  logging.info("image size: %d x %d" %( full_info.width, full_info.height))
-
-  # resize
-  full = images.Image(blob_key=str(image.key()))
-
-  if full_info.width > THUMB_WIDTH or full_info.height > THUMB_HEIGH:
-    full.resize(width=250, height=250)
-    full.im_feeling_lucky()
-    thumb = full.execute_transforms(output_encoding=images.JPEG)
-
-    # save thumb to db
-    thumb_db = Thumb(data=thumb, full=image,)
-    key = thumb_db.put()
-
-    # format addr
-    thumb_addr = "thumb/" + str(key)
-  else:
-    thumb_addr = "image/" + str(image.key())
-
-
-  # replace image with hash
-  data['image'] = {
-      "key" : str(image.key()),
-      "content_type" : image.content_type,
-      "size" : image.size,
-      "thumb" : thumb_addr,
-      "xy" : "%dx%d" %(full_info.width, full_info.height),
-  }
 
 
 ## View: show all posts in thread
@@ -339,4 +301,37 @@ def thumb(request, thumb_key):
 
   return HttpResponse(thumb.data, mimetype="image")
 
+class PostUrl(RequestHandler):
+  def get(self):
+    return Response( 
+      blobstore.create_upload_url("/post_img")
+    )
 
+
+class PostImage(RequestHandler, BlobstoreUploadMixin):
+  def get(self, img):
+    return Response( '{"img":"%s"}' % img )
+
+  def post(self):
+    upload_files = self.get_uploads('image')
+    blob_info = upload_files[0]
+
+    key = str(blob_info.key())
+
+    return Response(
+      status = 302,
+      headers = { "Location" : "/post_img/%s" % key }
+    )
+
+class ViewImage(RequestHandler, BlobstoreDownloadMixin):
+  def get(self, img):
+    key = blobstore.BlobKey(img)
+
+    url = images.get_serving_url(img, 48)
+    url = url.replace("0.0.0.0", self.request.host.split(":")[0])
+
+    return Response(
+      status = 302,
+      headers = { "Location" : str(url) },
+    )
+ 
