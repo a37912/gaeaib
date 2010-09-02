@@ -1,5 +1,5 @@
 application: gaeaib
-version: release-0-8
+version: release-0-9
 runtime: python
 api_version: 1
 
@@ -18,10 +18,6 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /_ah/queue/deferred                                                                                                               
-  script: $PYTHON_LIB/google/appengine/ext/deferred/deferred.py                                                                          
-  login: admin
-  
 - url: /stats.*                                                                                                                          
   script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
   

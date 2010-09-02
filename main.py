@@ -1,34 +1,20 @@
-import logging, os, sys
+# -*- coding: utf-8 -*-
 
-# Google App Engine imports.
-from google.appengine.ext.webapp import util
 
-# Force Django to reload its settings.
+import sys
 
-#
-# Remove the standard version of Django.
-for k in [k for k in sys.modules if k.startswith('django')]:
-      del sys.modules[k]
+if 'lib' not in sys.path:
+    sys.path[0:0] = ['lib', 'distlib', 'distlib.zip']
 
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+import config
+import tipfy
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+application = tipfy.make_wsgi_app(config.config)
 
-from django.conf import settings
-settings._target = None
-import django
-
-import django.core.handlers.wsgi
-import django.core.signals
-import django.db
-import django.dispatch.dispatcher
 
 def main():
-    # Create a Django application for WSGI.
-    application = django.core.handlers.wsgi.WSGIHandler()
-
-    # Run the WSGI CGI handler with that application.
-    util.run_wsgi_app(application)
+    # Run it!
+    tipfy.run_wsgi_app(application)
 
 if __name__ == '__main__':
     main()

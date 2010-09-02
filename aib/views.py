@@ -1,34 +1,30 @@
-from django.shortcuts import render_to_response as render, redirect
-from django.http import HttpResponse, Http404
-from django import forms
-from django.conf import settings
-from django.core.urlresolvers import reverse
-
-from google.appengine.api import memcache
-
 import logging
 from md5 import md5
+
+from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.api import images
-import recaptcha
-from django_blobstore import get_uploads, send_blob
 from google.appengine.ext import blobstore
 
+from tipfy import RequestHandler, Response, redirect
+from tipfy.ext.jinja2 import render_response
+
+from wtforms import Form
+from wtforms.fields import TextField
+
 from traceback import format_exc
+
+import recaptcha
+import rainbow
 
 
 # TODO: move out
 # New post or thread form
-class PostForm(forms.Form):
+class PostForm(Form):
 
-  name = forms.CharField(required=False)
-  sage = forms.BooleanField(required=False)
-  text = forms.CharField(widget=forms.Textarea, required=False)
-
-# TODO: move out
-class Thumb(db.Model):
-  data = db.BlobProperty()
-  full = blobstore.BlobReferenceProperty()
+  name = TextField()
+  sage = TextField()
+  text = TextField()
 
 # temporary here is list of boards
 boardlist = ['a', 'b', 'mod']
@@ -37,8 +33,9 @@ REPLIES_MAIN = 5
 
 ## View: Main page - board list
 #
-def index(request):
-  return render("index.html", {"boards" : boardlist})
+class Index(RequestHandler):
+  def get(self):
+    return render_response("index.html", boards = boardlist)
 
 ## Helper: functon to grab last thread list for board
 #
@@ -88,62 +85,59 @@ def get_threads(board):
 ## View: board page is a list of threads
 #
 # @param board - string board name
-def board(request, board):
+class Board(RequestHandler):
+  def get(self, board):
 
-  data = {}
-  data['post_form'] = PostForm() # new post form
-  data['board_name'] = board # board name
-  data['threads'] = get_threads(board) # last threads
-  data['show_captcha'] = True
-  data['reply'] = True
-  data['upload_url'] = blobstore.create_upload_url(
-      "/%s/post/" % board,
-  )
+    data = {}
+    data['post_form'] = PostForm() # new post form
+    data['board_name'] = board # board name
+    data['threads'] = get_threads(board) # last threads
+    data['show_captcha'] = True
+    data['reply'] = True
+    data['upload_url'] = blobstore.create_upload_url(
+        "/%s/post/" % board,
+    )
 
-  logging.info("board %s %s" % (board, str(memcache.get("thread"))))
+    logging.info("board %s %s" % (board, str(memcache.get("thread"))))
 
-  return render("thread.html", data)
+    return render_response("thread.html", **data)
 
 ## View: saves new post
 #
 # @param board - string board name
 # @param thread - thread id where to post or "new"
-def post(request, board, thread):
-  logging.info("post called")
+class Post(RequestHandler):
+  def post(self, board, thread):
+    logging.info("post called")
 
-  # TODO: redirect to rickroll
-  if request.method != 'POST':
+    # validate post form
+    form = PostForm(self.request.form)
+
+    if form.validate:
+      ip = self.request.remote_addr
+
+      #if thread == 'new':
+      #  check_captca(request.POST, ip)
+
+      # if ok, save
+      logging.info("data valid %r" %( form.data,))
+      try:
+        #save_image(request, form.cleaned_data)
+        save_post(form.data, board, thread, ip)
+      except:
+        logging.error(
+           format_exc() 
+        )
+        raise
+      finally:
+        logging.info("after save")
+
+    else:
+      # FIXME: show nice error page
+      return redirect("/%s" % board)
+
+    # TODO: redirect to thread or to board
     return redirect("/%s" % board)
-
-  # validate post form
-  form = PostForm(request.POST, request.FILES)
-
-  if form.is_valid():
-    ip = request.META.get("REMOTE_ADDR")
-
-    if thread == 'new':
-      check_captca(request.POST, ip)
-
-    # if ok, save
-    logging.info("data valid")
-    try:
-      save_image(request, form.cleaned_data)
-    except:
-      logging.error(
-         format_exc() 
-      )
-    finally:
-      logging.info("after save image")
-
-    save_post(form.cleaned_data, board, thread, 
-        request.META.get("REMOTE_ADDR")
-    )
-  else:
-    # FIXME: show nice error page
-    return redirect("/%s" % board)
-
-  # TODO: redirect to thread or to board
-  return redirect("/%s" % board)
 
 ## Helper: checks recaptcha answer
 def check_captca(post, ip):
@@ -153,14 +147,15 @@ def check_captca(post, ip):
   cResponse = recaptcha.submit( challenge, response, 
       settings.RECAPTCHA_PRV, ip
   )
+  """
   if not cResponse.is_valid:
     raise Http404
+  """
 
 ## Helper: calculates 5 colors for post
 def make_rainbow(ip, board, thread):
-  key = "%s-%s-%s-%s" %(
-      settings.SECRET_KEY, ip, board, thread
-  )
+  secret = 'YOBA'# FIXME
+  key = "%s-%s-%s-%s" %(secret, ip, board, thread)
 
   codes = [[]]
   for x in md5(key).digest()[:15]:
@@ -198,6 +193,7 @@ def save_post(data, board, thread, ip):
     raise Http404
 
   # FIXME: move to validation
+  logging.info("data: %r" % data)
   if not (data.get("image") or data.get("text")):
     raise Http404
 

@@ -1,27 +1,34 @@
 {% extends "base.html" %}
-{% load captcha %}
 
 {% block content %}
 {% block postform %}
 <div class="postarea"> 
 <form method="post" action="{{upload_url}}" enctype="multipart/form-data">
-  <table class="postform">
-    <tbody>
-      {{ post_form.as_table }}
+ <table class="postform"> 
+    <tbody> 
       <tr>
-        <th>
-          <label for="id_image">Image: </label>
-        </th>
-        <td>
-          <input type="file" name="image"/>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  {% if show_captcha %} 
-  <center class="captcha" style=""> {% captcha %}</center> 
-  {% endif %}
+        <th><label for="id_name">Name:</label></th>
+        <td><input type="text" name="name" id="id_name" /></td>
+      </tr> 
+      <tr>
+        <th><label for="id_sage">Sage:</label></th>
+        <td><input type="checkbox" name="sage" id="id_sage" /></td>
+      </tr> 
+      <tr>
+        <th><label for="id_text">Text:</label></th>
+        <td><textarea id="id_text" rows="10" cols="40" name="text"></textarea></td>
+      </tr> 
+      <tr> 
+        <th> 
+          <label for="id_image">Image: </label> 
+        </th> 
+        <td> 
+          <input type="file" name="image"/> 
+        </td> 
+      </tr> 
+    </tbody> 
+  </table> 
+ 
   <input type="submit"/>
 </form>
 </div>
