@@ -94,10 +94,7 @@ class Board(RequestHandler):
     data['threads'] = get_threads(board) # last threads
     data['show_captcha'] = True
     data['reply'] = True
-    data['upload_url'] = blobstore.create_upload_url(
-        "/%s/post/" % board,
-    )
-
+    
     logging.info("board %s %s" % (board, str(memcache.get("thread"))))
 
     return render_response("thread.html", **data)
@@ -115,9 +112,6 @@ class Post(RequestHandler):
 
     if form.validate:
       ip = self.request.remote_addr
-
-      #if thread == 'new':
-      #  check_captca(request.POST, ip)
 
       # if ok, save
       logging.info("data valid %r" %( form.data,))
@@ -138,19 +132,6 @@ class Post(RequestHandler):
 
     # TODO: redirect to thread or to board
     return redirect("/%s" % board)
-
-## Helper: checks recaptcha answer
-def check_captca(post, ip):
-  challenge = post.get('recaptcha_challenge_field')
-  response  = post.get('recaptcha_response_field')
-
-  cResponse = recaptcha.submit( challenge, response, 
-      settings.RECAPTCHA_PRV, ip
-  )
-  """
-  if not cResponse.is_valid:
-    raise Http404
-  """
 
 ## Helper: calculates 5 colors for post
 def make_rainbow(ip, board, thread):
@@ -309,28 +290,28 @@ def save_image(request, data):
 #
 # @param board - string board name
 # @Param thread - thread id where
-def thread(request, board, thread):
-  thread = int(thread)
+class Thread(RequestHandler):
+  def get(self, board, thread):
 
-  content = memcache.get("posts-%s-%d" % (board, thread))
+    content = memcache.get("posts-%s-%d" % (board, thread))
 
-  if not content:
-    raise Http404
+    if not content:
+      raise Http404
 
-  thread_data = {
-    'op' : content[0],
-    'posts' : content[1:],
-    'id' : thread,
-  }
+    thread_data = {
+      'op' : content[0],
+      'posts' : content[1:],
+      'id' : thread,
+    }
 
-  data = {}
-  data['threads'] = (thread_data,)
-  data['post_form'] = PostForm()
-  data['upload_url'] = blobstore.create_upload_url(
-      "/%s/%d/post/" % (board, thread),
-  )
+    data = {}
+    data['threads'] = (thread_data,)
+    data['post_form'] = PostForm()
+    data['upload_url'] = blobstore.create_upload_url(
+        "/%s/%d/post/" % (board, thread),
+    )
 
-  return render("thread.html", data)
+    return render_response("thread.html", **data)
 
 # TODO: move out of django
 ## View load image

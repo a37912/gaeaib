@@ -4,7 +4,7 @@ from tipfy import Rule
 def get_rules():
   return [
     Rule( 
-      "/$", 
+      "/", 
       endpoint="index", 
       handler="aib.views.Index"
     ),
@@ -19,5 +19,16 @@ def get_rules():
       handler = "aib.views.Post",
       defaults = {"thread" : "new" }
     ),
+    Rule( 
+      "/<board>/<int:thread>/", 
+      endpoint = "board",
+      handler = "aib.views.Thread"
+    ),
+    Rule( 
+      "/<board>/<int:thread>/post/", 
+      endpoint = "board",
+      handler = "aib.views.Post"
+    ),
+
 
   ]
