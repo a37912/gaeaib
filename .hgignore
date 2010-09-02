@@ -1,7 +1,2 @@
 .*\.pyc
-django$
-settings_priv.py
-etc
-distlib
-bin
 .installed.cfg
