@@ -1,6 +1,7 @@
 import logging
 from md5 import md5
 from datetime import datetime
+from django.utils.simplejson import dumps
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -16,7 +17,6 @@ from wtforms.fields import TextField, BooleanField
 
 from traceback import format_exc
 
-import recaptcha
 import rainbow
 
 
@@ -212,6 +212,7 @@ def save_post(data, board, thread, ip):
 
   # save to cache
   memcache.set("posts-%s-%d" % (board, thread), posts)
+  memcache.set("post-%s-%d" % (board,newpost), data)
 
   # debug
   key = "posts-%s-%d" % (board, thread)
@@ -335,3 +336,17 @@ class ViewImage(RequestHandler, BlobstoreDownloadMixin):
       headers = { "Location" : str(url) },
     )
  
+class ApiPost(RequestHandler):
+  TPL = {
+      "thread" : "posts-%(board)s-%(num)d",
+      "post" : "post-%(board)s-%(num)d",
+      "lastpost" : "posts-%(board)s",
+  }
+  def get(self, mode, board, num=None):
+    key = self.TPL.get(mode)
+    posts = memcache.get(key % {"board":board, "num":num})
+
+    return Response(
+        dumps(posts),
+        content_type="text/javascript",
+    )

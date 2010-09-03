@@ -50,6 +50,15 @@ def get_rules():
       endpoint = "img",
       handler = "aib.views.ViewImage",
     ),
-
+    Rule(
+      "/api/<any(thread,post):mode>/<board>/<int:num>",
+      endpoint = "api",
+       handler = "aib.views.ApiPost",
+    ),
+    Rule(
+      "/api/<any(lastpost):mode>/<board>",
+      endpoint = "api",
+       handler = "aib.views.ApiPost",
+    ),
 
   ]
