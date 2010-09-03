@@ -380,10 +380,7 @@ class ApiPost(RequestHandler):
     )
 
 class Delete(RequestHandler):
-  def post(self, board, post):
-
-    post_data = memcache.get("post-%s-%d" % (board,post))
-    thread = post_data.get("thread")
+  def post(self, board, thread, post):
 
     key = "posts-%s-%d" % (board, thread)
 

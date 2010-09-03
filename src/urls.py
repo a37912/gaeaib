@@ -61,7 +61,7 @@ def get_rules():
        handler = "aib.views.ApiPost",
     ),
     Rule(
-     "/winry/delete/<board>/<int:post>",
+      "/winry/delete/<board>/<int:thread>/<int:post>",
       endpoint = "admin:delete",
       handler = "aib.views.Delete",
     ),

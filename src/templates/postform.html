@@ -91,8 +91,9 @@ function winry_mode() {
     function() {
       $(this).click( function(e) {
         var postid = $(this).attr("postid");
+        var thread = $(this).attr("threadid");
 
-        var url = "/winry/delete/"+board+"/"+postid;
+        var url = "/winry/delete/"+board+"/"+thread+"/"+postid;
 
         $.ajax(
           {
@@ -104,6 +105,12 @@ function winry_mode() {
       )
     }
 
+  )
+  $("a.reply").each(
+    function() {
+      var url = $(this).attr("href");
+      $(this).attr("href", url+"?winry");
+    }
   )
 }
 var loc = window.location.toString();

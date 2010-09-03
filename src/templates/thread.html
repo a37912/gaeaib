@@ -18,6 +18,7 @@
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
     href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+    threadid="{{thread.id}}"
   >#{{thread.op.post}}</a>
 </span>
 
@@ -35,11 +36,12 @@
 </label>
 
 {% if reply %}
-  <a href="{{ thread.id }}">Reply</a>
+  <a class="reply" href="{{ thread.id }}/">Reply</a>
 {% else %}
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
     href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+    threadid="{{thread.id}}"
   >#{{thread.op.post}}</a>
 </span>
 
@@ -68,6 +70,7 @@
         <span class="reflink">
           <a class="reflink" name="p{{post.post}}" 
             href="#p{{post.post}}" postid="{{post.post}}" 
+            threadid="{{thread.id}}" 
           >#{{post.post}}</a>
         </span>
         {% if post.image %}
