@@ -118,6 +118,9 @@ POST_INERVAL = 3 * 60
 # @param board - string board name
 # @param thread - thread id where to post or "new"
 class Post(RequestHandler):
+  def get(self, board, thread):
+    return redirect("/%s/%d" %( board, thread) )
+
   def post(self, board, thread):
     logging.info("post called")
 
