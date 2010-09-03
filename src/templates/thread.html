@@ -3,6 +3,8 @@
 {% block threads %}
 
 {% for thread in threads %}
+
+<div class="thread">
 <h2>Thread {{ thread.id }}</h2>
 
 <hr/>
@@ -76,8 +78,44 @@
 </table>
 
 {% endfor %}
+</div>
+
 <div style="clear: left"></div>
 <hr/>
+
 {% endfor %}
+
+<table id="post_template" style="display:none">
+  <tbody>
+    <tr>
+      <td class="doubledash">&gt;&gt;</td>
+      <td class="reply">
+        <label>
+          <span class="commentpostername"></span>
+          <span class="rb"></span>
+        </label>
+        <label class="sg"><b>SAGE</b></label>
+        <label class="time"></label>
+        <span class="reflink">
+          <a class="reflink" name="p" href="#" ></a>
+        </span>
+
+        <span class="filesize"></span>
+        <br id="imgbr"/>
+        <a class="thumb" href="#" target="_blank">
+          <img class="thumb" src="/"/>
+        </a>
+
+        <blockquote class="postdata"></blockquote>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<script src='/_ah/channel/jsapi'></script>
+<script> token = "{{thread_token}}"; </script>
+
+<script src="/static/js/update.js"></script>
+</script>
 
 {% endblock %}

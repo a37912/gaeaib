@@ -7,6 +7,7 @@ from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.api import images
 from google.appengine.ext import blobstore
+from google.appengine.api import channel
 
 from tipfy import RequestHandler, redirect, Response, NotFound
 from tipfy.ext.jinja2 import render_response
@@ -222,6 +223,12 @@ def save_post(data, board, thread, ip):
   if new or not data.get("sage"):
     thread_bump(board, thread)
 
+  if not new:
+    key = "thread-%d" % thread
+
+    channel.send_message(key, dumps(data))
+
+
 ## Helper: bumps thread to the top
 #
 # @param board - string board name
@@ -279,6 +286,8 @@ class Thread(RequestHandler):
     data['upload_url'] = blobstore.create_upload_url(
         "/%s/%d/post/" % (board, thread),
     )
+    key = "thread-%d" % thread
+    data['thread_token'] = channel.create_channel(key)
 
     return render_response("thread.html", **data)
 
