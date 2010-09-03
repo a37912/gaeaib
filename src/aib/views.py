@@ -38,7 +38,7 @@ boardlist = {
     's' : 'School days',
     'mod' : 'Dating with Winry',
 }
-THREAD_PER_PAGE = 5
+THREAD_PER_PAGE = 10
 REPLIES_MAIN = 5
 
 ## View: Main page - board list
@@ -125,11 +125,13 @@ class Post(RequestHandler):
 
     qkey = "ip-%s" % ip
     quota = memcache.get(qkey) or 0
+    quota += 1
+    memcache.set(qkey, quota, time=POST_INERVAL*quota)
+
+    logging.info("ip: %s, quota: %d" % (ip, quota))
 
     if quota >= POST_QUOTA:
       return redirect("/%s" % board)
-
-    memcache.set(qkey, quota+1, time=POST_INERVAL)
 
     # validate post form
     form = PostForm(self.request.form)
@@ -271,7 +273,7 @@ def thread_clean(board):
     return
 
   to_remove = map(str, threads[THREAD_PER_PAGE-1:])
-  memcache.delete_multi(to_remove, key_prefix="posts-%s-" % board)
+  #memcache.delete_multi(to_remove, key_prefix="posts-%s-" % board)
 
   memcache.set("threadlist-%s" % board, threads[:THREAD_PER_PAGE-1])
 
