@@ -29,7 +29,7 @@
 {% endif %}
 
 <label>
-  <span class="postername">{{ thread.op.name }}</span>
+  <span class="postername">{{ thread.op.name|escape }}</span>
   {{thread.op.rainbow_html}}
   {{thread.op.time}}
 </label>
@@ -39,7 +39,7 @@
 {% endif %}
 
 <br/>
-<blockquote class="postdata">{{ thread.op.text }}</blockquote>
+<blockquote class="postdata">{{ thread.op.text|escape }}</blockquote>
 </div>
 
 {% if thread.skipmsg %}
@@ -53,7 +53,7 @@
       <td class="doubledash">&gt;&gt;</td>
       <td class="reply">
         <label>
-          <span class="commentpostername">{{ post.name }}</span>
+          <span class="commentpostername">{{ post.name|escape }}</span>
           {{post.rainbow_html}}
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
@@ -71,7 +71,7 @@
   <img class="thumb" src="{{post.image.thumb}}"/>
 </a>
         {% endif %}
-        <blockquote class="postdata">{{ post.text }}</blockquote>
+        <blockquote class="postdata">{{ post.text|escape }}</blockquote>
       </td>
     </tr>
   </tbody>
