@@ -211,7 +211,7 @@ def save_post(data, board, thread, ip):
   data['post'] = newpost
   data['thread'] = thread
   now = datetime.now()
-  data['time'] = now.strftime("%Y-%m-%d, %H:%m")
+  data['time'] = now.strftime("%Y-%m-%d, %H:%M")
   data['timestamp'] = int(now.strftime("%s"))
 
   img_key = data.get("key")
