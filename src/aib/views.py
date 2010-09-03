@@ -110,6 +110,9 @@ class Board(RequestHandler):
 
     return render_response("thread.html", **data)
 
+POST_QUOTA = 3
+POST_INERVAL = 3 * 60
+
 ## View: saves new post
 #
 # @param board - string board name
@@ -118,27 +121,34 @@ class Post(RequestHandler):
   def post(self, board, thread):
     logging.info("post called")
 
+    ip = self.request.remote_addr
+
+    qkey = "ip-%s" % ip
+    quota = memcache.get(qkey) or 0
+
+    if quota >= POST_QUOTA:
+      return redirect("/%s" % board)
+
+    memcache.set(qkey, quota+1, time=POST_INERVAL)
+
     # validate post form
     form = PostForm(self.request.form)
 
-    if form.validate:
-      ip = self.request.remote_addr
-
-      # if ok, save
-      logging.info("data valid %r" %( form.data,))
-      try:
-        save_post(form.data, board, thread, ip)
-      except:
-        logging.error(
-           format_exc() 
-        )
-        raise
-      finally:
-        logging.info("after save")
-
-    else:
-      # FIXME: show nice error page
+    if not form.validate:
       return redirect("/%s" % board)
+
+
+    # if ok, save
+    logging.info("data valid %r" %( form.data,))
+    try:
+      save_post(form.data, board, thread, ip)
+    except:
+      logging.error(
+         format_exc() 
+      )
+      raise
+    finally:
+      logging.info("after save")
 
     # TODO: redirect to thread or to board
     return redirect("/%s" % board)
