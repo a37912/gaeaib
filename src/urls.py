@@ -56,7 +56,7 @@ def get_rules():
        handler = "aib.views.ApiPost",
     ),
     Rule(
-      "/api/<any(lastpost):mode>/<board>",
+      "/api/<any(lastpost,threadlist):mode>/<board>",
       endpoint = "api",
        handler = "aib.views.ApiPost",
     ),

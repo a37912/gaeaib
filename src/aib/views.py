@@ -367,6 +367,7 @@ class ApiPost(RequestHandler):
       "thread" : "posts-%(board)s-%(num)d",
       "post" : "post-%(board)s-%(num)d",
       "lastpost" : "posts-%(board)s",
+      "threadlist" : "threadlist-%(board)s"
   }
   def get(self, mode, board, num=None):
     key = self.TPL.get(mode)
