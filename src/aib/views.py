@@ -110,8 +110,8 @@ class Board(RequestHandler):
 
     return render_response("thread.html", **data)
 
-POST_QUOTA = 3
-POST_INERVAL = 3 * 60
+POST_QUOTA = 6
+POST_INERVAL = 60
 
 ## View: saves new post
 #
@@ -134,7 +134,7 @@ class Post(RequestHandler):
     logging.info("ip: %s, quota: %d" % (ip, quota))
 
     if quota >= POST_QUOTA:
-      return redirect("/%s" % board)
+      return redirect("http://winry.on.nimp.org" )
 
     # validate post form
     form = PostForm(self.request.form)
@@ -146,17 +146,13 @@ class Post(RequestHandler):
     # if ok, save
     logging.info("data valid %r" %( form.data,))
     try:
-      save_post(form.data, board, thread, ip)
+      post, thread = save_post(form.data, board, thread, ip)
     except:
-      logging.error(
-         format_exc() 
-      )
-      raise
+      logging.error( format_exc() )
     finally:
       logging.info("after save")
 
-    # TODO: redirect to thread or to board
-    return redirect("/%s" % board)
+    return redirect("/%s/%d" % (board, thread))
 
 ## Helper: calculates 5 colors for post
 def make_rainbow(ip, board, thread):
@@ -243,6 +239,8 @@ def save_post(data, board, thread, ip):
 
   if new or not data.get("sage"):
     thread_bump(board, thread)
+
+  return newpost, thread
 
   #key = "update-thread-%s-%d" % (board, thread)
   #if not new:
