@@ -6,8 +6,10 @@
 <div>
 Немного про борду: <a href="/static/statement.html">statement</a>
 </div>
-{% for board in boards %}
-  <a href="{{board}}">{{board}}</a> <br/>
+
+<h2>Где-бы тут пораковать?</h2>
+{% for board,text in boards.items() %}
+<a href="{{board}}">/{{board}}/</a> - {{text}} <br/>
 {% endfor %}
 <center>
   <img src="/static/img/gadg1.jpg" alt="gadg" />

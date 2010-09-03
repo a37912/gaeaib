@@ -32,7 +32,12 @@ class PostForm(Form):
 
 
 # temporary here is list of boards
-boardlist = ['a', 'b', 'mod']
+boardlist = {
+    'a' : 'Anime',
+    'b' : 'Beating heart',
+    's' : 'School days',
+    'mod' : 'Dating with Winry',
+}
 THREAD_PER_PAGE = 5
 REPLIES_MAIN = 5
 
@@ -99,6 +104,7 @@ class Board(RequestHandler):
     data['threads'] = get_threads(board) # last threads
     data['show_captcha'] = True
     data['reply'] = True
+    data['board'] = boardlist.get(board, 'WHooo??')
     
     logging.info("board %s %s" % (board, str(memcache.get("thread"))))
 
@@ -284,6 +290,7 @@ class Thread(RequestHandler):
     data['upload_url'] = blobstore.create_upload_url(
         "/%s/%d/post/" % (board, thread),
     )
+    data['board'] = boardlist.get(board, "Woooo???")
     key = "update-thread-%s-%d" % (board, thread)
     #data['thread_token'] = channel.create_channel(key)
 
