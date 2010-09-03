@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head profile="http://gmpg.org/xfn/11">
+    <title>GaeAib statemet </title>
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/futaba.css" title="Futaba">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+  <body>
+    <div class="logo">
+    </div>
+    <hr>
+    <div>
+      <h2>Чозанах?</h2>
+      Для скрипто-кунов на гайкочане есть API, через которое они могут лепить
+      свои скрипокунсие юзерскрипты. Пользуясь случаем, передаю привет
+      научной конференции IT-технологий и ее ботам-сосаторам
+
+      <h3>Получить пост</h3>
+      <b>/api/post/доска/номер</b>, например /api/post/b/23
+
+      Формат ответа:
+      <pre>
+        name - имя постера
+        thread - номер треда, в котором запостили пост
+        post - номер поста
+        text - текст поста
+        image - данные про картинку
+          full - путь к полноразмерной картинке
+          thumb - путь к уменьшенной копии
+          content_type - тип изображения
+          size - размер файла в байтах
+        time - время поста строкой
+        timestamp - время поста в unix-time
+        sage - бинарный флаг, включена сажа или нет
+        rainbow - много циферок, уникальный код постера внутри треда
+        rainbow_html - сформатированная из кода радуга
+      </pre>
+
+      <h3>Получить тред</h3>
+      <b>/api/thread/доска/номер</b>, например /api/thread/b/22
+
+      Формат ответа - список постов в том же формате, что и выше
+      <h3>Последний пост на борде</h3>
+      <b>/api/lastpost/доска</b>, например /api/lastpost/b
+
+      Выдается номер последнего поста
+
+
+      <h3>И все?</h3>
+
+      Ну пока все, да
+    </div>
+
+
+  </body>
+</html>

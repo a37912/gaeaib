@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% block title %}index{% endblock %}
 {% block content %}
-<h2>Hello cancer!</h2>
+<h2>Привет дорогой рак! Заходи, у нас уютненько</h2>
+
+<div>
+Немного про борду: <a href="/static/statement.html">statement</a>
+</div>
 {% for board in boards %}
   <a href="{{board}}">{{board}}</a> <br/>
 {% endfor %}
