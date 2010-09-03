@@ -223,9 +223,9 @@ def save_post(data, board, thread, ip):
   if new or not data.get("sage"):
     thread_bump(board, thread)
 
-  key = "update-thread-%s-%d" % (board, thread)
-  if not new:
-    channel.send_message(key, dumps(data))
+  #key = "update-thread-%s-%d" % (board, thread)
+  #if not new:
+  #  channel.send_message(key, dumps(data))
 
 ## Helper: bumps thread to the top
 #
@@ -285,7 +285,7 @@ class Thread(RequestHandler):
         "/%s/%d/post/" % (board, thread),
     )
     key = "update-thread-%s-%d" % (board, thread)
-    data['thread_token'] = channel.create_channel(key)
+    #data['thread_token'] = channel.create_channel(key)
 
     return render_response("thread.html", **data)
 
