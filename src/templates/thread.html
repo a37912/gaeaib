@@ -1,5 +1,5 @@
 {% extends "postform.html" %}
-{% block title %}{{board}} {% endblock %}
+{% block title %}{{board_name}} {% endblock %}
 {% block threads %}
 
 {% for thread in threads %}
@@ -17,7 +17,7 @@
 
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
-    href="#p{{thread.op.post}}" postid="{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
   >#{{thread.op.post}}</a>
 </span>
 
@@ -36,6 +36,13 @@
 
 {% if reply %}
   <a href="{{ thread.id }}">Reply</a>
+{% else %}
+<span class="reflink">
+  <a class="reflink" name="p{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+  >#{{thread.op.post}}</a>
+</span>
+
 {% endif %}
 
 <br/>
@@ -113,9 +120,12 @@
 </table>
 
 <script src='/_ah/channel/jsapi'></script>
-<script> token = "{{thread_token}}"; </script>
+<script> 
+  token = "{{thread_token}}"; 
+  board = "{{board}}";
+</script>
 
 <script src="/static/js/update.js"></script>
-</script>
+
 
 {% endblock %}

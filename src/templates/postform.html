@@ -85,5 +85,34 @@
   }
   )
 </script>
+<script>
+function winry_mode() {
+  $("a.reflink").each(
+    function() {
+      $(this).click( function(e) {
+        var postid = $(this).attr("postid");
 
+        var url = "/winry/delete/"+board+"/"+postid;
+
+        $.ajax(
+          {
+            url: url,
+            type: 'POST',
+          }
+        );
+      }
+      )
+    }
+
+  )
+}
+var loc = window.location.toString();
+
+if ( loc.indexOf("?winry") != -1) {
+  alert("Winry!")
+  $(document).ready(winry_mode);
+}
+</script>
+
+</script>
 {% endblock %}

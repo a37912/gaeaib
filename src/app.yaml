@@ -1,5 +1,5 @@
 application: gaeaib
-version: release-0-10
+version: release-0-11
 runtime: python
 api_version: 1
 
@@ -27,6 +27,10 @@ handlers:
 
 - url: /static
   static_dir: static
+
+- url: /winry/.*
+  script: main.py
+  login: admin
 
 - url: /.*
   script: main.py

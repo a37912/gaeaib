@@ -288,7 +288,7 @@ class Thread(RequestHandler):
     content = memcache.get("posts-%s-%d" % (board, thread))
 
     if not content:
-      raise Http404
+      raise NotFound
 
     thread_data = {
       'op' : content[0],
@@ -302,7 +302,8 @@ class Thread(RequestHandler):
     data['upload_url'] = blobstore.create_upload_url(
         "/%s/%d/post/" % (board, thread),
     )
-    data['board'] = boardlist.get(board, "Woooo???")
+    data['board_name'] = boardlist.get(board, "Woooo???")
+    data['board'] = board
     key = "update-thread-%s-%d" % (board, thread)
     #data['thread_token'] = channel.create_channel(key)
 
@@ -377,3 +378,36 @@ class ApiPost(RequestHandler):
         dumps(posts),
         content_type="text/javascript",
     )
+
+class Delete(RequestHandler):
+  def post(self, board, post):
+
+    post_data = memcache.get("post-%s-%d" % (board,post))
+    thread = post_data.get("thread")
+
+    key = "posts-%s-%d" % (board, thread)
+
+    if post == thread:
+      memcache.delete(key)
+      return Response("wipe")
+
+    posts = memcache.get(key) or []
+
+    for offset, data in enumerate(posts):
+      if data.get('post') == post:
+        posts.pop(offset)
+        break
+    else:
+      return Response("no")
+
+    memcache.set(key, posts)
+
+    return Response("ok")
+
+class Unban(RequestHandler):
+  def get(self, ip):
+    qkey = "ip-%s" % ip
+    memcache.delete(qkey)
+
+    return Response("free")
+
