@@ -72,10 +72,11 @@ def save_post(data, board, thread, ip):
     posts = []
   else:
     thread = int(thread)
-    if thread not in board_db.thread:
-      raise NotFound()
+    #if thread not in board_db.thread:
+    #  raise NotFound()
 
-    board_db.thread.remove(thread)
+    if thread in board_db.thread:
+      board_db.thread.remove(thread)
     posts = Thread.load(thread, board)
 
     if not posts:
@@ -83,6 +84,9 @@ def save_post(data, board, thread, ip):
 
   board_db.thread.insert(0, thread)
   board_db.thread = board_db.thread[:THREAD_PER_PAGE]
+
+  if data.get('name') == 'SAEM':
+    ip+= str(board_db.counter)
 
   rb = rainbow.make_rainbow(ip, board, thread)
   data['rainbow'] = rb
