@@ -3,31 +3,31 @@ import logging
 from datetime import datetime
 from google.appengine.api import memcache
 from google.appengine.ext import blobstore
+from google.appengine.ext import db
 from google.appengine.api import images
 
 #from google.appengine.api import channel
 from tipfy import NotFound
 import rainbow
 from const import *
+from models import Board, Thread, Cache
 
 ## Helper: functon to grab last thread list for board
 #
 # @param board - string board name
 def get_threads(board):
 
-  threads = memcache.get("threadlist-%s" % board) or []
-
-  # map list of thread ids to fetch
-  ids = map(str,threads)
+  threads = Board.load(board)
+  logging.info("threadlist in %r : %r" % (board, threads))
 
   # grab data from cache
-  data =  memcache.get_multi(ids, "posts-%s-" % board)
+  data =  Thread.load_list(threads, board)
 
   ret = []
-  for thread in threads:
-    content = data.get(str(thread))
+  for num,content in data:
 
     if not content:
+      logging.info("skip %d" % num)
       continue
 
     if len(content) > REPLIES_MAIN+1:
@@ -37,11 +37,10 @@ def get_threads(board):
       end = content[1:]
       omitt = 0
       
-
     thread_data = {
         'op' : content[0],
         'posts' : end,
-        'id' : thread,
+        'id' : int(num),
         "skipmsg" : "%d omitted" % omitt if omitt else None,
       }
 
@@ -56,22 +55,34 @@ def get_threads(board):
 # @param thread - thread id where to post or "new"
 def save_post(data, board, thread, ip):
 
+  board_db = Board.get_by_key_name(board)
+
+  if not board_db:
+    board_db = Board(key_name = board, thread = [])
+
+  board_db.counter += 1
+
   # create new thread
   if thread == 'new':
-    thread = memcache.incr("posts-%s" % board, initial_value=0)
-    thread_clean(board)
-    new = True
+
+    if data.get("sage"):
+      raise NotFound() # FIXME: move to form
+
+    thread = board_db.counter
+    posts = []
   else:
     thread = int(thread)
-    new = False
+    if thread not in board_db.thread:
+      raise NotFound()
 
-  # FIXME: dont allow to post to nonexstand thread
-  posts = memcache.get("posts-%s-%d" % (board, thread))
-  if not posts:
-    posts = []
+    board_db.thread.remove(thread)
+    posts = Thread.load(thread, board)
 
-  if not new and not posts:
-    raise NotFound()
+    if not posts:
+      raise NotFound()
+
+  board_db.thread.insert(0, thread)
+  board_db.thread = board_db.thread[:THREAD_PER_PAGE]
 
   rb = rainbow.make_rainbow(ip, board, thread)
   data['rainbow'] = rb
@@ -80,13 +91,8 @@ def save_post(data, board, thread, ip):
   # FIXME: move to field
   data['name'] = data.get("name") or "Anonymous"
 
-  if new:
-    newpost = thread
-  else:
-    newpost = memcache.incr("posts-%s" % board, initial_value=0)
-
   # save thread and post number
-  data['post'] = newpost
+  data['post'] = board_db.counter
   data['thread'] = thread
   now = datetime.now()
   data['time'] = now.strftime("%Y-%m-%d, %H:%M")
@@ -107,54 +113,30 @@ def save_post(data, board, thread, ip):
 
   posts.append(data)
 
-  # save to cache
-  memcache.set("posts-%s-%d" % (board, thread), posts)
-  memcache.set("post-%s-%d" % (board,newpost), data)
+  thread_db = Thread.save(thread, board, posts)
 
-  # debug
-  key = "posts-%s-%d" % (board, thread)
+  db.put( (thread_db, board_db))
+  Cache.delete(
+    (
+      dict(Board=board, Thread=thread),
+      dict(Board=board)
+    )
+  )
+  memcache.set("threadlist-%s" % board, board_db.thread)
 
-  logging.info("saved %s" % key)
+  memcache.set_multi(
+      dict( 
+        [
+          (str(p.get("post")), p) 
+          for p in posts
+        ] 
+      ),
+      key_prefix = "post-%s" % board,
+  )
 
-  if new or not data.get("sage"):
-    thread_bump(board, thread)
-
-  return newpost, thread
+  return board_db.counter, thread
 
   #key = "update-thread-%s-%d" % (board, thread)
   #if not new:
   #  channel.send_message(key, dumps(data))
-
-## Helper: bumps thread to the top
-#
-# @param board - string board name
-# @param thread - thread id
-#
-# @note - can be called at thread creat time
-def thread_bump(board, thread):
-  threads = memcache.get("threadlist-%s" % board) or []
-
-  if thread in threads:
-    threads.remove(thread)
-
-  threads.insert(0, thread)
-
-  memcache.set("threadlist-%s" % board, threads)
-
-## Helper: deletes old threads
-#
-# @param board - string board nam
-# 
-# @note called before creating new thread
-def thread_clean(board):
-  threads = memcache.get("threadlist-%s" % board) or []
-
-  if len(threads) < THREAD_PER_PAGE:
-    return
-
-  to_remove = map(str, threads[THREAD_PER_PAGE-1:])
-  #memcache.delete_multi(to_remove, key_prefix="posts-%s-" % board)
-
-  memcache.set("threadlist-%s" % board, threads[:THREAD_PER_PAGE-1])
-
 

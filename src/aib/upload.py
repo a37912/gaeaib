@@ -1,3 +1,4 @@
+import logging
 from google.appengine.ext import blobstore
 from google.appengine.api import images
 
@@ -13,6 +14,13 @@ class PostUrl(RequestHandler):
 
 class PostImage(RequestHandler, BlobstoreUploadMixin):
   def get(self, img):
+
+    info = blobstore.BlobInfo.get(blobstore.BlobKey(img))
+
+    if 'image/' not in info.content_type:
+      info.delete()
+      return Response('{"err": "not image"}')
+
     return Response( '{"img":"%s"}' % img )
 
   def post(self):

@@ -1,14 +1,16 @@
 import logging
 
 from google.appengine.api import memcache
+from google.appengine.ext import db
 
 from tipfy import RequestHandler, redirect, Response, NotFound
-from tipfy.ext.jinja2 import render_response
+from tipfy.ext.jinja2 import render_response, render_template
 
 from forms import PostForm
 from util import get_threads, save_post
 
 from const import *
+import models
 
 ## View: Main page - board list
 #
@@ -22,6 +24,10 @@ class Index(RequestHandler):
 class Board(RequestHandler):
   def get(self, board):
 
+    cache = models.Cache.load(Board=board)
+    if cache:
+      return Response(cache)
+
     data = {}
     data['post_form'] = PostForm() # new post form
     data['threads'] = get_threads(board) # last threads
@@ -30,7 +36,10 @@ class Board(RequestHandler):
     data['board_name'] = boardlist.get(board, 'WHooo??')
     data['board'] = board # board name
 
-    return render_response("thread.html", **data)
+    html = render_template("thread.html", **data)
+    models.Cache.save(data = html, Board=board)
+
+    return Response(html)
 
 ## View: saves new post
 #
@@ -67,16 +76,17 @@ class Post(RequestHandler):
 
     return redirect("/%s/%d" % (board, thread))
 
-
-
 ## View: show all posts in thread
 #
 # @param board - string board name
 # @Param thread - thread id where
 class Thread(RequestHandler):
   def get(self, board, thread):
+    cache = models.Cache.load(Board=board, Thread=thread)
+    if cache:
+      return Response(cache)
 
-    content = memcache.get("posts-%s-%d" % (board, thread))
+    content = models.Thread.load(thread, board)
 
     if not content:
       raise NotFound
@@ -95,6 +105,9 @@ class Thread(RequestHandler):
     key = "update-thread-%s-%d" % (board, thread)
     #data['thread_token'] = channel.create_channel(key)
 
-    return render_response("thread.html", **data)
+    html = render_template("thread.html", **data)
 
+    models.Cache.save(data = html, Board=board, Thread=thread)
+
+    return Response(html)
 
