@@ -16,9 +16,11 @@ def rainbow(codes):
   )
 
 ## Helper: calculates 5 colors for post
-def make_rainbow(ip, board, thread):
+def make_rainbow(*a):
   secret = 'YOBA'# FIXME
-  key = "%s-%s-%s-%s" %(secret, ip, board, thread)
+  a = map(str,a)
+  a.insert(0,secret)
+  key = str.join("-", a)
 
   codes = [[]]
   for x in md5(key).digest()[:15]:

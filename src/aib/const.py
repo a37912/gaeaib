@@ -11,3 +11,7 @@ REPLIES_MAIN = 5
 POST_QUOTA = 6
 POST_INERVAL = 60
 
+board_options = {
+    's': ['useragent'],
+    'b': ['saem'],
+}

@@ -38,6 +38,11 @@
 {% if reply %}
   <a class="reply" href="{{ thread.id }}/">Reply</a>
 {% else %}
+
+{% if thread.op.agent %}
+<span class="agent">{{thread.op.agent|escape}}</span>
+{% endif %}
+
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
     href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
@@ -67,6 +72,9 @@
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
         {{post.time}}
+        {% if post.agent %}
+        <span class="agent">{{post.agent|escape}}</span>
+        {% endif %}
         <span class="reflink">
           <a class="reflink" name="p{{post.post}}" 
             href="#p{{post.post}}" postid="{{post.post}}" 

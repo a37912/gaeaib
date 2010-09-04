@@ -72,7 +72,7 @@ class Post(RequestHandler):
 
     # if ok, save
     logging.info("data valid %r" %( form.data,))
-    post, thread = save_post(form.data, board, thread, ip)
+    post, thread = save_post(self.request, form.data, board, thread)
 
     return redirect("/%s/%d" % (board, thread))
 

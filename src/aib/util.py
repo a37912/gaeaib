@@ -48,12 +48,26 @@ def get_threads(board):
 
   return ret
 
+def option_saem(request, data):
+  if data.get('name') != 'SAEM':
+    return
+
+  rb = rainbow.make_rainbow(data)
+  data['rainbow'] = rb
+  data['rainbow_html'] = rainbow.rainbow(rb)
+
+
+def option_useragent(request, data):
+  from werkzeug.useragents import UserAgent
+  ua = UserAgent(request.environ)
+  data['agent'] = "%s / %s" %(ua.platform, ua.browser)
+
 ## Helper: saves post to thread
 #
 # @param data - valid cleaned data from form
 # @param board - string board name
 # @param thread - thread id where to post or "new"
-def save_post(data, board, thread, ip):
+def save_post(request, data, board, thread):
 
   board_db = Board.get_by_key_name(board)
 
@@ -85,10 +99,7 @@ def save_post(data, board, thread, ip):
   board_db.thread.insert(0, thread)
   board_db.thread = board_db.thread[:THREAD_PER_PAGE]
 
-  if data.get('name') == 'SAEM':
-    ip+= str(board_db.counter)
-
-  rb = rainbow.make_rainbow(ip, board, thread)
+  rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb
   data['rainbow_html'] = rainbow.rainbow(rb)
 
@@ -114,6 +125,12 @@ def save_post(data, board, thread, ip):
         "full" : images.get_serving_url(img_key),
         "thumb" : images.get_serving_url(img_key, 200),
     }
+
+  for fname in board_options.get(board, []):
+    func = globals().get('option_'+fname)
+
+    if func:
+      func(request, data)
 
   posts.append(data)
 
