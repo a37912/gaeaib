@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}index{% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/static/css/list.css" title="Futaba">
+{% endblock %}
+
+{% block precontent %}
+<h2>Гайкочян</h2>
+{% endblock %}
+{% block content %}
+
+<div class="list_title">Boards</div>
+{% for board,text in boards %}
+<a target="board" href="{{board}}">/{{board}}/</a> - {{text}} <br/>
+{% endfor %}
+
+<hr/>
+
+{% endblock %}

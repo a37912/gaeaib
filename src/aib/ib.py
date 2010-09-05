@@ -15,8 +15,8 @@ import models
 ## View: Main page - board list
 #
 class Index(RequestHandler):
-  def get(self):
-    return render_response("index.html", boards = boardlist)
+  def get(self, tpl):
+    return render_response(tpl, boards = boardlist_order)
 
 ## View: board page is a list of threads
 #
@@ -35,6 +35,7 @@ class Board(RequestHandler):
     data['reply'] = True
     data['board_name'] = boardlist.get(board, 'WHooo??')
     data['board'] = board # board name
+    data['boards'] = boardlist_order
 
     html = render_template("thread.html", **data)
     models.Cache.save(data = html, Board=board)
@@ -104,6 +105,7 @@ class Thread(RequestHandler):
     data['board'] = board
     key = "update-thread-%s-%d" % (board, thread)
     #data['thread_token'] = channel.create_channel(key)
+    data['boards'] = boardlist_order
 
     html = render_template("thread.html", **data)
 

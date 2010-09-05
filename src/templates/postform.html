@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+[
+{% for board,text in boards %}
+<a href="{{board}}">/{{board}}/</a> | 
+{% endfor %}
+]
+
+
 {% block postform %}
 <div class="postarea"> 
 <form method="post" action="post/" >
@@ -40,6 +47,14 @@
 {% endblock %}
 
 {% block threads %}{% endblock %}
+
+[
+{% for board,text in boards %}
+<a href="{{board}}">/{{board}}/</a> | 
+{% endfor %}
+]
+
+
 {% endblock %}
 
 {% block scripts %}

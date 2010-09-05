@@ -4,9 +4,16 @@ from tipfy import Rule
 def get_rules():
   return [
     Rule( 
-      "/", 
+      "/main", 
       endpoint="index", 
-      handler="aib.ib.Index"
+      handler="aib.ib.Index",
+      defaults = {"tpl" : "index.html" }
+    ),
+    Rule( 
+      "/list", 
+      endpoint="list", 
+      handler="aib.ib.Index",
+      defaults = {"tpl" : "list.html" }
     ),
     Rule( 
       "/<board>/", 

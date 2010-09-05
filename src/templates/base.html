@@ -8,15 +8,17 @@
     {% block head %}{% endblock %}
   </head>
   <body>
+    {% block precontent %}
     <div class="logo">
     </div>
+    <h1>Добро пожаловать. Снова. Снова.</h1>
+    {% endblock %}
     <hr>{% block content %}{% endblock %}
     <div class="footer" style="clear: both;"> 
       Winry Rokbell | 
       <a href="/static/statement.html">Statement</a> |
       <a href="https://bitbucket.org/a6812694/gaeaib/">GAE AIB</a>
     </div>
-
     {% block scripts %}{% endblock %}
 
   </body>
