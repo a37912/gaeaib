@@ -7,7 +7,7 @@ from tipfy import RequestHandler, redirect, Response, NotFound
 from tipfy.ext.jinja2 import render_response, render_template
 
 from forms import PostForm
-from util import get_threads, save_post
+from util import get_threads, save_post, get_post
 
 from const import *
 import models
@@ -113,3 +113,13 @@ class Thread(RequestHandler):
 
     return Response(html)
 
+class PostRedirect(RequestHandler):
+  def get(self, board, post):
+    post_data = get_post(board, post)
+
+    if not post_data:
+      raise NotFound()
+
+    return redirect("/%s/%d/#p%d"% 
+        (board, post_data.get("thread"), post)
+      )

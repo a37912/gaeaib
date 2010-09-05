@@ -115,17 +115,6 @@ class Thread(db.Model):
 
       ret.append( (num, th) )
 
-    fail = numbers[:]
-    for num, th in ret:
-      if th:
-        fail.remove(int(num))
-
-    if fail:
-      for num in fail:
-        numbers.remove(num)
-        
-      Board.save(board, numbers)
-
     return ret
 
   @classmethod

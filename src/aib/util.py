@@ -180,6 +180,7 @@ def get_post(board, num):
     return post
 
   thq = Thread.all()
+  thq.ancestor( db.Key.from_path("Board", board))
   thq.filter("post_numbers", num)
 
   thread = thq.get()
