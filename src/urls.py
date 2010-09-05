@@ -68,14 +68,19 @@ def get_rules():
     ),
 
     Rule(
-      "/api/<any(thread,post):mode>/<board>/<int:num>",
-      endpoint = "api",
-       handler = "aib.api.ApiCacheGeneric",
+      "/api/thread/<board>/<int:num>",
+      endpoint = "api:threadlist",
+      handler = "aib.api.ApiThread",
     ),
     Rule(
-      "/api/<any(lastpost,threadlist):mode>/<board>",
+      "/api/lastpost/<board>",
+      endpoint = "api:lastpost",
+       handler = "aib.api.ApiLastPost",
+    ),
+    Rule(
+      "/api/threadlist/<board>",
       endpoint = "api",
-       handler = "aib.api.ApiCacheGeneric",
+       handler = "aib.api.ApiThreadList",
     ),
     Rule(
       "/winry/delete/<board>/<int:thread>/<int:post>",

@@ -11,24 +11,35 @@ def json_response(data):
       content_type="text/javascript",
   )
 
-
-
-class ApiCacheGeneric(RequestHandler):
-  TPL = {
-      "thread" : "posts-%(board)s-%(num)d",
-      "post" : "post-%(board)s-%(num)d",
-      "lastpost" : "posts-%(board)s",
-      "threadlist" : "threadlist-%(board)s"
-  }
-  def get(self, mode, board, num=None):
-    key = self.TPL.get(mode)
-    posts = memcache.get(key % {"board":board, "num":num})
-
-    return json_response(posts)
-
 class ApiPost(RequestHandler):
   def get(self, board, num):
     return json_response( util.get_post(board, num) )
+
+class ApiLastPost(RequestHandler):
+  def get(self, board):
+    key = "posts-%s" % board
+    post = memcache.get(key)
+
+    if post != None:
+      return json_response(post)
+
+    board = Board.get_by_key_name(board)
+
+    if board:
+      post = board.counter
+      memcache.set(key, post)
+    else:
+      post = None
+
+    return json_response(post)
+
+class ApiThreadList(RequestHandler):
+  def get(self, board):
+    return json_response( Board.load(board) )
+
+class ApiThread(RequestHandler):
+  def get(self, board, num):
+    return json_response( Thread.load(num, board) )
 
 class ApiBoard(RequestHandler):
   def get(self, board):
