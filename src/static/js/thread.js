@@ -22,15 +22,12 @@ $(document).ready(function() {
         '<a href="#p$1">&gt;&gt;$1</a>'
       );
 
-      html = html.replace(/(http:\/\/[^ ]*)/g, 
-        '<a href="http://hiderefer.com/?$1">$1</a>' 
-      );
+
 
       html = html.replace(/\*\*([^\*_]+)\*\*/g, "<b>$1</b>");
       html = html.replace(/__([^\*_]+)__/g, "<b>$1</b>");
 
       html = html.replace(/\*([^\*_]+)\*/g, "<i>$1</i>");
-      html = html.replace(/_([^\*_]+)_/g, "<i>$1</i>");
 
       html = html.replace(/    (.*)/g, "<pre>$1</pre>");
       html = html.replace(/\%\%(.*)\%\%/g, '<span class="spoiler">$1</pre>');
@@ -39,6 +36,9 @@ $(document).ready(function() {
 
       html = html.replace(/\n\n/g, '<br/>');
 
+      html = html.replace(/(http:\/\/[^ ]*)/g, 
+        '<a href="http://hiderefer.com/?$1">$1</a>' 
+      );
       $(this).html(html);
 
     } // each func

@@ -11,6 +11,14 @@ class Board(db.Model):
   thread = db.ListProperty(int)
   counter = db.IntegerProperty(default=0)
 
+  @property
+  def code(self):
+    return self.key().name()
+
+  @property
+  def name(self):
+    return boardlist.get(self.code)
+
   @classmethod
   def load_counter(cls, board):
     ent = cls.get_by_key_name(board)
@@ -47,6 +55,7 @@ class Thread(db.Model):
   TPL_ONE = "posts-%s-%d"
 
   posts = PickleProperty()
+  post_numbers = db.ListProperty(int)
   images = db.StringListProperty()
 
   @classmethod
@@ -77,6 +86,7 @@ class Thread(db.Model):
     ent = cls(
         posts = posts, 
         images = [p.get("key") for p in posts if p.get('key')],
+        post_numbers = [p.get("post") for p in posts],
         key = cls.gen_key(number, board)
     )
 

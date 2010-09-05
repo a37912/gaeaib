@@ -42,6 +42,7 @@ def get_threads(board):
         'posts' : end,
         'id' : int(num),
         "skipmsg" : "%d omitted" % omitt if omitt else None,
+        "skip" : omitt,
       }
 
     ret.append( thread_data )
@@ -145,15 +146,7 @@ def save_post(request, data, board, thread):
   )
   memcache.set("threadlist-%s" % board, board_db.thread)
 
-  memcache.set_multi(
-      dict( 
-        [
-          (str(p.get("post")), p) 
-          for p in posts
-        ] 
-      ),
-      key_prefix = "post-%s" % board,
-  )
+  memcache.set("post-%s-%d" %(board, board_db.counter), data)
 
   return board_db.counter, thread
 
@@ -161,3 +154,25 @@ def save_post(request, data, board, thread):
   #if not new:
   #  channel.send_message(key, dumps(data))
 
+
+def get_post(board, num):
+  key = "post-%(board)s-%(num)d" % {"board":board, "num":num}
+  post = memcache.get(key)
+
+  if post != None:
+    logging.info("cache hit")
+    return post
+
+  thq = Thread.all()
+  thq.filter("post_numbers", num)
+
+  thread = thq.get()
+
+  if not thread:
+    return 
+
+  [post] = [p for p in thread.posts if p.get('post') == num]
+
+  memcache.set(key, post)
+
+  return post

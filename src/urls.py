@@ -51,14 +51,31 @@ def get_rules():
       handler = "aib.upload.ViewImage",
     ),
     Rule(
+      "/api/board/<board>",
+      endpoint = "api:board",
+      handler = "aib.api.ApiBoard",
+    ),
+    Rule(
+      "/api/boardlist",
+      endpoint = "api:boardlist",
+      handler = "aib.api.ApiBoardList",
+    ),
+
+    Rule(
+      "/api/post/<board>/<int:num>",
+      endpoint = "api:post",  
+      handler = "aib.api.ApiPost",
+    ),
+
+    Rule(
       "/api/<any(thread,post):mode>/<board>/<int:num>",
       endpoint = "api",
-       handler = "aib.api.ApiPost",
+       handler = "aib.api.ApiCacheGeneric",
     ),
     Rule(
       "/api/<any(lastpost,threadlist):mode>/<board>",
       endpoint = "api",
-       handler = "aib.api.ApiPost",
+       handler = "aib.api.ApiCacheGeneric",
     ),
     Rule(
       "/winry/delete/<board>/<int:thread>/<int:post>",
