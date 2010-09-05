@@ -15,7 +15,13 @@ from models import Board, Thread, Cache
 ## Helper: functon to grab last thread list for board
 #
 # @param board - string board name
-def get_threads(board):
+def get_threads(board, fmt_name="page"):
+
+  _fmt = "thread_" + fmt_name
+  if _fmt in globals():
+    fmt = globals()[_fmt]
+  else:
+    fmt = thread_plain
 
   threads = Board.load(board)
   logging.info("threadlist in %r : %r" % (board, threads))
@@ -23,31 +29,41 @@ def get_threads(board):
   # grab data from cache
   data =  Thread.load_list(threads, board)
 
-  ret = []
-  for num,content in data:
+  return [ fmt(num,th) for num,th in data if th ]
 
-    if not content:
-      logging.info("skip %d" % num)
-      continue
+def thread_plain(num,content):
+  if len(content) > REPLIES_MAIN+1:
+    _content = [content[0]]
+    _content.extend( content[-REPLIES_MAIN:] )
+    omitt = len(content) - REPLIES_MAIN - 1
+  else:
+    _content = content
+    omitt = 0
 
-    if len(content) > REPLIES_MAIN+1:
-      end = content[-REPLIES_MAIN:]
-      omitt = len(content) - REPLIES_MAIN - 1
-    else:
-      end = content[1:]
-      omitt = 0
+  for post in _content:
+    post.pop("rainbow_html")
+
+  return {
+    "posts" : _content,
+    "skip" : omitt,
+  }
+
+
+def thread_page(num,content):
+  if len(content) > REPLIES_MAIN+1:
+    end = content[-REPLIES_MAIN:]
+    omitt = len(content) - REPLIES_MAIN - 1
+  else:
+    end = content[1:]
+    omitt = 0
       
-    thread_data = {
-        'op' : content[0],
-        'posts' : end,
-        'id' : int(num),
-        "skipmsg" : "%d omitted" % omitt if omitt else None,
-        "skip" : omitt,
-      }
-
-    ret.append( thread_data )
-
-  return ret
+  return {
+      'op' : content[0],
+      'posts' : end,
+      'id' : int(num),
+      "skipmsg" : "%d omitted" % omitt if omitt else None,
+      "skip" : omitt,
+  }
 
 def option_saem(request, data):
   if data.get('name') != 'SAEM':

@@ -15,6 +15,10 @@ handlers:
   static_files: static/images/favicon.ico
   upload: static/images/favicon.ico
 
+- url: /statement
+  static_files: static/statement.html
+  upload: static/statement.html
+
 - url: /static
   static_dir: static
 
