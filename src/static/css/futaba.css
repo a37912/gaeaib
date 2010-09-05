@@ -96,6 +96,8 @@ a:hover {
 	background: #F0E0D6;
 	color: #800000;
         -moz-border-radius: 5px 5px 5px 5px;
+        border-radius: 5px 5px 5px 5px;
+
 }
 .replyhl {
 	background: #F0C0B0;
