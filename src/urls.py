@@ -26,7 +26,7 @@ def get_rules():
       handler = "aib.ib.PostRedirect",
     ),
     Rule( 
-      "/<board>/<int:post>/", 
+      "/<board>/post/", 
       endpoint = "board:post",
       handler = "aib.ib.Post",
       defaults = {"thread" : "new" }
