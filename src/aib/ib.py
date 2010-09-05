@@ -117,9 +117,15 @@ class PostRedirect(RequestHandler):
   def get(self, board, post):
     post_data = get_post(board, post)
 
-    if not post_data:
+    thq = models.Thread.all(keys_only=True)
+    thq.ancestor( db.Key.from_path("Board", board))
+    thq.filter("post_numbers", post)
+
+    thread = thq.get()
+
+    if not thread:
       raise NotFound()
 
     return redirect("/%s/%d/#p%d"% 
-        (board, post_data.get("thread"), post)
+        (board, thread.id(), post)
       )
