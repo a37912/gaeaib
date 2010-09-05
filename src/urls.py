@@ -4,13 +4,13 @@ from tipfy import Rule
 def get_rules():
   return [
     Rule( 
-      "/main", 
+      "/main/", 
       endpoint="index", 
       handler="aib.ib.Index",
       defaults = {"tpl" : "index.html" }
     ),
     Rule( 
-      "/list", 
+      "/list/", 
       endpoint="list", 
       handler="aib.ib.Index",
       defaults = {"tpl" : "list.html" }
@@ -21,7 +21,12 @@ def get_rules():
       handler = "aib.ib.Board"
     ),
     Rule( 
-      "/<board>/post/", 
+      "/<board>/p<int:post>/", 
+      endpoint = "board:postredirect",
+      handler = "aib.ib.PostRedirect",
+    ),
+    Rule( 
+      "/<board>/<int:post>/", 
       endpoint = "board:post",
       handler = "aib.ib.Post",
       defaults = {"thread" : "new" }
