@@ -14,8 +14,9 @@ $(document).ready(function() {
   }
 
   insertlink = function(postnnum) {
+    var _postnum = postnnum;
     var textarea = $("textarea#id_text").get(0);
-    var text = ">>"+postnum+" ";
+    var text = ">>"+_postnum+" ";
 
     textarea.value+=text;
   }
@@ -31,7 +32,7 @@ $(document).ready(function() {
 
         insertlink(postid);
 
-        if (!reply) {
+        if (!_reply) {
           e.preventDefault();
         }
 
@@ -68,13 +69,10 @@ $(document).ready(function() {
     } // each func
   );// each
 
- 
-  preview = function(e, data, status) {
+  show_preview = function(np, post, e) {
 
-    console.log("show");
-    var np = make_post(data);
     np.addClass("preview");
-    np.addClass("preview_"+data.post);
+    np.addClass("preview_"+post);
     np.css("position", "absolute");
     np.css("left", (e.pageX+15)+"px");
     np.css("top",  e.pageY+"px");
@@ -88,7 +86,7 @@ $(document).ready(function() {
     np.css("opacity", 1);
     np.css("-webkit-box-shadow", "0 0 12px #999999");
     do_hide =  function() {
-        preview_hide(data.post);
+        preview_hide(post);
     }
     np.click(do_hide);
     np.mouseleave(do_hide);
@@ -97,6 +95,15 @@ $(document).ready(function() {
       no_preview_hide = false;
       }, preview_hide_time * 3
     );
+
+  }
+
+  preview = function(e, data, status) {
+
+    console.log("show");
+    var np = make_post(data);
+
+    show_preview(np, data.post, e);
 
   }
 
@@ -166,6 +173,14 @@ $(document).ready(function() {
         }
         no_preview = true;
         no_preview_hide = true;
+
+        var copy = $("#post-"+postid);
+
+        if(copy.length!=0) {
+          console.log("copy");
+          copy = copy.clone();
+          return show_preview(copy, postid, e);
+        }
 
         var key = _board+"/"+postid;
         var cache = preview_cache[key];
