@@ -1,13 +1,35 @@
 $(document).ready(function() {
+
+  var loc = window.location.toString();
+  // temp
+  try {
+    if(_board==undefined) {
+      true;
+    } 
+  } catch (e) { 
+    var st = loc.indexOf("/",7)+1;
+    var ed = loc.indexOf("/", st);
+
+    _board = loc.substring(st, ed);
+  }
+
+  insertlink = function(postnnum) {
+    var textarea = $("textarea#id_text").get(0);
+    var text = ">>"+postnum+" ";
+
+    textarea.value+=text;
+  }
+  var dash = loc.indexOf("#");
+  if (dash != -1) {
+    var postnum = loc.substring(dash+2,loc.length);
+    insertlink(postnum);
+  }
   $("a.reflink").each(
     function() {
       $(this).click( function(e) {
         var postid = $(this).attr("postid");
-        var textarea = $("textarea#id_text").get(0);
-        var text = ">>"+postid+" ";
 
-        textarea.value+=text;
-        textarea.focus();
+        insertlink(postid);
 
         if (!reply) {
           e.preventDefault();
@@ -55,7 +77,7 @@ $(document).ready(function() {
     np.addClass("preview");
     np.addClass("preview_"+data.post);
     np.css("position", "absolute");
-    np.css("left", e.pageX+"px");
+    np.css("left", (e.pageX+15)+"px");
     np.css("top",  e.pageY+"px");
     np.css("border", "solid 1px black");
     np.find(".doubledash").remove();
