@@ -8,8 +8,13 @@ a {
 a:hover {
 	color:#DD0000;
 }
-.reflink a:hover{
+.reflink {
+        color: #900000;
+        font-weight: bold;
+}
+.reflink a:hover {
 	font-weight: bold;
+        font-style: italic;
 }
 .postarea {
 }
@@ -21,6 +26,7 @@ a:hover {
 }
 
 .footer {
+        clear: both;
 	text-align:center;
 	font-size:12px;
 	font-family:serif;
@@ -133,4 +139,10 @@ span.spoiler {
 span.spoiler:hover {
         background: #F0D0B6;
           color: #800000;
+}
+
+.threadnum {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
 }

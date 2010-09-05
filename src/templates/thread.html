@@ -5,9 +5,9 @@
 {% for thread in threads %}
 
 <div class="thread">
-<h2>Thread {{ thread.id }}</h2>
-
-<hr/>
+  <div class="threadnum" >
+    Thread {{ thread.id }}
+  </div>
 
 <div class="oppost">
 {% if thread.op.image %}
