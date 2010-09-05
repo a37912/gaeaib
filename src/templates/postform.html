@@ -3,7 +3,7 @@
 {% block content %}
 [
 {% for board,text in boards %}
-<a href="{{board}}">/{{board}}/</a> | 
+<a href="/{{board}}">/{{board}}/</a> | 
 {% endfor %}
 ]
 
@@ -50,7 +50,7 @@
 
 [
 {% for board,text in boards %}
-<a href="{{board}}">/{{board}}/</a> | 
+<a href="/{{board}}">/{{board}}/</a> | 
 {% endfor %}
 ]
 
@@ -58,6 +58,10 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+_reply = {% if reply %}true{% else %}false{% endif %};
+_board = "{{board}}";
+</script>
 <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>         
 <script type="text/javascript" src="/static/js/ajaxfileupload.js"></script>
 <script type="text/javascript" src="/static/js/thread.js"></script>
