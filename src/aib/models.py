@@ -162,7 +162,6 @@ class Cache(db.Model):
 
   @classmethod
   def load(cls, **kw):
-    return
 
     key_str,key = cls.gen_key(**kw)
 
