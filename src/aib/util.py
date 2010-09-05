@@ -106,14 +106,16 @@ def save_post(request, data, board, thread):
     #if thread not in board_db.thread:
     #  raise NotFound()
 
-    if thread in board_db.thread:
+    if thread in board_db.thread and not data.get("sage"):
       board_db.thread.remove(thread)
     posts = Thread.load(thread, board)
 
     if not posts:
       raise NotFound()
 
-  board_db.thread.insert(0, thread)
+  if not data.get("sage"):
+    board_db.thread.insert(0, thread)
+
   board_db.thread = board_db.thread[:THREAD_PER_PAGE]
 
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
@@ -173,7 +175,7 @@ def save_post(request, data, board, thread):
 
 def get_post(board, num):
   key = "post-%(board)s-%(num)d" % {"board":board, "num":num}
-  post = memcache.get(key)
+  post = None #memcache.get(key)
 
   if post != None:
     logging.info("cache hit")
