@@ -70,7 +70,6 @@ $(document).ready(function() {
 
  
   preview = function(e, data, status) {
-    no_preview = true;
 
     console.log("show");
     var np = make_post(data);
@@ -79,13 +78,25 @@ $(document).ready(function() {
     np.css("position", "absolute");
     np.css("left", (e.pageX+15)+"px");
     np.css("top",  e.pageY+"px");
-    np.css("border", "solid 1px black");
     np.find(".doubledash").remove();
 
     console.log("show");
 
     $('body').append(np);
+    //np.slideUp(0).slideDown(500);
     np.show();
+    np.css("opacity", 1);
+    np.css("-webkit-box-shadow", "0 0 12px #999999");
+    do_hide =  function() {
+        preview_hide(data.post);
+    }
+    np.click(do_hide);
+    np.mouseleave(do_hide);
+
+    setTimeout(function() { 
+      no_preview_hide = false;
+      }, preview_hide_time * 3
+    );
 
   }
 
@@ -93,11 +104,13 @@ $(document).ready(function() {
   preview_hide = function(postid) {
     console.log("hide " + postid);
 
-    setTimeout(function() {
-      no_preview = false; 
+    $(".preview").css("opacity",0);
+
+    setTimeout(function() { 
       $(".preview").remove();
-    }, preview_hide_time
-    )
+      no_preview = false; 
+    }, 1*1000
+    ) ;
   }
 
   make_post = function(o) {
@@ -140,6 +153,7 @@ $(document).ready(function() {
 
   }
   no_preview = false;
+  no_preview_hide = false;
   preview_cache = new Object();
 
   $("a.postref").each(
@@ -150,6 +164,8 @@ $(document).ready(function() {
         if (no_preview) {
           return;
         }
+        no_preview = true;
+        no_preview_hide = true;
 
         var key = _board+"/"+postid;
         var cache = preview_cache[key];
@@ -172,10 +188,7 @@ $(document).ready(function() {
         );
 
         }
-      ).mouseleave( function(e) {
-        preview_hide(postid);
-        }
-      );
+      )
 
     }
   );

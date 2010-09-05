@@ -95,9 +95,8 @@ a:hover {
 .reply {
 	background: #F0E0D6;
 	color: #800000;
-        -moz-border-radius: 5px 5px 5px 5px;
-        border-radius: 5px 5px 5px 5px;
-
+        -moz-border-radius: 9px 9px 9px 9px;
+        border-radius: 9px 9px 9px 9px;
 }
 .replyhl {
 	background: #F0C0B0;
@@ -130,8 +129,12 @@ a:hover {
 	background-color: #F0E0D6 !important;
 }
 
-.reflinkpreview {
-	background-color: #F0E0D6 !important;
+.preview {
+  background-color: #F0E0D6 !important;
+  -moz-box-shadow: 0 0 8px #999999;
+  -webkit-transition-property: opacity, -webkit-box-shadow:;
+  -webkit-transition-duration: 1s, 2s;
+  opacity: 0;
 }
 
 span.spoiler {
