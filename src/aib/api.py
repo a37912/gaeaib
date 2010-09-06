@@ -2,6 +2,7 @@ import logging
 from tipfy import RequestHandler, Response
 from google.appengine.api import memcache
 from google.appengine.ext import db
+from google.appengine.ext import blobstore
 from django.utils.simplejson import dumps
 import util
 from models import Board, Thread, Cache
@@ -82,9 +83,15 @@ class Delete(RequestHandler):
 
       logging.info("found: %r" % p)
 
-      if p.get("key"):
+      key = p.get("key")
+
+      if key:
         p.pop("key", None)
         p.pop("image", None)
+        info = blobstore.BlobInfo.get(
+            blobstore.BlobKey(key)
+        )
+        info.delete()
 
         try:
           th.images.remove(p.get("key"))
