@@ -1,9 +1,10 @@
 import logging
 from tipfy import RequestHandler, Response
 from google.appengine.api import memcache
+from google.appengine.ext import db
 from django.utils.simplejson import dumps
 import util
-from models import Board, Thread
+from models import Board, Thread, Cache
 
 def json_response(data):
   return Response(
@@ -69,22 +70,47 @@ class ApiBoardList(RequestHandler):
 class Delete(RequestHandler):
   def post(self, board, thread, post):
 
-    key = "posts-%s-%d" % (board, thread)
+    th = Thread.get(db.Key.from_path(
+      "Board", board, 
+      "Thread", thread
+      )
+    )
 
-    if post == thread:
-      memcache.delete(key)
-      return Response("wipe")
+    for idx,p in enumerate(th.posts):
+      if p.get("post") != post:
+        continue
 
-    posts = memcache.get(key) or []
+      logging.info("found: %r" % p)
 
-    for offset, data in enumerate(posts):
-      if data.get('post') == post:
-        posts.pop(offset)
-        break
-    else:
-      return Response("no")
+      if p.get("key"):
+        p.pop("key", None)
+        p.pop("image", None)
 
-    memcache.set(key, posts)
+        try:
+          th.images.remove(p.get("key"))
+        except:
+          pass
+
+        logging.info("removed image %r" % p)
+
+      else:
+        p['text'] = 'Fuuuuuu'
+       
+      p['rainbow_html'] = u'<b>ANAL RAPED</b>'
+
+      break
+
+    th.put()
+
+    key = "posts-%s-%d" %(board, thread)
+    memcache.set(key, th.posts)
+
+    Cache.delete(
+      (
+        dict(Board=board, Thread=thread),
+        dict(Board=board)
+      )
+    )
 
     return Response("ok")
 

@@ -13,6 +13,9 @@ REPLIES_MAIN = 5
 
 POST_QUOTA = 6
 POST_INERVAL = 10
+POST_IMG_INERVAL = 30
+POST_IMG_QUOTA = 3
+
 
 board_options = {
     's': ['useragent'],
