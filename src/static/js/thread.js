@@ -61,7 +61,7 @@ $(document).ready(function() {
 
       html = html.replace(/\n/g, '<br/>');
 
-      html = html.replace(/(http:\/\/[^ ]*)/g, 
+      html = html.replace(/(http:\/\/[^ <\n]*)/g, 
         '<a href="http://hiderefer.com/?$1">$1</a>' 
       );
       $(this).html(html);
