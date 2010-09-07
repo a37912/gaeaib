@@ -11,10 +11,12 @@ from util import get_threads, save_post, get_post
 
 from const import *
 import models
+from redir import RedirMW
 
 ## View: Main page - board list
 #
 class Index(RequestHandler):
+  #middleware = [RedirMW]
   def get(self, tpl):
     return render_response(tpl, boards = boardlist_order)
 
@@ -22,6 +24,8 @@ class Index(RequestHandler):
 #
 # @param board - string board name
 class Board(RequestHandler):
+  #middleware = [RedirMW]
+
   def get(self, board):
 
     cache = models.Cache.load(Board=board)
@@ -82,12 +86,15 @@ class Post(RequestHandler):
 # @param board - string board name
 # @Param thread - thread id where
 class Thread(RequestHandler):
+  #middleware = [RedirMW]
+
   def get(self, board, thread):
     cache = models.Cache.load(Board=board, Thread=thread)
     if cache:
       return Response(cache)
 
-    content = models.Thread.load(thread, board)
+    _thread_data = models.Thread.load(thread, board)
+    content = _thread_data.get('posts')
 
     if not content:
       raise NotFound
@@ -96,6 +103,7 @@ class Thread(RequestHandler):
       'op' : content[0],
       'posts' : content[1:],
       'id' : thread,
+      'subject' : _thread_data.get('subject'),
     }
 
     data = {}

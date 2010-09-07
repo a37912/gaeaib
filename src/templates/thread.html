@@ -6,7 +6,11 @@
 
 <div class="thread">
   <div class="threadnum" >
-    Thread {{ thread.id }}
+    {% if thread.subject %}
+    {{ thread.subject }}
+    {% else %}
+    Thread {{thread.id}}
+    {% endif %}
   </div>
 
 <div class="oppost">

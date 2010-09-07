@@ -31,7 +31,9 @@ def get_threads(board, fmt_name="page"):
 
   return [ fmt(num,th) for num,th in data if th ]
 
-def thread_plain(num,content):
+def thread_plain(num,thread):
+  content = thread.get("posts")
+
   if len(content) > REPLIES_MAIN+1:
     _content = [content[0]]
     _content.extend( content[-REPLIES_MAIN:] )
@@ -46,10 +48,13 @@ def thread_plain(num,content):
   return {
     "posts" : _content,
     "skip" : omitt,
+    "subject" : thread.get("subject"),
   }
 
 
-def thread_page(num,content):
+def thread_page(num,thread):
+  content = thread.get("posts")
+
   if len(content) > REPLIES_MAIN+1:
     end = content[-REPLIES_MAIN:]
     omitt = len(content) - REPLIES_MAIN - 1
@@ -63,6 +68,7 @@ def thread_page(num,content):
       'id' : int(num),
       "skipmsg" : "%d omitted" % omitt if omitt else None,
       "skip" : omitt,
+      "subject" : thread.get("subject"),
   }
 
 def option_saem(request, data):
@@ -79,8 +85,11 @@ def option_useragent(request, data):
   ua = UserAgent(request.environ)
   data['agent'] = "%s / %s" %(ua.platform, ua.browser)
 
+
+SUBJECT_MAX = 25
 ## Helper: saves post to thread
 #
+# @param request - request object
 # @param data - valid cleaned data from form
 # @param board - string board name
 # @param thread - thread id where to post or "new"
@@ -101,6 +110,9 @@ def save_post(request, data, board, thread):
 
     thread = board_db.counter
     posts = []
+    thread_db = Thread.create(thread, board)
+    thread_db.posts = []
+    thread_db.subject = data.get("subject")[:SUBJECT_MAX]
   else:
     thread = int(thread)
     #if thread not in board_db.thread:
@@ -108,9 +120,10 @@ def save_post(request, data, board, thread):
 
     if thread in board_db.thread and not data.get("sage"):
       board_db.thread.remove(thread)
-    posts = Thread.load(thread, board)
 
-    if not posts:
+    thread_db = Thread.load(thread, board)
+
+    if not thread_db:
       raise NotFound()
 
   if not data.get("sage"):
@@ -151,9 +164,7 @@ def save_post(request, data, board, thread):
     if func:
       func(request, data)
 
-  posts.append(data)
-
-  thread_db = Thread.save(thread, board, posts)
+  thread_db.posts.append(data)
 
   db.put( (thread_db, board_db))
   Cache.delete(

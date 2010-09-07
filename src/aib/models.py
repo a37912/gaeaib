@@ -3,7 +3,7 @@ import logging
 from google.appengine.ext import db
 from google.appengine.api import memcache
 from tipfy.ext.db import PickleProperty
-#from aetycoon import DerivedProperty
+from aetycoon import DerivedProperty
 from const import *
 
 class Board(db.Model):
@@ -55,50 +55,55 @@ class Thread(db.Model):
   TPL_ONE = "posts-%s-%d"
 
   posts = PickleProperty()
-  post_numbers = db.ListProperty(int)
-  images = db.StringListProperty()
+
+  @DerivedProperty
+  def images(self):
+    return [
+        p.get("key") 
+        for p in self.posts 
+        if p.get('key')
+    ] 
+
+  @DerivedProperty
+  def post_numbers(self):
+    return [p.get("post") for p in self.posts]
+
+  subject = db.StringProperty()
 
   @classmethod
   def load(cls, number, board):
-    posts = memcache.get(cls.TPL_ONE % (board, number))
+    thread = memcache.get(cls.TPL_ONE % (board, number))
 
-    if posts == None:
-      posts = cls.load_db(number, board)
+    if thread == None:
+      thread = cls.load_db(number, board)
 
-      if posts:
-        memcache.set(cls.TPL_ONE % (board, number), posts)
-
-    return posts or []
+    return thread
 
   @classmethod
   def load_db(cls, number, board):
     ent = cls.get(cls.gen_key(number, board))
 
-    if ent:
-      return ent.posts
+    if not ent:
+      return {}
+
+    return {
+      "posts" : ent.posts,
+      "subject" : ent.subject,
+    }
 
   @classmethod
   def gen_key(cls, number, board):
     return db.Key.from_path("Board", board, "Thread", number)
 
   @classmethod
-  def save(cls, number, board, posts):
-    ent = cls(
-        posts = posts, 
-        images = [p.get("key") for p in posts if p.get('key')],
-        post_numbers = [p.get("post") for p in posts],
-        key = cls.gen_key(number, board)
-    )
-
-    memcache.set(cls.TPL_ONE % (board, number), posts)
-
-    return ent
+  def create(cls, number, board):
+    return cls(key=cls.gen_key(number, board))
 
   @classmethod
   def load_list(cls, numbers, board):
     keys = map(str, numbers)
 
-    data =  memcache.get_multi(keys, cls.TPL % board)
+    data =  {}#memcache.get_multi(keys, cls.TPL % board)
     
     ret = []
     for num in numbers:
@@ -128,7 +133,10 @@ class Thread(db.Model):
     return zip(
         map(str,numbers),
         map(
-          lambda x : x.posts if x else [],
+          lambda x : {
+            "posts":x.posts,
+            "subject":x.subject
+          } if x else {},
           filter(bool, db.get(keys))
         )
     )
@@ -151,6 +159,7 @@ class Cache(db.Model):
 
   @classmethod
   def load(cls, **kw):
+    return
 
     key_str,key = cls.gen_key(**kw)
 

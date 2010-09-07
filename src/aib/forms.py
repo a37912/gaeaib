@@ -8,5 +8,6 @@ class PostForm(Form):
   sage = BooleanField()
   text = TextField()
   key = TextField()
+  subject = TextField()
 
 

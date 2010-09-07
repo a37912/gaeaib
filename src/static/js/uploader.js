@@ -16,6 +16,7 @@ function upload_to(url) {
         $("#upload_key").val(data.img);
         var img = $("#view_img");
         img.attr("src", "/img/"+data.img);
+        $("#view_img_msg").hide();
         img.show();
       },
       error: function (data, status, e) 
@@ -29,6 +30,7 @@ function upload_to(url) {
 }
 
 do_up = function() {
+  $("#view_img_msg").show();
   $.ajax(
     {
       url: "/post_url",
