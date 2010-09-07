@@ -1,0 +1,4 @@
+cron:
+- description: remove unused blobs
+  url: /winry/clean_blob
+  schedule: every 8 hours

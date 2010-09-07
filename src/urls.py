@@ -104,6 +104,16 @@ def get_rules():
       endpoint = "admin:delete",
       handler = "aib.api.Unban",
     ),
-
-
+    Rule(
+      "/winry/clean_blob",
+      endpoint = "cron:clean",
+      handler = "aib.clean.CleanBlob"
+    ),
+          
+    Rule(
+      '/_ah/queue/deferred',
+      endpoint = 'tasks/deferred',
+      handler = 'tipfy.ext.taskqueue:DeferredHandler'
+    ),
+    
   ]
