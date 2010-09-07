@@ -7,7 +7,7 @@
 <div class="thread">
   <div class="threadnum" >
     {% if thread.subject %}
-    {{ thread.subject }}
+    {{ thread.subject|escape }}
     {% else %}
     Thread {{thread.id}}
     {% endif %}

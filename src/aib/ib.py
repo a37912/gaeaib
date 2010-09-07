@@ -94,7 +94,7 @@ class Thread(RequestHandler):
       return Response(cache)
 
     _thread_data = models.Thread.load(thread, board)
-    content = _thread_data.get('posts')
+    content = _thread_data.posts
 
     if not content:
       raise NotFound
@@ -103,7 +103,7 @@ class Thread(RequestHandler):
       'op' : content[0],
       'posts' : content[1:],
       'id' : thread,
-      'subject' : _thread_data.get('subject'),
+      'subject' : _thread_data.subject,
     }
 
     data = {}

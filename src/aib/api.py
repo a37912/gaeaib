@@ -41,13 +41,16 @@ class ApiThreadList(RequestHandler):
 
 class ApiThread(RequestHandler):
   def get(self, board, num):
-    thread = Thread.load(num, board)
+    thread_db = Thread.load(num, board)
 
-    if not thread:
+    if not thread_db:
       raise NotFound()
 
-    thread['skip'] = 0
-    return json_response( thread )
+    return json_response( {
+      "posts" : thread_db.posts,
+      "skip" : 0,
+      "subject" : thread_db.subject
+    } )
 
 class ApiBoard(RequestHandler):
   def get(self, board):

@@ -72,7 +72,7 @@ class Thread(db.Model):
 
   @classmethod
   def load(cls, number, board):
-    thread = memcache.get(cls.TPL_ONE % (board, number))
+    thread = None#memcache.get(cls.TPL_ONE % (board, number))
 
     if thread == None:
       thread = cls.load_db(number, board)
@@ -81,15 +81,7 @@ class Thread(db.Model):
 
   @classmethod
   def load_db(cls, number, board):
-    ent = cls.get(cls.gen_key(number, board))
-
-    if not ent:
-      return {}
-
-    return {
-      "posts" : ent.posts,
-      "subject" : ent.subject,
-    }
+    return cls.get(cls.gen_key(number, board))
 
   @classmethod
   def gen_key(cls, number, board):
@@ -159,7 +151,6 @@ class Cache(db.Model):
 
   @classmethod
   def load(cls, **kw):
-    return
 
     key_str,key = cls.gen_key(**kw)
 
