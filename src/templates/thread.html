@@ -2,6 +2,10 @@
 {% block title %}{{board_name}} {% endblock %}
 {% block threads %}
 
+{% if not threads %}
+<center><h1>Этаж еще не затоплен</h1></center>
+{% endif %}
+
 {% for thread in threads %}
 
 <div class="thread">
@@ -112,8 +116,8 @@ Pages:
 {% for page in pages %}
 [<a href = "page{{page}}">{{page}}</a>]
 {% endfor %}
-{% endif %}
 <hr/>
+{% endif %}
 
 <table class="reply" id="post_template" style="display:none">
   <tbody>
