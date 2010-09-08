@@ -228,7 +228,7 @@ $(document).ready(function() {
         tpl_a.attr("href", "#p"+frmpostid);
         tpl_a.mouseover( function(e) {handle_preview(frmpostid, e)} );
  
-        var rain = $("#post-"+postid+" span.rainbow").clone();
+        var rain = $("#post-"+frmpostid+" span.rainbow").clone();
         rain.removeAttr("id");
         rain.removeClass("rainbow");
 
