@@ -75,7 +75,7 @@ $(document).ready(function() {
     np.addClass("preview");
     np.addClass("preview_"+post);
     np.css("position", "absolute");
-    np.css("left", (e.pageX+15)+"px");
+    np.css("left", 0);
     np.css("top",  e.pageY+"px");
     np.find(".doubledash").remove();
 
@@ -84,6 +84,13 @@ $(document).ready(function() {
     $('body').append(np);
     //np.slideUp(0).slideDown(500);
     np.show();
+    var _x ;
+    if( (e.pageX + np.width()) > $(window).width()) {
+      _x = $(window).width() - np.width() - 5;
+    } else {
+      _x = e.pageX+15;
+    }
+    np.css("left", _x+"px");
     np.css("opacity", 1);
     np.css("-webkit-box-shadow", "0 0 12px #999999");
     do_hide =  function() {
