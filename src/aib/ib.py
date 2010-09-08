@@ -26,23 +26,30 @@ class Index(RequestHandler):
 class Board(RequestHandler):
   #middleware = [RedirMW]
 
-  def get(self, board):
+  def get(self, board, page=0):
 
-    cache = models.Cache.load(Board=board)
-    if cache:
-      return Response(cache)
+    if page > BOARD_PAGES:
+      raise NotFound()
+
+    if page == 0:
+      cache = models.Cache.load(Board=board)
+      if cache:
+        return Response(cache)
 
     data = {}
     data['post_form'] = PostForm() # new post form
-    data['threads'] = get_threads(board) # last threads
+    data['threads'] = get_threads(board,page=page) # last threads
     data['show_captcha'] = True
     data['reply'] = True
     data['board_name'] = boardlist.get(board, 'WHooo??')
     data['board'] = board # board name
     data['boards'] = boardlist_order
+    data['pages'] = range(BOARD_PAGES)
 
     html = render_template("thread.html", **data)
-    models.Cache.save(data = html, Board=board)
+
+    if page == 0:
+      models.Cache.save(data = html, Board=board)
 
     return Response(html)
 

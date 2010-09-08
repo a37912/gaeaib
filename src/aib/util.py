@@ -15,7 +15,7 @@ from models import Board, Thread, Cache
 ## Helper: functon to grab last thread list for board
 #
 # @param board - string board name
-def get_threads(board, fmt_name="page"):
+def get_threads(board, page=0, fmt_name="page"):
 
   _fmt = "thread_" + fmt_name
   if _fmt in globals():
@@ -24,6 +24,7 @@ def get_threads(board, fmt_name="page"):
     fmt = thread_plain
 
   threads = Board.load(board)
+  threads = threads[THREAD_PER_PAGE*page:THREAD_PER_PAGE*(page+1)]
   logging.info("threadlist in %r : %r" % (board, threads))
 
   # grab data from cache
@@ -129,7 +130,7 @@ def save_post(request, data, board, thread):
   if not data.get("sage"):
     board_db.thread.insert(0, thread)
 
-  board_db.thread = board_db.thread[:THREAD_PER_PAGE]
+  board_db.thread = board_db.thread[:THREAD_PER_PAGE*BOARD_PAGES]
 
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb

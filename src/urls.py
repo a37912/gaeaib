@@ -21,6 +21,11 @@ def get_rules():
       handler = "aib.ib.Board"
     ),
     Rule( 
+      "/<board>/page<int:page>", 
+      endpoint = "board",
+      handler = "aib.ib.Board"
+    ),
+    Rule( 
       "/<board>/p<int:post>/", 
       endpoint = "board:postredirect",
       handler = "aib.ib.PostRedirect",

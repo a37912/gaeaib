@@ -54,7 +54,7 @@ class ApiThread(RequestHandler):
 
 class ApiBoard(RequestHandler):
   def get(self, board):
-    return json_response(util.get_threads(board, 'plain'))
+    return json_response(util.get_threads(board, fmt_name='plain'))
 
 class ApiBoardList(RequestHandler):
   def get(self):

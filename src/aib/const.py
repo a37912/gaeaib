@@ -9,6 +9,7 @@ boardlist_order = (
 )
 boardlist = dict(boardlist_order)
 THREAD_PER_PAGE = 10
+BOARD_PAGES = 5
 REPLIES_MAIN = 5
 
 POST_QUOTA = 6
