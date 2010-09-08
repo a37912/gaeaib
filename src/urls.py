@@ -114,7 +114,11 @@ def get_rules():
       endpoint = "cron:clean",
       handler = "aib.clean.CleanBlob"
     ),
-          
+    Rule(
+      "/winry/clean_thread",
+      endpoint = "cron:clean:thread",
+      handler = "aib.clean.CleanThread"
+    ),
     Rule(
       '/_ah/queue/deferred',
       endpoint = 'tasks/deferred',

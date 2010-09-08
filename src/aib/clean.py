@@ -1,9 +1,9 @@
 import logging
 from google.appengine.ext.blobstore import BlobInfo
-from google.appengine.ext import deferred
+from google.appengine.ext import deferred, db
 from tipfy import RequestHandler, Response
 
-from aib.models import Thread
+from aib.models import Thread, Board
 
 class CleanBlob(RequestHandler):
   def get(self):
@@ -37,4 +37,29 @@ def do_clean(cursor=None):
     blob.delete()
 
   deferred.defer(do_clean, bq.cursor(), _countdown=30)
+
+class CleanThread(RequestHandler):
+  def get(self):
+    do_clean_thread()
+    return Response("yarr")
+
+def do_clean_thread(cursor=None):
+  thq = Thread.all(keys_only=True)
+
+  if cursor:
+    thq.with_cursor(cursor)
+
+  thread = thq.get()
+
+  if not thread:
+    logging.info("stop thread clean")
+    return
+
+  board = Board.get(thread.parent())
+
+  if not board or thread.id() not in board.thread:
+    db.delete(thread)
+    logging.info("purged thread")
+
+  deferred.defer(do_clean_thread, thq.cursor(), _countdown=10)
 
