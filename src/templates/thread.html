@@ -114,7 +114,7 @@
 {% if pages %}
 Pages:
 {% for page in pages %}
-[<a href = "page{{page}}">{{page}}</a>]
+[<a href = "{% if page %}page{{page}}{% else %}./{% endif %}">{{page}}</a>]
 {% endfor %}
 <hr/>
 {% endif %}
