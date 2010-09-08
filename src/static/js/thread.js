@@ -162,12 +162,7 @@ $(document).ready(function() {
   no_preview = false;
   no_preview_hide = false;
   preview_cache = new Object();
-
-  $("a.postref").each(
-    function() {
-      var postid = $(this).attr("postid");
-
-      $(this).mouseover( function(e) {
+  handle_preview = function(postid, e) {
         if (no_preview) {
           return;
         }
@@ -203,7 +198,31 @@ $(document).ready(function() {
         );
 
         }
-      )
+  $("a.postref").each(
+    function() {
+      var postid = $(this).attr("postid");
+
+      var repl = $("#post-replies-"+postid);
+      var tpl = $("#repl_link_template");
+
+      if (repl.length!=0 && tpl.length!= 0) {
+        tpl = tpl.clone();
+        var tpl_a = tpl.find("a");
+        tpl_a.text(">>"+postid);
+        tpl_a.attr("href", "#p"+postid);
+        tpl_a.mouseover( function(e) {handle_preview(postid, e)} );
+ 
+        var rain = $("#post-"+postid+" span.rainbow").clone();
+
+        tpl.append(rain);
+
+
+        repl.append(tpl);
+        repl.show();
+        tpl.show();
+      }
+
+      $(this).mouseover( function(e) {handle_preview(postid, e)} );
 
     }
   );

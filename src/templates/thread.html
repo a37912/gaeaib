@@ -76,7 +76,7 @@
       <td class="reply">
         <label>
           <span class="commentpostername">{{ post.name|escape }}</span>
-          {{post.rainbow_html}}
+          <span class="rainbow">{{post.rainbow_html}}</span>
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
         {{post.time}}
@@ -98,6 +98,7 @@
 </a>
         {% endif %}
         <blockquote class="postdata">{{ post.text|escape }}</blockquote>
+        <div class="post-replies" id="post-replies-{{post.post}}">ref: </div>
       </td>
     </tr>
   </tbody>
@@ -118,6 +119,10 @@ Pages:
 {% endfor %}
 <hr/>
 {% endif %}
+
+<span id="repl_link_template">
+  <a href="#"></a>
+</span>
 
 <table class="reply" id="post_template" style="display:none">
   <tbody>
