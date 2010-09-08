@@ -42,9 +42,10 @@ $(document).ready(function() {
  
   $(".postdata").each(
     function() {
+      var postid = $(this).attr("postid");
       var html = $(this).html();
       html = html.replace(/&gt;&gt;([0-9]+)/g, 
-        '<a postid="$1" class="postref" href="/'+_board+'/p$1">&gt;&gt;$1</a>'
+        '<a frmpostid="' + postid + '" postid="$1" class="postref" href="/'+_board+'/p$1">&gt;&gt;$1</a>'
       );
 
 
@@ -201,16 +202,18 @@ $(document).ready(function() {
   $("a.postref").each(
     function() {
       var postid = $(this).attr("postid");
+      var frmpostid = $(this).attr("frmpostid");
 
       var repl = $("#post-replies-"+postid);
       var tpl = $("#repl_link_template");
 
       if (repl.length!=0 && tpl.length!= 0) {
+        var to
         tpl = tpl.clone();
         var tpl_a = tpl.find("a");
-        tpl_a.text(">>"+postid);
-        tpl_a.attr("href", "#p"+postid);
-        tpl_a.mouseover( function(e) {handle_preview(postid, e)} );
+        tpl_a.text(">>"+frmpostid);
+        tpl_a.attr("href", "#p"+frmpostid);
+        tpl_a.mouseover( function(e) {handle_preview(frmpostid, e)} );
  
         var rain = $("#post-"+postid+" span.rainbow").clone();
 

@@ -97,7 +97,7 @@
   <img class="thumb" src="{{post.image.thumb}}"/>
 </a>
         {% endif %}
-        <blockquote class="postdata">{{ post.text|escape }}</blockquote>
+        <blockquote class="postdata" postid="{{post.post}}">{{ post.text|escape }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}">ref: </div>
       </td>
     </tr>
