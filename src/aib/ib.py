@@ -16,7 +16,7 @@ from redir import RedirMW
 ## View: Main page - board list
 #
 class Index(RequestHandler):
-  #middleware = [RedirMW]
+  middleware = [RedirMW]
   def get(self, tpl):
     return render_response(tpl, boards = boardlist_order)
 
@@ -24,7 +24,7 @@ class Index(RequestHandler):
 #
 # @param board - string board name
 class Board(RequestHandler):
-  #middleware = [RedirMW]
+  middleware = [RedirMW]
 
   def get(self, board, page=0):
 
@@ -93,7 +93,7 @@ class Post(RequestHandler):
 # @param board - string board name
 # @Param thread - thread id where
 class Thread(RequestHandler):
-  #middleware = [RedirMW]
+  middleware = [RedirMW]
 
   def get(self, board, thread):
     cache = models.Cache.load(Board=board, Thread=thread)
@@ -101,10 +101,10 @@ class Thread(RequestHandler):
       return Response(cache)
 
     _thread_data = models.Thread.load(thread, board)
-    content = _thread_data.posts
-
-    if not content:
+    if not _thread_data:
       raise NotFound
+
+    content = _thread_data.posts
 
     thread_data = {
       'op' : content[0],

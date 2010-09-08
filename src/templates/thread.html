@@ -107,10 +107,12 @@
 
 {% endfor %}
 
+{% if pages %}
 Pages:
 {% for page in pages %}
 [<a href = "page{{page}}">{{page}}</a>]
 {% endfor %}
+{% endif %}
 <hr/>
 
 <table class="reply" id="post_template" style="display:none">
