@@ -205,25 +205,33 @@ $(document).ready(function() {
       var frmpostid = $(this).attr("frmpostid");
 
       var repl = $("#post-replies-"+postid);
+      var repl_links = repl.find("span a");
       var tpl = $("#repl_link_template");
 
-      if (repl.length!=0 && tpl.length!= 0) {
+
+      if(repl_links.length >= 4) {
+        repl.append("... etc");
+      }
+      if (repl_links.length < 4 && repl.length!=0 && tpl.length!= 0) {
         var to
         tpl = tpl.clone();
+        tpl.removeAttr("id");
         var tpl_a = tpl.find("a");
         tpl_a.text(">>"+frmpostid);
         tpl_a.attr("href", "#p"+frmpostid);
         tpl_a.mouseover( function(e) {handle_preview(frmpostid, e)} );
  
         var rain = $("#post-"+postid+" span.rainbow").clone();
+        rain.removeAttr("id");
+        rain.removeClass("rainbow");
 
         tpl.append(rain);
-
 
         repl.append(tpl);
         repl.show();
         tpl.show();
       }
+
 
       $(this).mouseover( function(e) {handle_preview(postid, e)} );
 
