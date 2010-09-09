@@ -199,7 +199,9 @@ $(document).ready(function() {
             success: function(d,s) {
               console.log("set cache");
               preview_cache[key] = d;
-              preview(e,d,s);
+              if(d) {
+                preview(e,d,s);
+              }
             },
             dataType: 'json',
           }
