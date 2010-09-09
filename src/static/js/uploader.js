@@ -21,6 +21,7 @@ function upload_to(url) {
       },
       error: function (data, status, e) 
       {
+        $("#upload_img").show();
         $("#upload_img").change(do_up);
         alert(data);
         alert(status + " err " + e);
@@ -30,6 +31,8 @@ function upload_to(url) {
 }
 
 do_up = function() {
+  $("#upload_img").hide();
+
   $("#view_img_msg").show();
   $.ajax(
     {
@@ -42,4 +45,5 @@ do_up = function() {
 }
 
 $("#upload_img").change(do_up);
-
+$("#upload_img").show();
+$("#view_img_nojs").hide();

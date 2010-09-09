@@ -13,14 +13,14 @@
     {% if thread.subject %}
     {{ thread.subject|escape }}
     {% else %}
-    Thread {{thread.id}}
+    Тред номер {{thread.id}}
     {% endif %}
   </div>
 
 <div class="oppost">
 {% if thread.op.image %}
 
-<span class="filesize">Image {{thread.op.image.content_type}}: 
+<span class="filesize">{{thread.op.image.content_type}}: 
   {{ thread.op.image.size }}</span>
 
 <span class="reflink">
@@ -44,7 +44,7 @@
 </label>
 
 {% if reply %}
-  <a class="reply" href="{{ thread.id }}/">Reply</a>
+  <a class="reply" href="{{ thread.id }}/">Ответить</a>
 {% else %}
 
 {% if thread.op.agent %}
@@ -65,7 +65,7 @@
 </div>
 
 {% if thread.skipmsg %}
-<span class="omittedposts">{{ thread.skipmsg }}</span>
+<span class="omittedposts">Пропущено {{ thread.skip }}</span>
 {% endif %}
 
 {% for post in thread.posts %}
@@ -90,7 +90,7 @@
           >#{{post.post}}</a>
         </span>
         {% if post.image %}
-  <span class="filesize">Image {{post.image.content_type}}: 
+  <span class="filesize">{{post.image.content_type}}: 
   {{ post.image.size }}</span>
         <br/>
 <a href="{{post.image.full}}" target="_blank">
@@ -113,7 +113,7 @@
 {% endfor %}
 
 {% if pages %}
-Pages:
+Страницы:
 {% for page in pages %}
 [<a href = "{% if page %}page{{page}}{% else %}./{% endif %}">{{page}}</a>]
 {% endfor %}
