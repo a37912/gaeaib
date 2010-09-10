@@ -4,7 +4,7 @@ boardlist_order = (
    ( 'a' , 'Anime',),
    ( 's' , 'School days',),
    ( 'mod' , 'Dating with Winry',),
-   ( 'ped' , 'Church of Pedaliq Scripts',),
+#   ( 'ped' , 'Church of Pedaliq Scripts',),
    ( 'wh' , 'Imperium', ),
 )
 boardlist = dict(boardlist_order)
@@ -14,7 +14,7 @@ REPLIES_MAIN = 5
 
 POST_QUOTA = 6
 POST_INERVAL = 10
-POST_IMG_INERVAL = 30
+POST_IMG_INERVAL = 20
 POST_IMG_QUOTA = 3
 
 

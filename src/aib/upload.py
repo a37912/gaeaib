@@ -17,8 +17,8 @@ class PostUrl(RequestHandler):
 
     logging.info("image quota %r = %d" % (self.request.remote_addr, quota ) )
 
-    if quota > POST_IMG_QUOTA:
-      return Response("http://winry.on.nimp.org/")
+    #if quota > POST_IMG_QUOTA:
+    #  return Response("http://winry.on.nimp.org/")
 
 
     return Response( 
