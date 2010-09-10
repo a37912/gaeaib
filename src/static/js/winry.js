@@ -5,7 +5,7 @@ function winry_mode() {
         var postid = $(this).attr("postid");
         var thread = $(this).attr("threadid");
 
-        var url = "/winry/delete/"+board+"/"+thread+"/"+postid;
+        var url = "/winry/delete/"+_board+"/"+thread+"/"+postid;
 
         $.ajax(
           {

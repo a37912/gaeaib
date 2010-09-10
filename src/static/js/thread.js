@@ -58,7 +58,7 @@ $(document).ready(function() {
       html = html.replace(/    (.*)/g, "<pre>$1</pre>");
       html = html.replace(/\%\%(.*)\%\%/g, '<span class="spoiler">$1</span>');
 
-      html = html.replace(/^&gt;([^&].*)/mg, '<p class="unkfunc">&gt;$1</p>');
+      html = html.replace(/^&gt;([^&].*)(\n|$)/mg, '<p class="unkfunc">&gt;$1</p>');
 
       html = html.replace(/\n/g, '<br/>');
 
