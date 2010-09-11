@@ -3,7 +3,7 @@ import logging
 from google.appengine.ext import db
 from google.appengine.api import memcache
 from tipfy.ext.db import PickleProperty
-from aetycoon import DerivedProperty
+from aetycoon import DerivedProperty, CompressedProperty
 from const import *
 
 class Board(db.Model):
@@ -134,7 +134,7 @@ class Thread(db.Model):
     )
 
 class Cache(db.Model):
-  data = db.TextProperty()
+  comp = CompressedProperty(6)
 
   @classmethod
   def gen_key(cls, **kw):
@@ -164,7 +164,8 @@ class Cache(db.Model):
 
     if ent:
       logging.info("got from db cache %r" % key)
-      return ent.data
+      memcache.set(key_str, ent.comp)
+      return ent.comp
 
     logging.info("no cache %r" % key_str)
 
@@ -175,7 +176,7 @@ class Cache(db.Model):
 
     memcache.set(key_str, data)
 
-    ent = cls(data=data, key=key)
+    ent = cls(comp=data.encode('utf8'), key=key)
     ent.put()
 
   @classmethod
