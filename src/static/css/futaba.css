@@ -164,7 +164,7 @@ span.spoiler:hover {
   padding: 2px 6px;
 }
 
-blockquote p.unkfunc {
+blockquote p.unkfunc, blockquote pre {
   margin-bottom: 0px;
   margin-top: 0px;
 }

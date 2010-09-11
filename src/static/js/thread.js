@@ -55,12 +55,13 @@ $(document).ready(function() {
 
       html = html.replace(/\*([^\*_]+)\*/g, "<i>$1</i>");
 
+      html = html.replace(/```(.*)```/g, "<pre>$1</pre>");
       html = html.replace(/    (.*)/g, "<pre>$1</pre>");
       html = html.replace(/\%\%(.*)\%\%/g, '<span class="spoiler">$1</span>');
 
       html = html.replace(/^&gt;([^&].*)(\n|$)/mg, '<p class="unkfunc">&gt;$1</p>');
 
-      html = html.replace(/\n/g, '<br/>');
+      html = html.replace(/\n([^ <])/g, '<br/>$1');
 
       html = html.replace(/(http:\/\/[^ <\n]*)/g, 
         '<a href="http://hiderefer.com/?$1">$1</a>' 
