@@ -137,13 +137,17 @@ a:hover {
   opacity: 0;
 }
 
-span.spoiler {
-    background: #F0D0B6;
-      color: #F0D0B6;
+span.spoiler, span.spoiler a {
+  background: #F0D0B6;
+  color: #F0D0B6;
 }
 span.spoiler:hover {
-        background: #F0D0B6;
-          color: #800000;
+  background: #F0D0B6;
+  color: #800000;
+}
+
+span.spoiler:hover a {
+  color: #0000EE;
 }
 
 .threadnum {
