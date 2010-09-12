@@ -5,7 +5,7 @@ boardlist_order = (
    ( 's' , 'School days',),
    ( 'mod' , 'Dating with Winry',),
 #   ( 'ped' , 'Church of Pedaliq Scripts',),
-   ( 'wh' , 'Imperium', ),
+#   ( 'wh' , 'Imperium', ),
 )
 boardlist = dict(boardlist_order)
 THREAD_PER_PAGE = 10
@@ -17,8 +17,10 @@ POST_INERVAL = 10
 POST_IMG_INERVAL = 20
 POST_IMG_QUOTA = 3
 
+MOD_NAME = 'Winry'
 
 board_options = {
     's': ['useragent'],
     'b': ['saem'],
+    'mod' : [ 'modsign'],
 }

@@ -82,6 +82,9 @@ a:hover {
 	color:#117743;
 	font-weight:bold;
 }
+span.modpost {
+  color:red;
+}
 .postertrip {
 	color:#228854;
 }

@@ -5,6 +5,7 @@ from google.appengine.api import memcache
 from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.api import images
+from google.appengine.api import users
 
 #from google.appengine.api import channel
 from tipfy import NotFound
@@ -85,6 +86,14 @@ def option_useragent(request, data):
   from werkzeug.useragents import UserAgent
   ua = UserAgent(request.environ)
   data['agent'] = "%s / %s" %(ua.platform, ua.browser)
+
+def option_modsign(request, data):
+  if data.get('name') != MOD_NAME:
+    return
+
+  user = users.get_current_user()
+  if users.is_current_user_admin():
+    data['typ'] = 'modpost'
 
 
 SUBJECT_MAX = 25

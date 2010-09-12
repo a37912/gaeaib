@@ -38,7 +38,7 @@
 {% endif %}
 
 <label>
-  <span class="postername">{{ thread.op.name|escape }}</span>
+  <span class="postername {{thread.op.typ}}">{{ thread.op.name|escape }}</span>
   {{thread.op.rainbow_html}}
   {{thread.op.time}}
 </label>
@@ -75,7 +75,7 @@
       <td class="doubledash">&gt;&gt;</td>
       <td class="reply">
         <label>
-          <span class="commentpostername">{{ post.name|escape }}</span>
+          <span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span>
           <span class="rainbow">{{post.rainbow_html}}</span>
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
