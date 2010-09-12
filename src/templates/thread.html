@@ -37,6 +37,7 @@
 </a>
 {% endif %}
 
+<a href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">[RAPE ME]</a>
 <label>
   <span class="postername">{{ thread.op.name|escape }}</span>
   {{thread.op.rainbow_html}}
@@ -74,6 +75,7 @@
     <tr>
       <td class="doubledash">&gt;&gt;</td>
       <td class="reply">
+	<a href="/delete/{{board}}/{{thread.id}}/{{post.post}}">[RAPE ME]</a>
         <label>
           <span class="commentpostername">{{ post.name|escape }}</span>
           <span class="rainbow">{{post.rainbow_html}}</span>
@@ -85,7 +87,7 @@
         {% endif %}
         <span class="reflink">
           <a class="reflink" name="p{{post.post}}" 
-            href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
+            href="/{{board}}/p{{post.post}}" Postid="{{post.post}}" 
             threadid="{{thread.id}}" 
           >#{{post.post}}</a>
         </span>

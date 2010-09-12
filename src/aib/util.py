@@ -207,3 +207,47 @@ def get_post(board, num):
   memcache.set(key, post)
 
   return post
+
+def delete_post(board,thread_num,post_num,rape_msg):
+
+  th = Thread.get(db.Key.from_path(
+      "Board", board, 
+      "Thread", thread_num
+      ))
+
+  [post] = [p for p in th.posts if p.get('post') == post_num]
+  logging.info("found: %r" % post)
+
+  key = post.get("key")
+  if key:
+    post.pop("key", None)
+    post.pop("image", None)
+    info = blobstore.BlobInfo.get(
+      blobstore.BlobKey(key))
+    info.delete()
+    
+    try:
+      th.images.remove(post.get("key"))
+    except:
+      pass
+    
+    logging.info("removed image %r" % post)
+    
+  else:
+    post['text'] = 'Fuuuuuu'       
+    post['rainbow_html'] = u'<b>' + rape_msg + '</b>'
+
+
+  th.put()
+  Cache.delete(
+    (
+      dict(Board=board, Thread=thread_num),
+      dict(Board=board)
+      )
+    )
+  
+  key = "posts-%s-%d" %(board, thread_num)
+  memcache.set(key, th.posts)
+  return
+
+

@@ -47,6 +47,11 @@ def get_rules():
       handler = "aib.ib.Post"
     ),
     Rule(
+      "/delete/<board>/<int:thread>/<int:post>",
+      endpoint = "board",
+      handler = "aib.ib.DeletePost",
+    ),
+    Rule(
       "/post_url",
       endpoint = "posturl",
       handler = "aib.upload.PostUrl",

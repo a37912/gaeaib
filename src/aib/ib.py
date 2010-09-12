@@ -5,9 +5,10 @@ from google.appengine.ext import db
 
 from tipfy import RequestHandler, redirect, Response, NotFound
 from tipfy.ext.jinja2 import render_response, render_template
+from tipfy.ext.session import SessionMiddleware, SessionMixin
 
 from forms import PostForm
-from util import get_threads, save_post, get_post
+from util import get_threads, save_post, get_post, delete_post
 
 from const import *
 import models
@@ -57,7 +58,8 @@ class Board(RequestHandler):
 #
 # @param board - string board name
 # @param thread - thread id where to post or "new"
-class Post(RequestHandler):
+class Post(RequestHandler, SessionMixin):
+  middleware = [SessionMiddleware]
   def get(self, board, thread):
     return redirect("/%s/%d" %( board, thread) )
 
@@ -85,6 +87,16 @@ class Post(RequestHandler):
     # if ok, save
     logging.info("data valid %r" %( form.data,))
     post, thread = save_post(self.request, form.data, board, thread)
+
+    if "posts" not in self.session:
+      self.session["posts"]=dict()
+
+    pdict = self.session["posts"]
+    if board not in pdict:
+      pdict[board] = list()
+
+    pdict[board].append(post)
+    self.session["posts"] = pdict
 
     return redirect("/%s/%d" % (board, thread))
 
@@ -144,3 +156,19 @@ class PostRedirect(RequestHandler):
     return redirect("/%s/%d/#p%d"% 
         (board, thread.id(), post)
       )
+
+
+## View: Rapes specifiend post
+#
+# @param board - string board name
+# @param thread - thread id
+# @param post - post id which will be deleted
+class DeletePost(RequestHandler, SessionMixin):
+  middleware = [SessionMiddleware]
+  def get(self, board, thread, post):
+    
+    if "posts" in self.session and board in self.session["posts"]:
+      if post in self.session["posts"][board]:
+        delete_post(board, thread, post, "RAPED")
+
+    return redirect("/%s/%d" %( board, thread) )
