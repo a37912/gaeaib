@@ -208,8 +208,16 @@ def get_post(board, num):
 
   return post
 
-def delete_post(board,thread_num,post_num,rape_msg):
+## Helper: deletes image/post from the thread
+#
+# @param board - string board name
+# @param thread_num - thread id
+# @param post_num - post id 
+# @param rape_msg - string replacement of the rainbow
+# @return True if it's a text deletion else otherwise
+def delete_post(board, thread_num, post_num, rape_msg):
 
+  last_deletion = False
   th = Thread.get(db.Key.from_path(
       "Board", board, 
       "Thread", thread_num
@@ -234,6 +242,7 @@ def delete_post(board,thread_num,post_num,rape_msg):
     logging.info("removed image %r" % post)
     
   else:
+    last_deletion = True
     post['text'] = 'Fuuuuuu'       
     post['rainbow_html'] = u'<b>' + rape_msg + '</b>'
 
@@ -248,6 +257,4 @@ def delete_post(board,thread_num,post_num,rape_msg):
   
   key = "posts-%s-%d" %(board, thread_num)
   memcache.set(key, th.posts)
-  return
-
-
+  return last_deletion

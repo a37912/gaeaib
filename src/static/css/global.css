@@ -109,3 +109,7 @@ form .trap {
 .logo {
   float: right;
 }
+
+.erase-link img {
+  border: 0 none;
+}

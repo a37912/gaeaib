@@ -35,9 +35,15 @@
 <a href="{{thread.op.image.full}}" target="_blank">
   <img class="thumb" src="{{thread.op.image.thumb}}"/>
 </a>
+<a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
+  <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
+</a>
+{% else %}
+<a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
+  <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png">
+</a>
 {% endif %}
 
-<a href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">[RAPE ME]</a>
 <label>
   <span class="postername">{{ thread.op.name|escape }}</span>
   {{thread.op.rainbow_html}}
@@ -75,7 +81,13 @@
     <tr>
       <td class="doubledash">&gt;&gt;</td>
       <td class="reply">
-	<a href="/delete/{{board}}/{{thread.id}}/{{post.post}}">[RAPE ME]</a>
+        <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{post.post}}">
+          {% if post.image %}
+          <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
+          {% else %}
+          <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png">
+          {% endif %}
+        </a>
         <label>
           <span class="commentpostername">{{ post.name|escape }}</span>
           <span class="rainbow">{{post.rainbow_html}}</span>
@@ -87,7 +99,7 @@
         {% endif %}
         <span class="reflink">
           <a class="reflink" name="p{{post.post}}" 
-            href="/{{board}}/p{{post.post}}" Postid="{{post.post}}" 
+            href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
             threadid="{{thread.id}}" 
           >#{{post.post}}</a>
         </span>
