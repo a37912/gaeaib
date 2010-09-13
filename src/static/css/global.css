@@ -113,3 +113,14 @@ form .trap {
 .erase-link img {
   border: 0 none;
 }
+
+.erase-link { 
+  opacity: 0;
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.5s;
+}
+
+.oppost:hover .erase-link, .reply:hover .erase-link {
+  opacity: 1;
+}
+
