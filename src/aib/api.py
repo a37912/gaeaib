@@ -74,55 +74,7 @@ class ApiBoardList(RequestHandler):
 
 class Delete(RequestHandler):
   def post(self, board, thread, post):
-
-    th = Thread.get(db.Key.from_path(
-      "Board", board, 
-      "Thread", thread
-      )
-    )
-
-    for idx,p in enumerate(th.posts):
-      if p.get("post") != post:
-        continue
-
-      logging.info("found: %r" % p)
-
-      key = p.get("key")
-
-      if key:
-        p.pop("key", None)
-        p.pop("image", None)
-        info = blobstore.BlobInfo.get(
-            blobstore.BlobKey(key)
-        )
-        info.delete()
-
-        try:
-          th.images.remove(p.get("key"))
-        except:
-          pass
-
-        logging.info("removed image %r" % p)
-
-      else:
-        p['text'] = 'Fuuuuuu'
-       
-      p['rainbow_html'] = u'<b>ANAL RAPED</b>'
-
-      break
-
-    th.put()
-
-    key = "posts-%s-%d" %(board, thread)
-    memcache.set(key, th.posts)
-
-    Cache.delete(
-      (
-        dict(Board=board, Thread=thread),
-        dict(Board=board)
-      )
-    )
-
+    util.delete_post(board, thread, post, "ANAL RAPED")
     return Response("ok")
 
 class Unban(RequestHandler):

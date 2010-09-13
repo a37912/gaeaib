@@ -9,3 +9,11 @@ config['tipfy'] = {
 config['tipfy.ext.jinja2'] = {
   'templates_dir': ['templates'],
 }
+
+config['tipfy.ext.session'] = {
+  #choose another one secret_key plz
+  'secret_key': '#FIXME BLDJAAAAAAAD!!!!',
+  'cookie_args': {
+    'max_age': 600,
+    }
+}
