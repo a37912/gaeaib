@@ -163,7 +163,7 @@ class DeletePost(RequestHandler, SecureCookieMixin, CookieMixin):
     
     key = board + "%d" % post
     cookie = self.get_secure_cookie(key, True)
-    if "win" in cookie and cookie['win'] == key:
+    if cookie.get('win') == key:
       if delete_post(board, thread, post, "AN HERO"):
         self.delete_cookie(key)
 
