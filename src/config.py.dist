@@ -17,3 +17,11 @@ config['tipfy.ext.session'] = {
     'max_age': 600,
     }
 }
+
+config['aib.forms'] = {
+  'spamlist' : [
+    '<a href',
+    '\[url=',
+    '\[link=',
+  ],
+}

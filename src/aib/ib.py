@@ -81,8 +81,8 @@ class Post(RequestHandler, SecureCookieMixin):
     # validate post form
     form = PostForm(self.request.form)
 
-    if not form.validate:
-      return redirect("/%s" % board)
+    if not form.validate():
+      return redirect("/%s/" % board)
 
     # if ok, save
     logging.info("data valid %r" %( form.data,))
