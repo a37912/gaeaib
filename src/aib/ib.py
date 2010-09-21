@@ -1,7 +1,9 @@
 import logging
+from uuid import uuid4 as uuid
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
+from google.appengine.api import channel
 
 from tipfy import RequestHandler, redirect, Response, NotFound
 from tipfy.ext.jinja2 import render_response, render_template
@@ -98,13 +100,15 @@ class Post(RequestHandler, SecureCookieMixin):
 #
 # @param board - string board name
 # @Param thread - thread id where
-class Thread(RequestHandler):
-  middleware = [RedirMW]
+class Thread(RequestHandler, SecureCookieMixin, CookieMixin):
+  middleware = [RedirMW, SessionMiddleware]
 
   def get(self, board, thread):
+    """
     cache = models.Cache.load(Board=board, Thread=thread)
     if cache:
       return Response(cache)
+    """
 
     _thread_data = models.Thread.load(thread, board)
     if not _thread_data:
@@ -119,13 +123,23 @@ class Thread(RequestHandler):
       'subject' : _thread_data.subject,
     }
 
+    key = "update-thread-%s-%d" % (board, thread)
+    person_cookie = self.get_secure_cookie("person", True)
+    person = person_cookie.get("update", str(uuid()))
+    person_cookie['update'] = person
+
+    watchers = memcache.get(key) or []
+    if person not in watchers:
+      watchers.append(person)
+      memcache.set(key, watchers[:20], time=60*20) # FIXME
+
     data = {}
     data['threads'] = (thread_data,)
     data['post_form'] = PostForm()
     data['board_name'] = boardlist.get(board, "Woooo???")
     data['board'] = board
-    key = "update-thread-%s-%d" % (board, thread)
-    #data['thread_token'] = channel.create_channel(key)
+    logging.info("create token for key %s" % key)
+    data['thread_token'] = channel.create_channel(person+key)
     data['boards'] = boardlist_order
 
     html = render_template("thread.html", **data)

@@ -7,7 +7,8 @@ from google.appengine.ext import db
 from google.appengine.api import images
 from google.appengine.api import users
 
-#from google.appengine.api import channel
+from google.appengine.api import channel
+from django.utils.simplejson import dumps
 from tipfy import NotFound
 import rainbow
 from const import *
@@ -113,8 +114,9 @@ def save_post(request, data, board, thread):
   board_db.counter += 1
 
   # create new thread
+  new = False
   if thread == 'new':
-
+    new = True
     if data.get("sage"):
       raise NotFound() # FIXME: move to form
 
@@ -187,12 +189,15 @@ def save_post(request, data, board, thread):
 
   memcache.set("post-%s-%d" %(board, board_db.counter), data)
 
+
+  key = "update-thread-%s-%d" % (board, thread)
+  if not new:
+    watchers = memcache.get(key) or []
+    for person in watchers:
+      logging.info("send data to key %s" % (person+key))
+      channel.send_message(person+key, dumps(data))
+
   return board_db.counter, thread
-
-  #key = "update-thread-%s-%d" % (board, thread)
-  #if not new:
-  #  channel.send_message(key, dumps(data))
-
 
 def get_post(board, num):
   key = "post-%(board)s-%(num)d" % {"board":board, "num":num}
