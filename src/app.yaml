@@ -11,9 +11,9 @@ handlers:
   static_files: static/robots.txt
   upload: static/robots.txt
 
-- url: /
-  static_files: static/index.html
-  upload: static/index.html
+#- url: /
+#  static_files: static/index.html
+#  upload: static/index.html
 
 - url: /favicon.ico
   static_files: static/images/favicon.ico

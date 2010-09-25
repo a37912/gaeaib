@@ -1,0 +1,6 @@
+User-Agent: *
+Host: www.bloop.ru
+
+User-agent: *
+#FBI employee only
+Disallow: /fbi/

@@ -4,15 +4,11 @@
 <link rel="stylesheet" type="text/css" href="/static/css/list.css" title="Futaba">
 {% endblock %}
 
-{% block precontent %}
+{% block body %}
 <h2>Гайкочян</h2>
-{% endblock %}
-{% block content %}
 
 <div class="list_title">Boards</div>
-{% for board,text in boards %}
-<a target="board" href="/{{board}}/">/{{board}}/</a> - {{text}} <br/>
-{% endfor %}
+{% for board,text in boards %}<a target="board" href="/{{board}}/">/{{board}}/</a> - {{text}} <br/>{% endfor %}
 
 <hr/>
 

@@ -1,8 +1,24 @@
-body {
-	margin: 0;
-	padding: 8px;
-	margin-bottom: auto;
+/* Mappings added for integrated TOC handling */
+
+* html { overflow: hidden;  }
+* html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
+
+#menu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
+#tocMenu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
+
+* html #havmenu { position: absolute; }
+
+#bodyContent { margin-left: 210px; }
+* html #bodyContent { margin-left: 220px; }
+
+#bodyContent div object {
+    padding: 0;
+    border-top: 1px solid #808080;
+    border-right: 1px solid #808080;
+    border-bottom: 0;
+    border-left: 1px solid #808080; 
 }
+
 
 blockquote blockquote {
 	margin-left: 0em;

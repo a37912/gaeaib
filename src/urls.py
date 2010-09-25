@@ -4,7 +4,7 @@ from tipfy import Rule
 def get_rules():
   return [
     Rule( 
-      "/main/", 
+      "/", 
       endpoint="index", 
       handler="aib.ib.Index",
       defaults = {"tpl" : "index.html" }
