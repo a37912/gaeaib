@@ -10,6 +10,18 @@ def get_rules():
       defaults = {"tpl" : "index.html" }
     ),
     Rule( 
+      "/api", 
+      endpoint="index", 
+      handler="aib.ib.Index",
+      defaults = {"tpl" : "api.html" }
+    ),
+    Rule( 
+      "/about", 
+      endpoint="index", 
+      handler="aib.ib.Index",
+      defaults = {"tpl" : "about.html" }
+    ),
+    Rule( 
       "/list/", 
       endpoint="list", 
       handler="aib.ib.Index",

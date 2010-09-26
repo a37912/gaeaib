@@ -3,7 +3,9 @@ boardlist_order = (
    ( 'b' , 'Beating heart'),
    ( 'a' , 'Anime',),
    ( 's' , 'School days',),
+   ( 'ne', 'Nekospot'),
    ( 'mod' , 'Dating with Winry',),
+   
 #   ( 'ped' , 'Church of Pedaliq Scripts',),
 #   ( 'wh' , 'Imperium', ),
 )
