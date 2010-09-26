@@ -1,6 +1,5 @@
 import logging
 from md5 import md5
-from tipfy.ext.jinja2 import get_env
 
 TEMPLATE='<span style="background: none repeat scroll 0% 0%rgb(%d, %d, %d);">&nbsp;&nbsp;</span>'
 

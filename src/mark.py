@@ -1,5 +1,6 @@
 import re
-
+from jinja2 import contextfilter, Markup
+from cgi import escape
 
 
 POST_LINK = (
@@ -150,6 +151,21 @@ def markup(data, **kw):
   data = str.join("\n", lines)
 
   return data % kw
+
+
+@contextfilter
+def jinja2(ctx, post):
+  kw = {
+      "postid" : post.get("post"),
+      "board" : ctx.get("board"),
+      "data" : escape(post.get("text")),
+  }
+  return markup(**kw)
+
+def install_jinja2():
+  from tipfy.ext.jinja2 import get_env
+  environment = get_env()
+  environment.filters['wakaba'] = jinja2
 
 
 if __name__ == '__main__':

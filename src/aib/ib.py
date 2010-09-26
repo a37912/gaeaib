@@ -13,6 +13,8 @@ from util import get_threads, save_post, get_post, delete_post
 from const import *
 import models
 from redir import RedirMW
+import mark
+mark.install_jinja2()
 
 ## View: Main page - board list
 #
@@ -103,7 +105,7 @@ class Thread(RequestHandler):
 
   def get(self, board, thread):
     cache = models.Cache.load(Board=board, Thread=thread)
-    if cache:
+    if cache and 0:
       return Response(cache)
 
     _thread_data = models.Thread.load(thread, board)

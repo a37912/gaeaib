@@ -68,7 +68,7 @@
 {% endif %}
 
 <br/>
-<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text|escape }}</blockquote>
+<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op|wakaba }}</blockquote>
 </div>
 
 {% if thread.skipmsg %}
@@ -111,7 +111,7 @@
   <img class="thumb" src="{{post.image.thumb}}"/>
 </a>
         {% endif %}
-        <blockquote class="postdata" postid="{{post.post}}">{{ post.text|escape }}</blockquote>
+        <blockquote class="postdata" postid="{{post.post}}">{{ post|wakaba }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}">ref: </div>
       </td>
     </tr>
