@@ -1,8 +1,13 @@
 import logging
+from uuid import uuid4 as uuid
 from tipfy import RequestHandler, Response
+from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
+
 from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.ext import blobstore
+from google.appengine.api import channel
+
 from django.utils.simplejson import dumps
 import util
 from models import Board, Thread, Cache
@@ -84,3 +89,20 @@ class Unban(RequestHandler):
 
     return Response("free")
 
+class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
+  middleware = [SessionMiddleware]
+
+  def post(self, board, thread):
+    key = "update-thread-%s-%d" % (board, thread)
+    person_cookie = self.get_secure_cookie("person", True)
+    person = person_cookie.get("update", str(uuid()))
+    person_cookie['update'] = person
+
+    watchers = memcache.get(key) or []
+    if person not in watchers:
+      watchers.append(person)
+      memcache.set(key, watchers[:20], time=60*20) # FIXME
+
+    token = channel.create_channel(person+key)
+
+    return json_response( {"token" : token} )

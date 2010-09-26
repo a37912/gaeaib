@@ -43,7 +43,8 @@ handlers:
 - url: /.*
   script: main.py
 
-admin_console:                                                                                                                           
-  pages:                                                                                                                                 
-  - name: "Stats"                                                                                                                        
+admin_console:
+  pages:
+  - name: "Stats"
     url: /stats
+    

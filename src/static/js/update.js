@@ -4,7 +4,7 @@ function listen_updates(token) {
   updates = new goog.appengine.Channel(token);
   var socket = updates.open();
   socket.onopen = function() {
-    console.log("soet connected");
+    console.log("socket connected");
   };
   socket.onmessage = function(evt) {
     o = JSON.parse(evt.data);
@@ -47,14 +47,28 @@ function listen_updates(token) {
 
     container.append(np);
 
-    np.show();
+    np.slideUp(0).slideDown(300);
 
 
   }
 }
 
-console.log(token);
+try {
+  thread;
+} catch (e) {
+  thread = "";
+}
 
-if (token != "") {
-  listen_updates(token);
+if (thread != "") {
+  $.ajax(
+    {
+      url: "update",
+      dataType: 'json',
+      type: "POST",
+      success: function(data) {
+        console.log(data.token);
+        listen_updates(data.token);
+      }
+    }
+  )
 }

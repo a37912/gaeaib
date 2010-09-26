@@ -154,7 +154,7 @@ class Cache(db.Model):
 
     key_str,key = cls.gen_key(**kw)
 
-    data = memcache.get(key_str)
+    data = None #memcache.get(key_str)
 
     if data:
       logging.info("got from cache %r" % key_str)

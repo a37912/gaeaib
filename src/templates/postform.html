@@ -65,7 +65,7 @@
 <script>
 _reply = {% if reply %}true{% else %}false{% endif %};
 _board = "{{board}}";
-token = "{{thread_token}}"; 
+thread = "{{thread}}";
 
 try{
   console
@@ -83,5 +83,5 @@ if (console == undefined) {
 <script type="text/javascript" src="/static/js/uploader.js?3"></script>
 <script type="text/javascript" src="/static/js/winry.js?2"></script>
 <script src='/_ah/channel/jsapi'></script>
-<script src="/static/js/update.js"></script>
+<script src="/static/js/update.js?17.0"></script>
 {% endblock %}
