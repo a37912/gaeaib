@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block body %}
-<h2>Гайкочян</h2>
+<h2><a href="/" target="_top">Гайкочян</a></h2>
 
 <div class="list_title">Boards</div>
-{% for board,text in boards %}<a target="board" href="/{{board}}/">/{{board}}/</a> - {{text}} <br/>{% endfor %}
+{% for board,text in boards %}<a target="_top" href="/{{board}}/">/{{board}}/</a> - {{text}} <br/>{% endfor %}
 
 <hr/>
 

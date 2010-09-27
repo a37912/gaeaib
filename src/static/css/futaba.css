@@ -98,8 +98,8 @@ span.modpost {
 .reply {
 	background: #F0E0D6;
 	color: #800000;
-        -moz-border-radius: 9px 9px 9px 9px;
-        border-radius: 9px 9px 9px 9px;
+  -moz-border-radius: 9px 9px 9px 9px;
+  border-radius: 9px 9px 9px 9px;
 }
 .replyhl {
 	background: #F0C0B0;
@@ -138,6 +138,7 @@ span.modpost {
   -webkit-transition-property: opacity, -webkit-box-shadow:;
   -webkit-transition-duration: 0.5s, 2s;
   opacity: 0;
+  max-width: 60%;
 }
 
 span.spoiler, span.spoiler a {

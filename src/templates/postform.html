@@ -1,66 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-[{% for board,text in boards %}<a href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
 
 {% block postform %}
-<div class="postarea"> 
+<div id="postarea" class="{% if not reply %}reply{% endif %}"> 
 <form method="post" action="post/" >
- <table class="postform"> 
-    <tbody> 
-      <tr>
-        <th><label for="id_name">Имя:</label></th>
-        <td><input placeholder="Anonymous" type="text" name="name" id="id_name" /></td>
-      </tr> 
+<h3>{% if not reply %}Ответить{% else %}Новая тема{% endif %}</h3>
+ <div class="field">
+   <label class="formQuestion" for="id_name">Имя</label>
+   <div class="formHelp"></div>
+   <input type="text" name="name" id="id_name" value="" size="31" maxlength="30" placeholder="Anonymous" />
+ </div>
 {% if not reply %}
-      <tr>
-        <th><label for="id_sage">Сажа:</label></th>
-        <td><input type="checkbox" name="sage" id="id_sage" /></td>
-      </tr> 
+ <div class="field">
+   <input class="noborder" type="checkbox" value="on" name="sage" id="id_sage">
+   <label class="formQuestion" for="id_sage">Сажа</label>
+   <div class="formHelp"></div>
+ </div>
 {% else %}
-      <tr>
-        <th><label for="id_subject">Тема:</label></th>
-        <td><input placeholder="25 буковок" size=25 type="text" name="subject" id="id_subject" /></td>
-      </tr> 
-{% endif %}
-      <tr>
-        <th><label for="id_text">Вброс:</label></th>
-        <td><textarea placeholder="Дай анонимусу текстовое поле и он напишет туда что?" id="id_text" rows="10" cols="40" name="text"></textarea></td>
-      </tr> 
-      <tr> 
-        <th> 
-          <label for="id_image">Картинка: </label> 
-        </th> 
-        <td> 
-          <span id="view_img_nojs">Включите javascript для загрузки
-            файлов</span>
-          <input style="display: none" id="upload_img" type="file" name="image"/> 
-          <img id="view_img" style="display: none" src="" />
-          <br/>
-          <span id="view_img_msg"  style="display: none" >
-            Подождите, пока грузится картинка
-            </span>
-        </td> 
-      </tr> 
-    </tbody> 
-  </table> 
+ <div id="title" class="field title">
+   <label class="formQuestion" for="id_subject">Тема</label>
+   <div class="formHelp"></div>
+   <input type="text" name="title" id="id_subject" value="" size="26" maxlength="25" placeholder="25 буковок" />
+ </div>
+{% endif %} 
+ <div class="field">
+   <label class="formQuestion" for="id_text">Вброс</label>
+   <div class="formHelp"></div>
+   <div><textarea rows="10" cols="40" name="text" id="id_text" placeholder="Дай анонимусу текстовое поле и он напишет туда что?"></textarea></div>
+ </div>
 
-  <input type="hidden" id="upload_key" name="key"></input>
- 
-  <input type="submit" class="g-button" value="Отправить"/>
+ <div class="field">
+   <label class="formQuestion" for="image">Изображение</label>
+   <div class="formHelp" id="image_help">Будет показано в списке новостей и в самой новости. Изображение будет уменьшено до нормальных размеров.</div>
+   <span id="view_img_nojs">Включите javascript для загрузки файлов</span>
+   <input style="display: none" id="upload_img" type="file" name="image" id="image" size="30"/> 
+   <img id="view_img" style="display: none" src="" />
+   <br />
+   <span id="view_img_msg"  style="display: none" >Подождите, пока грузится картинка</span>
+ </div>
+ <input type="hidden" id="upload_key" name="key" />
+  <input type="submit" class="g-button" value="Отправить" />
 </form>
 </div>
-
-<hr>
 {% endblock %}
-
 {% block threads %}{% endblock %}
-
-[{% for board,text in boards %}<a href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
-
-
 {% endblock %}
-
 {% block scripts %}
 <script>
 _reply = {% if reply %}true{% else %}false{% endif %};

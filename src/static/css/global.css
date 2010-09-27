@@ -1,143 +1,255 @@
-/* Mappings added for integrated TOC handling */
+body {
+font: 100% Arial, FreeSans, sans-serif;
+background: White;
+color: Black;
+}
+h1, h2, h3, h4, h5, h6 {
+font-family: "Helvetica Neue", Arial, FreeSans, sans-serif;
+font-weight: bold;
+line-height: 150%;
+color: Black;
+}
+h1, h2 {
+letter-spacing: -0.05em;
+}
+h1 {
+font-size: 2em;
+}
+h2 {
+font-size: 1.75em;
+}
+h3 {
+font-size: 1.5em;
+}
+h4 {
+font-size: 1.25em;
+}
+h5 {
+font-size: 1em;
+}
+h6 {
+font-size: 0.8em;
+}
+p {
+}
+a:link, a:visited {
+color: #205c90;
+}
+dt {
+font-weight: bold;
+}
+input {
+font-family: "Lucida Grande", Arial, FreeSans;
+}
+q {
+quotes: "“" "”" "‘" "’"
+}
 
 * html { overflow: hidden;  }
 * html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
 
 #menu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
-#tocMenu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
 
 * html #havmenu { position: absolute; }
 
 #bodyContent { margin-left: 210px; }
 * html #bodyContent { margin-left: 220px; }
 
-#bodyContent div object {
-    padding: 0;
-    border-top: 1px solid #808080;
-    border-right: 1px solid #808080;
-    border-bottom: 0;
-    border-left: 1px solid #808080; 
+div #postarea {
+/*top: -1.5em;
+width: 225px; */
+background-color: white;
+border: 1px solid #999;
+-webkit-border-radius: 10px;
+-webkit-box-shadow: 0px 0px 5px #BBB;
+padding: 0px 13px 10px 13px;
+margin-left: 1em;
+font-size: 82%;
+margin-right: 5px;
 }
 
+div#postarea.reply {
+background-color: #D6FFD9;
+}
+
+#postarea h3{
+padding: 0px 0px 0px;
+margin: 5px 0;
+}
+
+div.formControls {
+margin: 1em 0;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+background-color: #ffffe0;
+}
+label {
+font-weight:bold;
+}
+input[type="checkbox"] + label:hover {
+background: #ddd;
+outline: 0.1em solid #ddd;
+}
+
+.field {
+clear: both;
+margin-top: 0;
+}
+.field input[type="text"] {
+}
+input#title {
+width: 100%;
+}
+
+input[type="checkbox"] + label:hover {
+background: #ddd;
+outline: 0.1em solid #ddd;
+}
+
+#title input {
+font-family: "Helvetica Neue", Arial, FreeSans, sans-serif;
+font-weight: bold;
+line-height: 125%;
+color: Black;
+letter-spacing: -0.05em;
+font-size: 1.625em; /* */
+}
+
+#topmenu {
+position:fixed;
+top:0px;
+left:220px;
+border-left:1px #CCC solid;
+border-right:1px #CCC solid;
+border-bottom:1px #CCC solid;
+padding:3px;
+-moz-border-radius: 0px 0px 5px 5px;
+-webkit-border-bottom-left-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+z-index:100;
+background:white;
+}
 
 blockquote blockquote {
-	margin-left: 0em;
+margin-left: 0em;
 }
 
 form {
-	margin-bottom: 0px;
+margin-bottom: 0px;
 }
 
 form .trap {
-	display:none;
+display:none;
 }
 
 .postarea {
-	text-align: center;
+text-align: center;
 }
 
 .postarea table {
-	margin: 0px auto;
-	text-align: left;
+margin: 0px auto;
+text-align: left;
 }
 
 .aa {
-  white-space: pre;
-  text-align: left;
-  font-family: IPAMonaPGothic, Mona, 'MS PGothic', YOzFontAA97 !important;
+white-space: pre;
+text-align: left;
+font-family: IPAMonaPGothic, Mona, 'MS PGothic', YOzFontAA97 !important;
 }
 
 .thumb {
-	border: none;
-	float: left;
-	margin: 2px 20px;
+border: none;
+float: left;
+margin: 2px 20px;
 }
 
 .nothumb {
-	float: left;
-	background: #eee;
-	border: 2px dashed #aaa;
-	text-align: center;
-	margin: 2px 20px;
-	padding: 1em 0.5em 1em 0.5em;
+float: left;
+background: #eee;
+border: 2px dashed #aaa;
+text-align: center;
+margin: 2px 20px;
+padding: 1em 0.5em 1em 0.5em;
 }
 
 .reply blockquote, blockquote :last-child {
-	margin-bottom: 0em;
+margin-bottom: 0em;
 }
 
 .reflink a {
-	color: inherit;
-	text-decoration: none;
+color: inherit;
+text-decoration: none;
 }
 
 .reflink a:hover{
-	color: #800000;
+color: #800000;
 }
 
 .reply .filesize {
-	margin-left: 20px;
+margin-left: 20px;
 }
 
 .userdelete {
-	float: right;
-	text-align: center;
-	white-space: nowrap;
+float: right;
+text-align: center;
+white-space: nowrap;
 }
 
 .doubledash {
- 	vertical-align: top;
-	clear: both;
-	float: left;
+vertical-align: top;
+clear: both;
+float: left;
 }
 
 .replypage .replylink {
-	display: none;
+display: none;
 }
 
 .pagelist {
-	max-width: 600px;
+max-width: 600px;
 }
 
 .admin {
-	color: #800080;
-	font-weight: normal;
+color: #800080;
+font-weight: normal;
 }
 
 .mod {
-	color: #FF0000;
-	font-weight: normal;
+color: #FF0000;
+font-weight: normal;
 }
 
 .vip {
-	color: #336600;
-	font-weight: normal;
+color: #336600;
+font-weight: normal;
 }
 
 .managemenu {
-  background: #EEAA88;
-	color: #800000;
-	padding: 4px;
-	clear: both;
-	-moz-border-radius: 4px;
+background: #EEAA88;
+color: #800000;
+padding: 4px;
+clear: both;
+-moz-border-radius: 4px;
 }
 
 .logo {
-  float: right;
+float: right;
 }
 
 .erase-link img {
-  border: 0 none;
+border: 0 none;
 }
 
 .erase-link { 
-  opacity: 0;
-  -webkit-transition-property: opacity;
-  -webkit-transition-duration: 0.5s;
+opacity: 0;
+-webkit-transition-property: opacity;
+-webkit-transition-duration: 0.5s;
 }
 
 .oppost:hover .erase-link, .reply:hover .erase-link {
-  opacity: 1;
+opacity: 1;
 }
 
 button.g-button, a.g-button, input[type=submit].g-button {

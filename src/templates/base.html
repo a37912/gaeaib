@@ -16,15 +16,17 @@
   <body>
   {% block body %}
     <div id="bodyContent">
+      <div id="topmenu">
+      [{% for board,text in boards %}<a href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
+      </div>
       {% block precontent %}
         <div class="logo"></div>
         <h1>Добро пожаловать. Снова. Опять.</h1>
       {% endblock %}
-      <hr>
       {% block content %}{% endblock %}
       <div class="footer" > 
         Winry Rokbell | 
-        <a href="/static/statement.html">Statement</a> |
+        <a href="/about">Statement</a> | <a href="/api">API</a> |
         <a href="http://github.com/a37912/gaeaib/" >GAE AIB</a>
       </div>
       {% block scripts %}{% endblock %}
