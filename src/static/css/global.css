@@ -265,3 +265,12 @@ text-align: center;
 text-shadow: 0px 1px 1px rgba(255,255,255,1);
 line-height: 1;
 }
+
+#bupdate{
+background: white;
+bottom: 0px;
+left: 20px;
+position: fixed;
+width: 60px;
+z-index: 2999;
+}

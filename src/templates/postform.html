@@ -32,7 +32,7 @@
 
  <div class="field">
    <label class="formQuestion" for="image">Изображение</label>
-   <div class="formHelp" id="image_help">Будет показано в списке новостей и в самой новости. Изображение будет уменьшено до нормальных размеров.</div>
+   <div class="formHelp" id="image_help"></div>
    <span id="view_img_nojs">Включите javascript для загрузки файлов</span>
    <input style="display: none" id="upload_img" type="file" name="image" id="image" size="30"/> 
    <img id="view_img" style="display: none" src="" />
@@ -62,6 +62,7 @@ if (console == undefined) {
   console.log = function(msg) { msg }
 }
 </script>
+<div id="bupdate">Ответить</div>
 <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/static/js/ajaxfileupload.js?2"></script>
 <script type="text/javascript" src="/static/js/thread.js?17.5"></script>
