@@ -3,6 +3,7 @@ from tipfy.ext.jinja2 import render_template
 from const import *
 from mark import markup
 import re
+from cgi import escape
 
 class Render(object):
   MAXREFS = 5
@@ -21,7 +22,7 @@ class Render(object):
     post = post.copy()
     post['html'] = markup(
         board=self.board, postid=post.get("post"),
-        data = post.get('text'),
+        data = escape(post.get('text')),
     )
 
     return post
@@ -69,9 +70,7 @@ class Render(object):
           rainbow = post.get("rainbow_html")
       )
 
-    import logging
     for ref in refs[:self.MAXREFS]:
-      logging.info("ref: %s, %s" % (ref, type(ref)))
       pattern = u"<!--REF-%s-->" % ref
       self.html = self.html.replace(pattern, refhtml+pattern)
 

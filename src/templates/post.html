@@ -33,7 +33,7 @@
   <img class="thumb" src="{{post.image.thumb}}"/>
 </a>
         {% endif %}
-        <blockquote class="postdata" postid="{{post.post}}">{{ post|wakaba }}</blockquote>
+        <blockquote class="postdata" postid="{{post.post}}">{{ post.html }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
       </td>
     </tr>

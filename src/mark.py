@@ -59,7 +59,7 @@ states = {
         QUOTE,
         LIST,
       ],
-      "line" : "%s<br/>",
+      "line" : (r"^(.*)$", r"\1<br/>"),
     },
     PRE : {
       "match" : r"^    ",
@@ -85,7 +85,7 @@ states = {
       "match" : r" -",
       "start" : "<ul>",
       "end" : "</ul>",
-      "line" : "<li>%s</li>",
+      "line" : (r"^ -(.*)$", r"<li>\1</li>"),
       "change" : [],
       "fmt" : [
         POST_LINK,
@@ -141,7 +141,8 @@ def markup(data, **kw):
 
 
     if 'line' in state:
-      line = state['line'] % line
+      pattern, sub = state['line']
+      line = re.sub(pattern, sub, line)
 
     lines[ind] = line
 
@@ -149,6 +150,11 @@ def markup(data, **kw):
     lines[ind] += state['end']
 
   data = str.join("\n", lines)
+
+  import logging
+  logging.info("kw: %r" % kw)
+  assert 'board' in kw
+  assert kw.get('board')
 
   return data % kw
 

@@ -1,7 +1,8 @@
 import logging
 from uuid import uuid4 as uuid
-from tipfy import RequestHandler, Response
+from tipfy import RequestHandler, Response, NotFound
 from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
+from tipfy.ext.jinja2 import render_template
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -11,6 +12,7 @@ from google.appengine.api import channel
 from django.utils.simplejson import dumps
 import util
 from models import Board, Thread, Cache
+from mark import markup
 
 def json_response(data):
   return Response(
@@ -20,7 +22,19 @@ def json_response(data):
 
 class ApiPost(RequestHandler):
   def get(self, board, num):
-    return json_response( util.get_post(board, num) )
+    post = util.get_post(board, num)
+
+    if not post:
+      raise NotFound
+
+    post['html'] = markup(
+        board = board,
+        postid = num,
+        data = post.get("text")
+    )
+    post['full_html'] = render_template("post.html", post=post)
+
+    return json_response( post )
 
 class ApiLastPost(RequestHandler):
   def get(self, board):
