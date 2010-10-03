@@ -41,6 +41,7 @@ class Render(object):
         board = self.board,
         board_name = boardlist.get(self.board, "Woooo???"),
         boards = boardlist_order,
+        thread = self.thread,
     )
 
   def add(self,post,new=False):
@@ -55,10 +56,10 @@ class Render(object):
 
     post = self._markup(post)
 
-    post_html = render_template("post.html", post=post)
+    self.post_html = render_template("post.html", post=post)
 
     self.html = self.html.replace(
-        u"<!--NPHERE-->", post_html)
+        u"<!--NPHERE-->", self.post_html)
 
     refs = re.findall(">>([0-9]+)", post.get("text", "")) or []
 

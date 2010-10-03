@@ -193,13 +193,13 @@ def save_post(request, data, board, thread):
   r.add(data, new)
   r.save()
 
-
   key = "update-thread-%s-%d" % (board, thread)
   if not new:
+    send = { "html" : r.post_html, "evt" : "newpost" }
     watchers = memcache.get(key) or []
     for person in watchers:
       logging.info("send data to key %s" % (person+key))
-      channel.send_message(person+key, dumps(data))
+      channel.send_message(person+key, dumps(send))
 
   return board_db.counter, thread
 
