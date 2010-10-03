@@ -13,6 +13,7 @@ from tipfy import NotFound
 import rainbow
 from const import *
 from models import Board, Thread, Cache
+from render import Render
 
 ## Helper: functon to grab last thread list for board
 #
@@ -181,13 +182,16 @@ def save_post(request, data, board, thread):
   db.put( (thread_db, board_db))
   Cache.delete(
     (
-      dict(Board=board, Thread=thread),
-      dict(Board=board)
+      dict(Board=board),
     )
   )
   memcache.set("threadlist-%s" % board, board_db.thread)
 
   memcache.set("post-%s-%d" %(board, board_db.counter), data)
+
+  r = Render(board, thread)
+  r.add(data, new)
+  r.save()
 
 
   key = "update-thread-%s-%d" % (board, thread)
@@ -264,7 +268,6 @@ def delete_post(board, thread_num, post_num, rape_msg):
   th.put()
   Cache.delete(
     (
-      dict(Board=board, Thread=thread_num),
       dict(Board=board)
       )
     )
