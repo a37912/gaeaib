@@ -1,5 +1,6 @@
 {% extends "postform.html" %}
-{% block title %}{{board_name}} {% endblock %}
+{% block title %}{{board_name}}{% endblock %}
+{% block precontent %} <h1><a href="/{{board}}/">{{board_name}} </a></h1>{% endblock %}
 {% block threads %}
 
 {% if not threads %}
@@ -51,7 +52,7 @@
 </label>
 
 {% if reply %}
-  <a class="g-button" href="{{ thread.id }}/" >Ответить</a>
+  <a class="g-button" href="{{ thread.id }}/" >↩ Ответить</a>
 {% else %}
 
 {% if thread.op.agent %}
@@ -127,11 +128,13 @@
 {% endfor %}
 
 {% if pages %}
+<div class="pages-list">
 Страницы:
 {% for page in pages %}
-[<a href = "{% if page %}page{{page}}{% else %}./{% endif %}">{{page}}</a>]
+<a href = "{% if page %}page{{page}}{% else %}./{% endif %}" class="pagecounter"><span>{{page}}</span></a> 
 {% endfor %}
-<hr/>
+</div>
+
 {% endif %}
 
 <span id="repl_link_template">

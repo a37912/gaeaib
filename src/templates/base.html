@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-  <head profile="http://gmpg.org/xfn/11">
+  <head>
     <title>Гайкочян: {% block title %}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAAdlQbR14UCdaGbl9h7-YS_RQLRbSg8g6RseZCp7-mwHyp02pSyRS8uBkl04dqhrqP_5ng5Zo3SgqNwA" type="text/javascript"></script>
@@ -17,7 +17,7 @@
   {% block body %}
     <div id="bodyContent">
       <div id="topmenu">
-      [{% for board,text in boards %}<a href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
+      [{%- for boardid,text in boards %}<a href="/{{boardid}}/" {% if boardid==board %} class="currentboard"{% endif %}>/{{boardid}}/</a> | {% endfor %}]
       </div>
       {% block precontent %}
         <div class="logo"></div>

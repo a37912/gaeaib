@@ -4,6 +4,7 @@ boardlist_order = (
    ( 'a' , 'Anime',),
    ( 's' , 'School days',),
    ( 'ne', 'Nekospot'),
+   ( 'vg', 'Video Games'),
    ( 'mod' , 'Dating with Winry',),
    
 #   ( 'ped' , 'Church of Pedaliq Scripts',),

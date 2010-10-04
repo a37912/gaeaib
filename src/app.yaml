@@ -11,6 +11,10 @@ handlers:
   static_files: static/robots.txt
   upload: static/robots.txt
 
+- url: /crossdomain.xml
+  static_files: static/crossdomain.xml
+  upload: static/crossdomain.xml
+
 #- url: /
 #  static_files: static/index.html
 #  upload: static/index.html

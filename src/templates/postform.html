@@ -21,7 +21,7 @@
  <div id="title" class="field title">
    <label class="formQuestion" for="id_subject">Тема</label>
    <div class="formHelp"></div>
-   <input type="text" name="title" id="id_subject" value="" size="26" maxlength="25" placeholder="25 буковок" />
+   <input type="text" name="subject" id="id_subject" value="" size="26" maxlength="25" placeholder="25 буковок" />
  </div>
 {% endif %} 
  <div class="field">
@@ -62,7 +62,13 @@ if (console == undefined) {
   console.log = function(msg) { msg }
 }
 </script>
-<div id="bupdate">Ответить</div>
+<!-- ><div id="bupdate">Ответить</div> -->
+<!--
+<div class="b-ljtimes-wrapper" id="ljtime">				<i class="i-ljtimes-border"><i class="i-ljtimes-bl"></i><i class="i-ljtimes-br"></i></i>				<span class="i-ljtimes-btn" title="Кликни или потяни вниз" onclick="return LJLive.tagClick(event)" onmousedown="return LJLive.tagMousedown(event)">					<i class="i-ljtimes-drag"></i>					<i class="i-ljtimes-click"></i>				</span></div>
+
+
+<div class="b-ljtimes-update" style="display: block; right: 41px; "><div class="b-ljtimes-logged">                                        <form action="http://www.livejournal.com/update.bml" method="post">                                            <i class="i-ljtimes-logged-close"><i class="i-ljtimes-logged-iclose"></i></i>                                            <div class="b-ljtimes-logged-form">                                                <span class="b-ljtimes-logged-label"><label for="t_subject">Тема:</label></span>                                                <span class="b-ljtimes-logged-input"><input type="text" name="subject" value="" id="t_subject" class="i-ljtimes-text"></span>                                                <span class="b-ljtimes-logged-label"><label for="t_draft">Сообщение:</label></span>                                                <span class="b-ljtimes-logged-input"><textarea id="t_draft" name="event" cols="30" rows="10" class="i-ljtimes-textarea"></textarea></span>                                                <span class="b-ljtimes-logged-label"><label for="t_prop_taglist">Метки:</label></span>                                                <span class="b-ljtimes-logged-input"><input type="text" name="taglist" value="" id="t_prop_taglist" class="i-ljtimes-text"></span>                                            </div>                                            <div class="b-ljtimes-logged-submit"><input type="submit" name="send" value="Опубликовать"></div>                                        </form>                                    </div></div>
+-->
 <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/static/js/ajaxfileupload.js?2"></script>
 <script type="text/javascript" src="/static/js/thread.js?17.5"></script>
