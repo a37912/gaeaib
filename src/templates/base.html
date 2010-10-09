@@ -51,15 +51,18 @@
       {% block precontent %}
         {#<div class="logo"></div>
         <h1>Добро пожаловать. Снова. Опять.</h1>#}
+        {% if board %}<h1><a href="{{ board }}">{{ board_name }}</a></h1>{% endif %}
       {% endblock %}
       </header>
       <!-- BODY -->
       {% block content %}{% endblock %}
+      <footer>
       <div class="footer" > 
-        Winry Rokbell | 
+        Winry Rokbell | Гайчан <sup style="color:red">βeta</sup> |
         <a href="/about">Statement</a> | <a href="/api">API</a> |
         <a href="http://github.com/a37912/gaeaib/" >GAE AIB</a>
       </div>
+      </footer>
       {% block scripts %}{% endblock %}
     </div>
     
