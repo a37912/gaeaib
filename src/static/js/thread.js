@@ -40,39 +40,10 @@ $(document).ready(function() {
     }
   ); // each
  
-  $(".postdata").each(
-    function() {
-      var postid = $(this).attr("postid");
-      var html = $(this).html();
-      html = html.replace(/&gt;&gt;([0-9]+)/g, 
-        '<a frmpostid="' + postid + '" postid="$1" class="postref" href="/'+_board+'/p$1">&gt;&gt;$1</a>'
-      );
-
-
-
-      html = html.replace(/\*\*([^\*_]+)\*\*/g, "<b>$1</b>");
-      html = html.replace(/__([^\*_]+)__/g, "<b>$1</b>");
-
-      html = html.replace(/\*([^\*_]+)\*/g, "<i>$1</i>");
-
-      html = html.replace(/```(.*)```/g, "<pre>$1</pre>");
-      html = html.replace(/    (.*)/g, "<pre>$1</pre>");
-      html = html.replace(/\%\%(.*)\%\%/g, '<span class="spoiler">$1</span>');
-
-      html = html.replace(/^&gt;([^&].*)(\n|$)/mg, '<p class="unkfunc">&gt;$1</p>');
-
-      html = html.replace(/\n([^ <])/g, '<br/>$1');
-
-      html = html.replace(/(http:\/\/[^ <\n]*)/g, 
-        '<a href="http://hiderefer.com/?$1">$1</a>' 
-      );
-      $(this).html(html);
-
-    } // each func
-  );// each
-
   show_preview = function(np, post, e) {
 
+    console.log(np);
+    np.removeAttr("id");
     np.addClass("preview");
     np.addClass("preview_"+post);
     np.css("position", "absolute");
@@ -83,14 +54,17 @@ $(document).ready(function() {
     console.log("show");
 
     $('body').append(np);
+    console.log("show!");
+
+    console.log(np.show);
     //np.slideUp(0).slideDown(500);
-    np.show();
     var _x ;
     if( (e.pageX + np.width()) > $(window).width()) {
       _x = $(window).width() - np.width() - 5;
     } else {
       _x = e.pageX+15;
     }
+
     np.css("left", _x+"px");
     np.css("opacity", 1);
     np.css("-webkit-box-shadow", "0 0 12px #999999");
@@ -110,7 +84,7 @@ $(document).ready(function() {
   preview = function(e, data, status) {
 
     console.log("show");
-    var np = make_post(data);
+    var np = $(data.full_html);
 
     show_preview(np, data.post, e);
 
@@ -129,45 +103,6 @@ $(document).ready(function() {
     ) ;
   }
 
-  make_post = function(o) {
-    var np =  $("#post_template").clone();
-
-    np.find(".postdata").text(o.text);
-    np.find(".commentpostername").text(o.name);
-    np.find(".rb").html(o.rainbow_html);
-    np.find(".time").text(o.time);
-
-    var ref = np.find("a.reflink");
-    ref.text("#"+o.post);
-    ref.attr("name", "p"+o.post);
-    ref.attr("href", "#p"+o.post);
-
-
-    if (! o.sage ) {
-      np.find(".sg").remove();
-    }
-
-    console.log("img: " + o.image);
-
-    if (o.image) {
-      console.log("got img");
-      np.find(".filesize").text("Image " + o.image.content_type  + ": " + o.image.size  );
-      np.find("a.thumb").attr("href", o.image.full);
-      np.find("img.thumb").attr("src", o.image.thumb);
-      console.log("set img");
-
-    } else {
-      console.log("no img, remove");
-
-      np.find(".filesize").remove();
-      np.find(".thumb").remove();
-      np.find("#imgbr").remove();
-
-    }
-
-    return np;
-
-  }
   no_preview = false;
   no_preview_hide = false;
   preview_cache = new Object();
@@ -212,36 +147,6 @@ $(document).ready(function() {
   $("a.postref").each(
     function() {
       var postid = $(this).attr("postid");
-      var frmpostid = $(this).attr("frmpostid");
-
-      var repl = $("#post-replies-"+postid);
-      var repl_links = repl.find("span a");
-      var tpl = $("#repl_link_template");
-
-
-      if(repl_links.length >= 4) {
-        repl.append("... etc");
-      }
-      if (repl_links.length < 4 && repl.length!=0 && tpl.length!= 0) {
-        var to
-        tpl = tpl.clone();
-        tpl.removeAttr("id");
-        var tpl_a = tpl.find("a");
-        tpl_a.text(">>"+frmpostid);
-        tpl_a.attr("href", "#p"+frmpostid);
-        tpl_a.mouseover( function(e) {handle_preview(frmpostid, e)} );
- 
-        var rain = $("#post-"+frmpostid+" span.rainbow").clone();
-        rain.removeAttr("id");
-        rain.removeClass("rainbow");
-
-        tpl.append(rain);
-
-        repl.append(tpl);
-        repl.show();
-        tpl.show();
-      }
-
 
       $(this).mouseover( function(e) {handle_preview(postid, e)} );
 
