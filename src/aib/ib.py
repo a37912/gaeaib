@@ -109,33 +109,6 @@ class Thread(RequestHandler):
     else:
       raise NotFound
 
-    _thread_data = models.Thread.load(thread, board)
-    if not _thread_data:
-      raise NotFound
-
-    content = _thread_data.posts
-
-    thread_data = {
-      'op' : content[0],
-      'posts' : content[1:],
-      'id' : thread,
-      'subject' : _thread_data.subject,
-    }
-
-
-    data = {}
-    data['threads'] = (thread_data,)
-    data['board_name'] = boardlist.get(board, "Woooo???")
-    data['board'] = board
-    data['boards'] = boardlist_order
-    data['thread'] = thread
-
-    html = render_template("thread.html", **data)
-
-    models.Cache.save(data = html, Board=board, Thread=thread)
-
-    return Response(html)
-
 class PostRedirect(RequestHandler):
   def get(self, board, post):
     post_data = get_post(board, post)

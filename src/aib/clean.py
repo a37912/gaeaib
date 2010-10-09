@@ -77,9 +77,10 @@ def do_clean_cache(cursor=None):
 
   cache = cacheq.get()
 
+  if not cache:
+    return
+
   if cache.parent().kind() == 'Board':
-    db.delete(cache)
-  elif db.get(cache.parent()):
     db.delete(cache)
 
   deferred.defer(do_clean_cache, cacheq.cursor(), _countdown=2)

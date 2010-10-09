@@ -1,9 +1,12 @@
+import logging
+from cgi import escape
+
+from google.appengine.ext import deferred, db
 from tipfy import RequestHandler, Response
+
 from render import Render
 from models import Thread
-from google.appengine.ext import deferred, db
 from mark import markup
-from cgi import escape
 
 def do_render_cache(cursor=None):
   thq = Thread.all()

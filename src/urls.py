@@ -146,6 +146,10 @@ def get_rules():
       handler = "aib.clean.CleanCache"
     ),
     Rule(
+      "/winry/render_cache",
+      handler = "aib.rerender.RenderCache"
+    ),
+    Rule(
       '/_ah/queue/deferred',
       endpoint = 'tasks/deferred',
       handler = 'tipfy.ext.taskqueue:DeferredHandler'
