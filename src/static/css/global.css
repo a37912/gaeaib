@@ -1,7 +1,19 @@
+/* * html { overflow: hidden;  } */
+* html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
+/* #menu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
+*/
+/*#bodyContent { margin-left: 210px; }
+* html #bodyContent { margin-left: 220px; }
+*/
+
+#bodyContent { margin-left: 20px; margin-right: 20px; }
+* html #bodyContent { margin-left: 20px; margin-right: 20px;  }
+
+
 body {
 font: 100% Arial, FreeSans, sans-serif;
-background: White;
-color: Black;
+background-color: #E4EBEF;
+color: #444;
 }
 h1, h2, h3, h4, h5, h6 {
 font-family: "Helvetica Neue", Arial, FreeSans, sans-serif;
@@ -44,17 +56,13 @@ font-family: "Lucida Grande", Arial, FreeSans;
 q {
 quotes: "“" "”" "‘" "’"
 }
+/*  Top navigation */
 
-* html { overflow: hidden;  }
-* html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
+/* if we want Apple like nav then use http://designindevelopment.com/css/apple-navigation-with-css3/ */
 
-#menu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
+/* end Top navigation */
 
-* html #havmenu { position: absolute; }
-
-#bodyContent { margin-left: 210px; }
-* html #bodyContent { margin-left: 220px; }
-
+/* Add form */
 div #postarea {
 /*top: -1.5em;
 width: 225px; */
@@ -117,10 +125,12 @@ letter-spacing: -0.05em;
 font-size: 1.625em; /* */
 }
 
+/* /Add form */
+
 #topmenu {
 position:fixed;
 top:0px;
-left:220px;
+left:30px;
 border-left:1px #CCC solid;
 border-right:1px #CCC solid;
 border-bottom:1px #CCC solid;
@@ -131,6 +141,20 @@ padding:3px;
 z-index:100;
 background:white;
 }
+
+.post { 
+float:right; 
+width:504px; 
+margin-bottom:40px;
+padding:14px 14px 16px 14px; 
+border-radius: 5px;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px; 
+border: 1px solid #dddddd; 
+border-bottom: 1px solid #b3b3b3; 
+background-color: rgba(255,255,255,0.90); 
+}
+
 
 blockquote blockquote {
 margin-left: 0em;
@@ -183,7 +207,7 @@ color: inherit;
 text-decoration: none;
 }
 
-.reflink a:hover{
+.reflink a:hover {
 color: #800000;
 }
 
@@ -266,7 +290,7 @@ text-shadow: 0px 1px 1px rgba(255,255,255,1);
 line-height: 1;
 }
 
-#bupdate{
+#bupdate {
 background: white;
 bottom: 0px;
 left: 20px;
@@ -274,3 +298,144 @@ position: fixed;
 width: 60px;
 z-index: 2999;
 }
+                    
+.pagecounter {
+padding:0 .5em;
+height:2.0833em;
+border:1px solid #ccc;
+color:#000;
+background:#f6f6f6;
+background-image:-moz-linear-gradient(top,#ffffff,#efefef);
+background-image:-webkit-gradient(linear,left top,left bottom,from(#ffffff),to(#efefef));
+filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#ffffff,endColorStr=#efefef);
+-moz-border-radius:3px;
+-webkit-border-radius:3px;
+border-radius:3px;
+white-space:nowrap;
+vertical-align:middle;
+cursor:pointer;
+overflow:visible;
+font: normal normal normal 12px/normal Arial, Helvetica, sans-serif;
+text-decoration: none;
+}
+.pagecounter span{
+padding:5px 5px;
+}
+.pagecounter:hover {
+border-color:#999;
+background:#f3f3f3;
+background-image:-moz-linear-gradient(top,#ffffff,#ebebeb);
+background-image:-webkit-gradient(linear,left top,left bottom,from(#ffffff),to(#ebebeb));
+filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#ffffff,endColorStr=#ebebeb);
+outline:0;
+-moz-box-shadow:0 0 3px #999;
+-webkit-box-shadow:0 0 3px #999;
+box-shadow:0 0 3px #999}
+.pagecounter:active {
+border-color:#999;
+background:#ddd;
+background-image:-moz-linear-gradient(top,#cccccc,#ffffff);
+background-image:-webkit-gradient(linear,left top,left bottom,from(#cccccc),to(#ffffff));
+filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#cccccc,endColorStr=#ffffff)
+}
+.pages-list {
+margin-top:20px;
+}
+.footer {
+border-bottom: 1px solid #CCC;
+}
+
+.currentboard {
+font-weight: bold;
+}
+
+/* Post section */
+
+#post-header {
+  background: url(http://cliqset-assets.s3.amazonaws.com/v4.1/img/bg.line.png) repeat-x 50% 9px;
+  color: #0f4567;
+  position: relative;
+  width: 90%;
+  font-size: 12px;
+  letter-spacing: 0;
+  
+  padding: 0 10px;
+  text-align: left;
+  text-decoration: none;
+  word-spacing: normal;  
+
+}
+
+.opic {
+max-width: 400px;
+margin: 0 auto;
+box-shadow: 3px 3px 5px #aac1ce;
+-webkit-box-shadow: 3px 3px 5px #aac1ce;
+-moz-box-shadow: 3px 3px 5px #aac1ce;
+padding: 8px;
+border: 1px solid #dce5eb;
+}
+
+
+
+/* ---------- Stream Actions */
+
+#post-header h2 {
+  background-color: #e4ebef;
+  /*display: inline-block;*/
+  margin: 0 10px;
+  padding: 0 10px;
+  text-shadow: white 0px 1px 1px;
+  font-size:16px;
+}
+
+#post-header .stream-actions {
+  background-color: #e4ebef;
+  right: 5px;
+  position: absolute;
+  padding: 0 5px;
+  height: 29px;
+  top: -3px; }
+
+#post-header .rainbow {
+  background-color: #e4ebef;
+  background-image: url(http://search.cliqset.com/img/bg.stream-actions.png);
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  border-color: #a2bee0;
+  border-style: solid;
+  border-width: 1px 0px 1px 1px;
+  color: #0f4567;
+  float: left;
+  font-size: 10px;
+  display: block;
+  height: 19px;
+  padding: 2px 10px;
+  text-shadow: rgba(255, 255, 255, 1) 0px 1px 0px; }
+  
+#post-header .stream-actions li a:hover {
+    background-position: 0 -23px; }
+#post-header .stream-actions li a:active {
+    background-position: 0 -46px; }
+  
+#post-header .stream-actions li a.first {
+  -moz-border-radius-topleft: 5px;  
+  -moz-border-radius-bottomleft: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  border-width: 1px 0px 1px 1px;
+}
+
+#post-header .stream-actions li a.last {
+  -moz-border-radius-topright: 5px;  
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-width: 1px 1px 1px 1px;
+}
+
+#post-header .rainbow {
+
+}
+
+

@@ -9,33 +9,33 @@
 
 {% for thread in threads %}
 
-<div class="thread">
-  <div class="threadnum" >
-    {% if thread.subject %}
-    {{ thread.subject|escape }}
-    {% else %}
-    Тред номер {{thread.id}}
+<div id="post-header">
+  <div class="rainbow">{% if thread.op.name != 'Anonymous' %}{{ thread.op.name|escape }} : {% endif %}{{thread.op.rainbow_html}}</div>
+</div>
+  <h2>
+    <a href="/{{board}}/{{thread.id}}/">
+    {%- if thread.subject %}{{ thread.subject|escape }}
+    {% else %} Тред номер {{thread.id}}
     {% endif %}
-  </div>
+    </a>
+  </h2>
+
 
 <div class="oppost">
+
 {% if thread.op.image %}
 
-<span class="filesize">{{thread.op.image.content_type}}: 
-  {{ thread.op.image.size }}</span>
+<span class="filesize">{{thread.op.image.content_type}}: {{ thread.op.image.size }}</span>
 
 <span class="reflink">
-  <a class="reflink" name="p{{thread.op.post}}" 
-    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
-    threadid="{{thread.id}}"
-  >#{{thread.op.post}}</a>
+  <a class="reflink" name="p{{thread.op.post}}" href="#p{{thread.op.post}}" postid="{{thread.op.post}}" threadid="{{thread.id}}">#{{thread.op.post}}</a>
 </span>
 
 
-<br/>
-<a href="{{thread.op.image.full}}" target="_blank">
-  <img class="thumb" src="{{thread.op.image.thumb}}"/>
-</a>
+<br/>!!!
+<div class="opic"><a href="{{thread.op.image.full}}" target="_blank">
+  <img class="thumb" src="{{thread.op.image.thumb}}" />
+</a></div>
 <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
   <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
 </a>
@@ -108,9 +108,7 @@
   <span class="filesize">{{post.image.content_type}}: 
   {{ post.image.size }}</span>
         <br/>
-<a href="{{post.image.full}}" target="_blank">
-  <img class="thumb" src="{{post.image.thumb}}"/>
-</a>
+<div class="opic"><a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a></div>
         {% endif %}
         <blockquote class="postdata" postid="{{post.post}}">{{ post.text|escape }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}">ref: </div>
