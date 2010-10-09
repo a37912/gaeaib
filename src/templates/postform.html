@@ -1,7 +1,3 @@
-{% extends "base.html" %}
-
-{% block content %}
-
 {% block postform %}
 <div id="postarea" class="{% if not reply %}reply{% endif %}"> 
 <form method="post" action="post/" >
@@ -43,31 +39,4 @@
   <input type="submit" class="g-button" id="post_submit" value="Отправить" />
 </form>
 </div>
-{% endblock %}
-{% block threads %}{% endblock %}
-{% endblock %}
-{% block scripts %}
-<script>
-_reply = {% if reply %}true{% else %}false{% endif %};
-_board = "{{board}}";
-thread = "{{thread}}";
-
-try{
-  console
-} catch (e) {
-  console = undefined;
-}
-if (console == undefined) {
-  console = new Object();
-  console.log = function(msg) { msg }
-}
-</script>
-<div id="bupdate">Ответить</div>
-<script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/static/js/ajaxfileupload.js?2"></script>
-<script type="text/javascript" src="/static/js/thread.js?18.0"></script>
-<script type="text/javascript" src="/static/js/uploader.js?18.0"></script>
-<script type="text/javascript" src="/static/js/winry.js?2"></script>
-<script src='/_ah/channel/jsapi'></script>
-<script src="/static/js/update.js?18.0"></script>
 {% endblock %}

@@ -1,7 +1,9 @@
-{% extends "postform.html" %}
+{% extends "base.html" %}
 {% block title %}{{board_name}} {% endblock %}
-{% block threads %}
-
+{% block content %}
+{% if reply %}
+{% include "postform.html" %}
+{% endif %}
 {% if not threads %}
 <center><h1>Этаж еще не затоплен</h1></center>
 {% endif %}
@@ -84,6 +86,10 @@
 
 {% endfor %}
 
+{% if not reply %}
+{% include "postform.html" %}
+{% endif %}
+
 {% if pages %}
 Страницы:
 {% for page in pages %}
@@ -91,5 +97,7 @@
 {% endfor %}
 <hr/>
 {% endif %}
+
+{% include "scripts.html" %}
 
 {% endblock %}
