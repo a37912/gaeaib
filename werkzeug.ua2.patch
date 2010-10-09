@@ -1,0 +1,107 @@
+--- src/distlib/werkzeug/useragents.py	2010-09-07 02:53:16.951944000 +0300
++++ ua.py	2010-09-30 10:40:42.153743570 +0300
+@@ -22,15 +22,16 @@
+         (r'darwin|mac|os\s*x', 'macos'),
+         ('win', 'windows'),
+         (r'android', 'android'),
+-        (r'x11|lin(\b|ux)?', 'linux'),
+         ('(sun|i86)os', 'solaris'),
+         (r'nintendo\s+wii', 'wii'),
+         ('irix', 'irix'),
+         ('hp-?ux', 'hpux'),
+         ('aix', 'aix'),
+         ('sco|unix_sv', 'sco'),
++        ('dragonfly', 'dragonfly'),
+         ('bsd', 'bsd'),
+-        ('amiga', 'amiga')
++        ('amiga', 'amiga'),
++        (r'x11|lin(\b|ux)?', 'linux'),
+     )
+     browsers = (
+         ('googlebot', 'google'),
+@@ -40,7 +41,8 @@
+         (r'aol|america\s+online\s+browser', 'aol'),
+         ('opera', 'opera'),
+         ('chrome', 'chrome'),
+-        ('firefox|firebird|phoenix|iceweasel', 'firefox'),
++        ('firefox|firebird|phoenix|iceweasel|namoroka|minefield', 'firefox'),
++        ('midoru', 'midori'),
+         ('galeon', 'galeon'),
+         ('safari', 'safari'),
+         ('webkit', 'webkit'),
+@@ -54,7 +56,19 @@
+         ('seamonkey|mozilla', 'seamonkey')
+     )
+ 
++    cpus = (
++      ('(ppc|powerpc)', 'powerpc'),
++      ('(ppc64|powerpc64)', 'powerpc64'),
++      ('(sparc|sun)', 'sparc'),
++      ('sparc64', 'sparc64'),
++      ('mips', 'mips'),
++      ('dec', 'alpha'),
++      ('alpha', 'alpha'),
++      ('(i[346]|x)86', 'x86'),
++    )
++
+     _browser_version_re = r'(?:%s)[/\sa-z(]*(\d+[.\da-z]+)?(?i)'
++    _cpu_re = r'\([^;]+; [A-Z]+;[^;] %s;'
+     _language_re = re.compile(
+         r'(?:;\s*|\s+)(\b\w{2}\b(?:-\b\w{2}\b)?)\s*;|'
+         r'(?:\(|\[|;)\s*(\b\w{2}\b(?:-\b\w{2}\b)?)\s*(?:\]|\)|;)'
+@@ -65,6 +79,8 @@
+         self.browsers = [(b, re.compile(self._browser_version_re % a))
+                          for a, b in self.browsers]
+ 
++        self.cpus = [(b, re.compile(self._cpu_re % a, re.I)) for a,b in self.cpus]
++
+     def __call__(self, user_agent):
+         for platform, regex in self.platforms:
+             match = regex.search(user_agent)
+@@ -79,12 +95,20 @@
+                 break
+         else:
+             browser = version = None
++
++        for cpu, regex in self.cpus:
++            match = regex.search(user_agent)
++            if match is not None:
++              break
++        else:
++            cpu = None
++
+         match = self._language_re.search(user_agent)
+         if match is not None:
+             language = match.group(1) or match.group(2)
+         else:
+             language = None
+-        return platform, browser, version, language
++        return platform, browser, version, language, cpu
+ 
+ 
+ class UserAgent(object):
+@@ -105,6 +129,7 @@
+        -   `amiga`
+        -   `android`
+        -   `bsd`
++       -   `dragonfly`
+        -   `hpux`
+        -   `iphone`
+        -   `irix`
+@@ -125,6 +150,7 @@
+         -   `camino`
+         -   `chrome`
+         -   `firefox`
++        -   `midori`
+         -   `galeon`
+         -   `google` *
+         -   `kmeleon`
+@@ -157,7 +183,7 @@
+         if isinstance(environ_or_string, dict):
+             environ_or_string = environ_or_string.get('HTTP_USER_AGENT', '')
+         self.string = environ_or_string
+-        self.platform, self.browser, self.version, self.language = \
++        self.platform, self.browser, self.version, self.language, self.cpu = \
+             self._parser(environ_or_string)
+ 
+     def to_header(self):

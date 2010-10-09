@@ -1,41 +1,42 @@
-{% extends "postform.html" %}
-{% block title %}{{board_name}}{% endblock %}
-{% block precontent %} <h1><a href="/{{board}}/">{{board_name}} </a></h1>{% endblock %}
-{% block threads %}
-
+{% extends "base.html" %}
+{% block title %}{{board_name}} {% endblock %}
+{% block content %}
+{% if reply %}
+{% include "postform.html" %}
+{% endif %}
 {% if not threads %}
 <center><h1>Этаж еще не затоплен</h1></center>
 {% endif %}
 
 {% for thread in threads %}
 
-<div id="post-header">
-  <div class="rainbow">{% if thread.op.name != 'Anonymous' %}{{ thread.op.name|escape }} : {% endif %}{{thread.op.rainbow_html}}</div>
-</div>
-  <h2>
-    <a href="/{{board}}/{{thread.id}}/">
-    {%- if thread.subject %}{{ thread.subject|escape }}
-    {% else %} Тред номер {{thread.id}}
+<div class="thread">
+  <div class="threadnum" >
+    {% if thread.subject %}
+    {{ thread.subject|escape }}
+    {% else %}
+    Тред номер {{thread.id}}
     {% endif %}
-    </a>
-  </h2>
-
+  </div>
 
 <div class="oppost">
-
 {% if thread.op.image %}
 
-<span class="filesize">{{thread.op.image.content_type}}: {{ thread.op.image.size }}</span>
+<span class="filesize">{{thread.op.image.content_type}}: 
+  {{ thread.op.image.size }}</span>
 
 <span class="reflink">
-  <a class="reflink" name="p{{thread.op.post}}" href="#p{{thread.op.post}}" postid="{{thread.op.post}}" threadid="{{thread.id}}">#{{thread.op.post}}</a>
+  <a class="reflink" name="p{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+    threadid="{{thread.id}}"
+  >#{{thread.op.post}}</a>
 </span>
 
 
-<br/>!!!
-<div class="opic"><a href="{{thread.op.image.full}}" target="_blank">
-  <img class="thumb" src="{{thread.op.image.thumb}}" />
-</a></div>
+<br/>
+<a href="{{thread.op.image.full}}" target="_blank">
+  <img class="thumb" src="{{thread.op.image.thumb}}"/>
+</a>
 <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
   <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
 </a>
@@ -52,7 +53,7 @@
 </label>
 
 {% if reply %}
-  <a class="g-button" href="{{ thread.id }}/" >↩ Ответить</a>
+  <a class="g-button" href="{{ thread.id }}/" >Ответить</a>
 {% else %}
 
 {% if thread.op.agent %}
@@ -69,55 +70,18 @@
 {% endif %}
 
 <br/>
-<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text|escape }}</blockquote>
+<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text_html }}</blockquote>
 </div>
-
+{% if thread.posts %}
 {% if thread.skipmsg %}
 <span class="omittedposts">Пропущено {{ thread.skip }}</span>
 {% endif %}
-
 {% for post in thread.posts %}
-<table id="post-{{post.post}}">
-  <tbody>
-    <tr>
-      <td class="doubledash">&gt;&gt;</td>
-      <td class="reply">
-        <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{post.post}}">
-          {% if post.image %}
-          <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
-          {% else %}
-          <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png">
-          {% endif %}
-        </a>
-        <label>
-          <span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span>
-          <span class="rainbow">{{post.rainbow_html}}</span>
-        </label>
-        {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
-        {{post.time}}
-        {% if post.agent %}
-        <span class="agent">{{post.agent|escape}}</span>
-        {% endif %}
-        <span class="reflink">
-          <a class="reflink" name="p{{post.post}}" 
-            href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
-            threadid="{{thread.id}}" 
-          >#{{post.post}}</a>
-        </span>
-        {% if post.image %}
-  <span class="filesize">{{post.image.content_type}}: 
-  {{ post.image.size }}</span>
-        <br/>
-<div class="opic"><a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a></div>
-        {% endif %}
-        <blockquote class="postdata" postid="{{post.post}}">{{ post.text|escape }}</blockquote>
-        <div class="post-replies" id="post-replies-{{post.post}}">ref: </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+{% include 'post.html' %}
 {% endfor %}
+{% else %}
+<!--NPHERE-->
+{% endif %}
 </div>
 
 <div style="clear: left"></div>
@@ -125,45 +89,19 @@
 
 {% endfor %}
 
-{% if pages %}
-<div class="pages-list">
-Страницы:
-{% for page in pages %}
-<a href = "{% if page %}page{{page}}{% else %}./{% endif %}" class="pagecounter"><span>{{page}}</span></a> 
-{% endfor %}
-</div>
-
+{% if not reply %}
+{% include "postform.html" %}
 {% endif %}
 
-<span id="repl_link_template">
-  <a href="#"></a>
-</span>
+{% if pages %}
+Страницы:
+{% for page in pages %}
+[<a href = "{% if page %}page{{page}}{% else %}./{% endif %}">{{page}}</a>]
+{% endfor %}
+<hr/>
+{% endif %}
 
-<table class="reply" id="post_template" style="display:none">
-  <tbody>
-    <tr>
-      <td class="doubledash">&gt;&gt;</td>
-      <td class="reply">
-        <label>
-          <span class="commentpostername"></span>
-          <span class="rb"></span>
-        </label>
-        <label class="sg"><b>SAGE</b></label>
-        <label class="time"></label>
-        <span class="reflink">
-          <a class="reflink" name="p" href="#" ></a>
-        </span>
-
-        <span class="filesize"></span>
-        <br id="imgbr"/>
-        <a class="thumb" href="#" target="_blank">
-          <img class="thumb" src="/"/>
-        </a>
-
-        <blockquote class="postdata"></blockquote>
-      </td>
-    </tr>
-  </tbody>
-</table>
+{% include "scripts.html" %}
 
 {% endblock %}
+

@@ -1,10 +1,11 @@
 import re
-
+from jinja2 import contextfilter, Markup
+from cgi import escape
 
 
 POST_LINK = (
     "&gt;&gt;([0-9]+)",
-    r'<a frmpostid="%(postid)s" postid="\1" class="postref" href="/%(board)s/p\1">&gt;&gt;\1</a>',
+    r'<a frmpostid="__postid__" postid="\1" class="postref" href="/__board__/p\1">&gt;&gt;\1</a>',
 )
 
 BOLD1 = (
@@ -58,7 +59,7 @@ states = {
         QUOTE,
         LIST,
       ],
-      "line" : "%s<br/>",
+      "line" : (r"^(.*)$", r"\1<br/>"),
     },
     PRE : {
       "match" : r"^    ",
@@ -84,7 +85,7 @@ states = {
       "match" : r" -",
       "start" : "<ul>",
       "end" : "</ul>",
-      "line" : "<li>%s</li>",
+      "line" : (r"^ -(.*)$", r"<li>\1</li>"),
       "change" : [],
       "fmt" : [
         POST_LINK,
@@ -140,7 +141,8 @@ def markup(data, **kw):
 
 
     if 'line' in state:
-      line = state['line'] % line
+      pattern, sub = state['line']
+      line = re.sub(pattern, sub, line)
 
     lines[ind] = line
 
@@ -149,7 +151,30 @@ def markup(data, **kw):
 
   data = str.join("\n", lines)
 
-  return data % kw
+  import logging
+  logging.info("kw: %r" % kw)
+  assert 'board' in kw
+  assert kw.get('board')
+
+  data = data.replace("__board__", kw.get("board"))
+  data = data.replace("__postid__", str(kw.get("postid")))
+
+  return data
+
+
+@contextfilter
+def jinja2(ctx, post):
+  kw = {
+      "postid" : post.get("post"),
+      "board" : ctx.get("board"),
+      "data" : escape(post.get("text")),
+  }
+  return markup(**kw)
+
+def install_jinja2():
+  from tipfy.ext.jinja2 import get_env
+  environment = get_env()
+  environment.filters['wakaba'] = jinja2
 
 
 if __name__ == '__main__':

@@ -13,6 +13,9 @@ from tipfy import NotFound
 import rainbow
 from const import *
 from models import Board, Thread, Cache
+from render import Render
+from mark import markup
+from cgi import escape
 
 ## Helper: functon to grab last thread list for board
 #
@@ -86,7 +89,7 @@ def option_saem(request, data):
 def option_useragent(request, data):
   from werkzeug.useragents import UserAgent
   ua = UserAgent(request.environ)
-  data['agent'] = "%s / %s" %(ua.platform, ua.browser)
+  data['agent'] = "%s@%s / %s" %(ua.platform, ua.cpu, ua.browser)
 
 def option_modsign(request, data):
   if data.get('name') != MOD_NAME:
@@ -146,6 +149,10 @@ def save_post(request, data, board, thread):
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb
   data['rainbow_html'] = rainbow.rainbow(rb)
+  data['text_html'] = markup(
+        board=board, postid=board_db.counter,
+        data=escape(data.get('text', '')),
+  )
 
   # FIXME: move to field
   data['name'] = data.get("name") or "Anonymous"
@@ -181,21 +188,29 @@ def save_post(request, data, board, thread):
   db.put( (thread_db, board_db))
   Cache.delete(
     (
-      dict(Board=board, Thread=thread),
-      dict(Board=board)
+      dict(Board=board),
     )
   )
   memcache.set("threadlist-%s" % board, board_db.thread)
 
   memcache.set("post-%s-%d" %(board, board_db.counter), data)
 
+  r = Render(board, thread)
+  r.add(data, new)
+  r.save()
 
   key = "update-thread-%s-%d" % (board, thread)
   if not new:
+    send = { 
+        "html" : r.post_html, 
+        "evt" : "newpost" ,
+        "count" : len(thread_db.posts),
+        "last" : board_db.counter,
+    }
     watchers = memcache.get(key) or []
     for person in watchers:
       logging.info("send data to key %s" % (person+key))
-      channel.send_message(person+key, dumps(data))
+      channel.send_message(person+key, dumps(send))
 
   return board_db.counter, thread
 
@@ -264,7 +279,6 @@ def delete_post(board, thread_num, post_num, rape_msg):
   th.put()
   Cache.delete(
     (
-      dict(Board=board, Thread=thread_num),
       dict(Board=board)
       )
     )

@@ -1,7 +1,3 @@
-{% extends "base.html" %}
-
-{% block content %}
-
 {% block postform %}
 <div id="postarea" class="{% if not reply %}reply{% endif %}"> 
 <form method="post" action="post/" >
@@ -21,7 +17,7 @@
  <div id="title" class="field title">
    <label class="formQuestion" for="id_subject">Тема</label>
    <div class="formHelp"></div>
-   <input type="text" name="subject" id="id_subject" value="" size="26" maxlength="25" placeholder="25 буковок" />
+   <input type="text" name="title" id="id_subject" value="" size="26" maxlength="25" placeholder="25 буковок" />
  </div>
 {% endif %} 
  <div class="field">
@@ -40,39 +36,8 @@
    <span id="view_img_msg"  style="display: none" >Подождите, пока грузится картинка</span>
  </div>
  <input type="hidden" id="upload_key" name="key" />
-  <input type="submit" class="g-button" value="Отправить" />
+  <input type="submit" class="g-button" id="post_submit" value="Отправить" />
 </form>
 </div>
 {% endblock %}
-{% block threads %}{% endblock %}
-{% endblock %}
-{% block scripts %}
-<script>
-_reply = {% if reply %}true{% else %}false{% endif %};
-_board = "{{board}}";
-thread = "{{thread}}";
 
-try{
-  console
-} catch (e) {
-  console = undefined;
-}
-if (console == undefined) {
-  console = new Object();
-  console.log = function(msg) { msg }
-}
-</script>
-
-<!-- <div id="ki_container" style="bottom: 0px; "><div id="ki_tab"><a href="#"></a></div><div id="ki_main"><form id="ki_form" action="#" method="post"><div id="ki_questions"><div id="ki_question_12427" class="ki_question ki_top "><h1 class="ki_question_title ">Why do you come to this website?</h1><ul id="ki_question_12427_answers" class="ki_answers "><li id="ki_answer_23784" class="ki_answer_li "><label><input type="radio" name="r[12427][]" value="23784" class="ki_radio"> To learn from it.</label></li><li id="ki_answer_23785" class="ki_answer_li h "><label><input type="radio" name="r[12427][]" value="23785" class="ki_radio"> To use the files.</label></li><li id="ki_answer_23786" class="ki_answer_li "><label><input type="radio" name="r[12427][]" value="23786" class="ki_radio"> Something else<input name="re[12427][23786]" class="ki_explain_small " style="display: none; "></label></li></ul></div><hr></div><div id="ki_buttons"><a href="http://www.kissinsights.com/r/p?utm_source=suview&amp;utm_medium=dark&amp;utm_campaign=365psd.com&amp;utm_content=1&amp;r=8684" target="_blank" class="ki_powered_by ">Powered by KISSinsights</a><a id="ki_submit_button" href="#" class="ki_button ">Submit<span class="ki_circle "><span class="ki_arrow "></span></span></a></div></form><div id="ki_thanks" style="display: none; "></div></div></div>
-
-
--->
-
-<script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="/static/js/ajaxfileupload.js?2"></script>
-<script type="text/javascript" src="/static/js/thread.js?17.5"></script>
-<script type="text/javascript" src="/static/js/uploader.js?3"></script>
-<script type="text/javascript" src="/static/js/winry.js?2"></script>
-<script src='/_ah/channel/jsapi'></script>
-<script src="/static/js/update.js?17.0"></script>
-{% endblock %}

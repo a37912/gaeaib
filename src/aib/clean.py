@@ -3,7 +3,7 @@ from google.appengine.ext.blobstore import BlobInfo
 from google.appengine.ext import deferred, db
 from tipfy import RequestHandler, Response
 
-from aib.models import Thread, Board
+from aib.models import Thread, Board, Cache
 
 class CleanBlob(RequestHandler):
   def get(self):
@@ -62,4 +62,28 @@ def do_clean_thread(cursor=None):
     logging.info("purged thread")
 
   deferred.defer(do_clean_thread, thq.cursor(), _countdown=10)
+
+
+class CleanCache(RequestHandler):
+  def get(self):
+    do_clean_cache()
+    return Response("yarr nom-nom")
+
+def do_clean_cache(cursor=None):
+  cacheq = Cache.all(keys_only=True)
+
+  if cursor:
+    cacheq.with_cursor(cursor)
+
+  cache = cacheq.get()
+
+  if not cache:
+    return
+
+  if cache.parent().kind() == 'Board':
+    db.delete(cache)
+
+  deferred.defer(do_clean_cache, cacheq.cursor(), _countdown=2)
+
+
 
