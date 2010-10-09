@@ -3,6 +3,6 @@ cron:
   url: /winry/clean_blob
   schedule: every 12 hours
 
-- description: remove old threads
-  url: /winry/clean_thread
-  schedule: every 12 hours
+#- description: remove old threads
+#  url: /winry/clean_thread
+#  schedule: every 12 hours

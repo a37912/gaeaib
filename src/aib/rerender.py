@@ -34,10 +34,14 @@ def do_render_cache(cursor=None):
     else:
       render.append(post)
 
-  thread.put()
+  if len(thread.posts) > 1:
+    thread.put()
+  else:
+    thread.delete()
+
   render.save()
 
-  deferred.defer(do_render_cache, thq.cursor(), _countdown=10)
+  deferred.defer(do_render_cache, thq.cursor())
 
 
 class RenderCache(RequestHandler):

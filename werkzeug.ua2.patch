@@ -53,7 +53,7 @@
          self.browsers = [(b, re.compile(self._browser_version_re % a))
                           for a, b in self.browsers]
  
-+        self.cpus = [(b, re.compile(self._cpu_re % a, re.I)) for a,b in self.self.cpus]
++        self.cpus = [(b, re.compile(self._cpu_re % a, re.I)) for a,b in self.cpus]
 +
      def __call__(self, user_agent):
          for platform, regex in self.platforms:

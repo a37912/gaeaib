@@ -5,7 +5,7 @@ from cgi import escape
 
 POST_LINK = (
     "&gt;&gt;([0-9]+)",
-    r'<a frmpostid="%(postid)s" postid="\1" class="postref" href="/%(board)s/p\1">&gt;&gt;\1</a>',
+    r'<a frmpostid="__postid__" postid="\1" class="postref" href="/__board__/p\1">&gt;&gt;\1</a>',
 )
 
 BOLD1 = (
@@ -156,7 +156,10 @@ def markup(data, **kw):
   assert 'board' in kw
   assert kw.get('board')
 
-  return data % kw
+  data = data.replace("__board__", kw.get("board"))
+  data = data.replace("__postid__", str(kw.get("postid")))
+
+  return data
 
 
 @contextfilter
