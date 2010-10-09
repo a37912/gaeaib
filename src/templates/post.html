@@ -1,4 +1,4 @@
-<table id="post-{{post.post}}">
+<table id="post-{{post.post}}" class="tablepost" >
   <tbody>
     <tr>
       <td class="doubledash">&gt;&gt;</td>
@@ -33,7 +33,7 @@
   <img class="thumb" src="{{post.image.thumb}}"/>
 </a>
         {% endif %}
-        <blockquote class="postdata" postid="{{post.post}}">{{ post.html }}</blockquote>
+        <blockquote class="postdata" postid="{{post.post}}">{{ post.text_html }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
       </td>
     </tr>

@@ -18,19 +18,21 @@ function upload_to(url) {
         img.attr("src", "/img/"+data.img);
         $("#view_img_msg").hide();
         img.show();
+        uploading = false;
       },
       error: function (data, status, e) 
       {
         $("#upload_img").show();
         $("#upload_img").change(do_up);
-        alert(data);
         alert(status + " err " + e);
+        uploading = false;
       }
     }
   )
 }
 
 do_up = function() {
+  uploading = true;
   $("#upload_img").hide();
 
   $("#view_img_msg").show();
@@ -47,3 +49,5 @@ do_up = function() {
 $("#upload_img").change(do_up);
 $("#upload_img").show();
 $("#view_img_nojs").hide();
+
+uploading = false;

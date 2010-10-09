@@ -68,56 +68,15 @@
 {% endif %}
 
 <br/>
-<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op|wakaba }}</blockquote>
+<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text_html }}</blockquote>
 </div>
-
-{% if thread.skipmsg %}
-<span class="omittedposts">Пропущено {{ thread.skip }}</span>
-{% endif %}
-
+{% if thread.posts %}
 {% for post in thread.posts %}
-<table id="post-{{post.post}}">
-  <tbody>
-    <tr>
-      <td class="doubledash">&gt;&gt;</td>
-      <td class="reply">
-        <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{post.post}}">
-          {% if post.image %}
-          <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
-          {% else %}
-          <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png">
-          {% endif %}
-        </a>
-        <label>
-          <span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span>
-          <span class="rainbow">{{post.rainbow_html}}</span>
-        </label>
-        {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
-        {{post.time}}
-        {% if post.agent %}
-        <span class="agent">{{post.agent|escape}}</span>
-        {% endif %}
-        <span class="reflink">
-          <a class="reflink" name="p{{post.post}}" 
-            href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
-            threadid="{{thread.id}}" 
-          >#{{post.post}}</a>
-        </span>
-        {% if post.image %}
-  <span class="filesize">{{post.image.content_type}}: 
-  {{ post.image.size }}</span>
-        <br/>
-<a href="{{post.image.full}}" target="_blank">
-  <img class="thumb" src="{{post.image.thumb}}"/>
-</a>
-        {% endif %}
-        <blockquote class="postdata" postid="{{post.post}}">{{ post|wakaba }}</blockquote>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+{% include 'post.html' %}
 {% endfor %}
+{% else %}
+<!--NPHERE-->
+{% endif %}
 </div>
 
 <div style="clear: left"></div>
@@ -132,36 +91,5 @@
 {% endfor %}
 <hr/>
 {% endif %}
-
-<span id="repl_link_template">
-  <a href="#"></a>
-</span>
-
-<table class="reply" id="post_template" style="display:none">
-  <tbody>
-    <tr>
-      <td class="doubledash">&gt;&gt;</td>
-      <td class="reply">
-        <label>
-          <span class="commentpostername"></span>
-          <span class="rb"></span>
-        </label>
-        <label class="sg"><b>SAGE</b></label>
-        <label class="time"></label>
-        <span class="reflink">
-          <a class="reflink" name="p" href="#" ></a>
-        </span>
-
-        <span class="filesize"></span>
-        <br id="imgbr"/>
-        <a class="thumb" href="#" target="_blank">
-          <img class="thumb" src="/"/>
-        </a>
-
-        <blockquote class="postdata"></blockquote>
-      </td>
-    </tr>
-  </tbody>
-</table>
 
 {% endblock %}

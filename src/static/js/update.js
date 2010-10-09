@@ -2,7 +2,7 @@ function listen_updates(token) {
   console.log("list token " + token);
 
   updates = new goog.appengine.Channel(token);
-  var socket = updates.open();
+  socket = updates.open();
   socket.onopen = function() {
     console.log("socket connected");
   };
@@ -10,9 +10,21 @@ function listen_updates(token) {
     o = JSON.parse(evt.data);
 
     if (o.evt == "newpost") {
-      var np = $(o.html);
+
+      if ($("#post-" + o.last).length > 0) {
+        return;
+      }
+
       var container = $(".thread");
+
+      if ($(".tablepost").length != (o.count-2)) {
+        var warn = $('<p class="warn">hmmm...</p>');
+        container.append(warn);
+      }
+
+      var np = $(o.html);
       container.append(np);
+
 
     }
     
@@ -41,3 +53,57 @@ if (thread != "") {
     }
   )
 }
+
+sendform = function(e) {
+  try {
+    if(! socket.readyState ) {
+      return;
+    }
+  } catch (err) {
+    return;
+  }
+
+  e.preventDefault();
+
+  if(uploading) {
+    alert("image uploading");
+  }
+
+  var fields = [
+    "id_name",
+    "id_text",
+    "id_sage",
+    "id_subject",
+    "upload_key"
+  ]
+  var data = {};
+
+  for (var idx in fields) {
+    var field = fields[idx];
+    var inp_f = $("#" + field).get(0);
+    if (inp_f == undefined) {
+      continue
+    }
+    data[inp_f.name] = inp_f.value
+  }
+
+  unlock = function() {
+    for (var idx in fields) {
+      var field = fields[idx];
+      var inp_f = $("#" + field).get(0);
+
+      if (inp_f == undefined) {
+        continue
+      }
+
+      inp_f.value = "";
+    }
+    $("#post_submit").removeAttr("disabled");
+
+  }
+
+  $("#post_submit").attr("disabled", "disabled");
+  $.post( "post/", data, unlock)
+}
+
+$("form").submit(sendform);
