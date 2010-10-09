@@ -146,6 +146,10 @@ def get_rules():
       handler = "aib.clean.CleanCache"
     ),
     Rule(
+      "/winry/clean_board",
+      handler = "aib.clean.CleanBoard"
+    ),
+    Rule(
       "/winry/render_cache",
       handler = "aib.rerender.RenderCache"
     ),

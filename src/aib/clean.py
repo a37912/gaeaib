@@ -86,4 +86,27 @@ def do_clean_cache(cursor=None):
   deferred.defer(do_clean_cache, cacheq.cursor(), _countdown=2)
 
 
+class CleanBoard(RequestHandler):
+  def get(self):
+    do_clean_board()
+    return Response("yarr")
+
+def do_clean_board(cursor=None):
+  thq = Board.all()
+
+  if cursor:
+    thq.with_cursor(cursor)
+
+  board = thq.get()
+
+  if not board:
+    logging.info("stop board clean")
+    return
+
+  threads = Thread.load_list(board.thread, board.key().name())
+
+  board.thread = [th for (th,data) in threads if data]
+  board.put()
+
+  deferred.defer(do_clean_board, thq.cursor())
 
