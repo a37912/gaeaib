@@ -273,16 +273,23 @@ def delete_post(board, thread_num, post_num, rape_msg):
   else:
     last_deletion = True
     post['text'] = 'Fuuuuuu'       
+    post['text_html'] = 'Fuuuuuu'       
     post['rainbow_html'] = u'<b>' + rape_msg + '</b>'
-
 
   th.put()
   Cache.delete(
     (
-      dict(Board=board)
-      )
+      dict(Board=board),
     )
+  )
+
+  r = Render(board, thread_num)
+  #kind of shit:
+  r.create(th.posts[0])
+  for a_post in th.posts[1:]:
+    r.append(a_post)
+  r.save()
   
-  key = "posts-%s-%d" %(board, thread_num)
-  memcache.set(key, th.posts)
+  #FIXME: update records in memcache 
+
   return last_deletion

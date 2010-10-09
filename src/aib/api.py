@@ -32,7 +32,7 @@ class ApiPost(RequestHandler):
         postid = num,
         data = post.get("text")
     )
-    post['full_html'] = render_template("post.html", post=post)
+    post['full_html'] = render_template("post.html", post=post, board=board)
 
     return json_response( post )
 
