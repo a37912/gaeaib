@@ -67,6 +67,7 @@ sendform = function(e) {
 
   if(uploading) {
     alert("image uploading");
+    return;
   }
 
   var fields = [
