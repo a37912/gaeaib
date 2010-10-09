@@ -55,6 +55,15 @@ if (thread != "") {
 }
 
 sendform = function(e) {
+  var button = $("#post_submit");
+
+  if(uploading) {
+    uploading = false;
+    e.preventDefault();
+    button.attr("disabled", "disabled");
+
+    return;
+  }
   try {
     if(! socket.readyState ) {
       return;
@@ -63,12 +72,6 @@ sendform = function(e) {
     return;
   }
 
-  e.preventDefault();
-
-  if(uploading) {
-    alert("image uploading");
-    return;
-  }
 
   var fields = [
     "id_name",
@@ -99,12 +102,14 @@ sendform = function(e) {
 
       inp_f.value = "";
     }
-    $("#post_submit").removeAttr("disabled");
+    button.removeAttr("disabled");
 
   }
 
-  $("#post_submit").attr("disabled", "disabled");
+  button.attr("disabled", "disabled");
   $.post( "post/", data, unlock)
+
+  e.preventDefault();
 }
 
 $("form").submit(sendform);

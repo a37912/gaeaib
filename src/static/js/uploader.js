@@ -18,6 +18,9 @@ function upload_to(url) {
         img.attr("src", "/img/"+data.img);
         $("#view_img_msg").hide();
         img.show();
+        if (! uploading ) {
+          $("form").submit();
+        }
         uploading = false;
       },
       error: function (data, status, e) 
