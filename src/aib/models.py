@@ -105,7 +105,7 @@ class Thread(db.Model):
         logging.info("cant find %d %r, go to db" %(num,th))
         ret = cls.load_list_db(numbers, board)
         memcache.set_multi(
-            dict(ret),
+            dict([(str(num),th) for num, th in ret]),
             key_prefix = cls.TPL % board
         )
         break
@@ -123,13 +123,13 @@ class Thread(db.Model):
     ]
 
     return zip(
-        map(str,numbers),
+        numbers,
         map(
           lambda x : {
             "posts":x.posts,
             "subject":x.subject
           } if x else {},
-          filter(bool, db.get(keys))
+          db.get(keys)
         )
     )
 

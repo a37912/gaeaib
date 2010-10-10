@@ -65,9 +65,7 @@ sendform = function(e) {
     return;
   }
   try {
-    if(! socket.readyState ) {
-      return;
-    }
+    socket;
   } catch (err) {
     return;
   }
@@ -76,7 +74,6 @@ sendform = function(e) {
   var fields = [
     "id_name",
     "id_text",
-    "id_sage",
     "id_subject",
     "upload_key"
   ]
@@ -89,6 +86,10 @@ sendform = function(e) {
       continue
     }
     data[inp_f.name] = inp_f.value
+  }
+
+  if ($("#id_sage").attr("checked")) {
+    data['sage'] = true;
   }
 
   unlock = function() {

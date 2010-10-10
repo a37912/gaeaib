@@ -42,7 +42,7 @@ class Render(object):
   def append(self, post):
     assert self.html, 'nowhere to append'
 
-    self.post_html = render_template("post.html", post=post)
+    self.post_html = render_template("post.html", post=post, board=self.board)
 
     self.html = self.html.replace(
         u"<!--NPHERE-->", self.post_html)
