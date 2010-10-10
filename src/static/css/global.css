@@ -74,6 +74,11 @@ padding: 0px 13px 10px 13px;
 margin-left: 1em;
 font-size: 82%;
 margin-right: 5px;
+min-width:400px;
+}
+
+#postarea textarea {
+width:90%
 }
 
 div#postarea.reply {

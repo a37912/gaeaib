@@ -40,10 +40,8 @@
       <nav>
        <a href="/" {% if not board %}class="currentboard"{% endif %}>Гайкочан</a> | 
        {%- for boardid,text in boards %}
-         <a href="/{{boardid}}/" {% if boardid==board %} class="currentboard"{% endif %}
-          >/{{boardid}}/
-         </a> 
-         {% if not loop.last %} | {% endif %} 
+        <a href="/{{boardid}}/" {%- if boardid==board %} class="currentboard"{% endif %}>/{{boardid}}/</a>
+        {%- if not loop.last %} | {% endif %} 
        {% endfor %}
       </nav>
       </div>
@@ -51,7 +49,7 @@
       {% block precontent %}
         {#<div class="logo"></div>
         <h1>Добро пожаловать. Снова. Опять.</h1>#}
-        {% if board %}<h1><a href="{{ board }}">{{ board_name }}</a></h1>{% endif %}
+        {% if board %}<h1><a href="/{{ board }}/">{{ board_name }}</a></h1>{% endif %}
       {% endblock %}
       </header>
       <!-- BODY -->
@@ -59,8 +57,8 @@
       <footer>
       <div class="footer" > 
         Winry Rokbell | Гайчан <sup style="color:red">βeta</sup> |
-        <a href="/about">Statement</a> | <a href="/api">API</a> |
-        <a href="http://github.com/a37912/gaeaib/" >GAE AIB</a>
+        <a href="/about">Statement</a> | <a href="/api">API</a> | <a href="/faq">FAQ</a> | 
+        <a href="http://github.com/a37912/gaeaib/" >Соус</a>
       </div>
       </footer>
       {% block scripts %}{% endblock %}
