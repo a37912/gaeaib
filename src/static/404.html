@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"> 
+        <meta name="author" content="Na Wong">
+        <meta name="copyright" content="Na&rsquo;design">
+        <title>Конец инторнетов</title>
+        <link rel="stylesheet" href="/static/404.css">
+        <link rel="home" href="/b/" title="Home">
+        <!-- <script src="http://idzr.org/scripts/lightbugs.js"></script> --> 
+<script type="text/javascript">
+const POSTERS_PER_ROW = 20 //108;
+const RING_RADIUS = 300;
+
+function randomString(){
+    var chars = "£@ABCDEFGHJKLMNPQRSTUVWXTZあえおきけせまわやをのねひはれ";
+    var string_length = 1;
+    var randomstring = '';
+    for (var i=0; i<string_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+        randomstring += chars.substring(rnum,rnum+1);
+    }
+    return randomstring;
+}       
+
+function randomList(){
+   var taglist = new Array ( "Blood Bath",  "Shot In The Head", 
+	"Based On Manga", "Teenage Boy", "Nipples", "Pedophile", "Blood", 
+        "Killing", "Sadness", "Joy", "Rampage", "Horns", "Beating", 
+	"Abuse", "Pedophilia", "Teenager Nudity", "Surrealism", "Beaten To Death", "Extreme Violence", 
+	"Nudity", "Bully", "Female Rear Nudity", "Psychic", "Child Abuse", "Sadism", 
+	"Graphic Violence", "Supernatural Power", "Trauma", "Adolescence", "Flashback", "Suffering", 
+	"Affection", "Bitterness", "Infant Nudity", "Cruelty", "Amnesia", "Brutality", 
+	"Perversion", "Gore", "Child Nudity", "Classroom", "Shooting", "Sadist", 
+	"Violence", "Degradation", "Dead Animal", "Urination", 
+	"Female Nudity", "Disembowelment", "Death Of Sister", "Death Of Pet", "Sexual Perversion", "Blood Spatter", 
+	"Evil", "Split Personality", "Bullying", "Psychic Power", "Dark Past", "Bare Breasts", 
+	"Female Killer", "Based On Comic", "Decapitation", "Paranoia", "Dark Secret", "Mutilation", 
+	"Mistreatment", "Evil Child", "Childhood Trauma", "Murder", "Desperation", "Massacre", 
+	"Death", "Children", "Paranoiac", "Murder Of Family", "Adolescent", "Controversy", 
+	"Teenage Girl", "Shot To Death", "Kiss", "Female Frontal Nudity", "Splatter", "Horn", 
+	"Bloody Body Of Child", "Anime", "Death Of Father");
+   return taglist[Math.floor(Math.random() * taglist.length)];
+}
+
+function setup_posters(row){
+    var posterAngle = 360 / POSTERS_PER_ROW;
+    for (var i = 0; i < POSTERS_PER_ROW; i ++) {
+        var poster = document.createElement('div');
+        poster.className = 'code';
+        
+        var transform = 'rotateX(' + (i*6) + 'deg) rotateY(' + (posterAngle * Math.floor(Math.random()*360)) + 'deg) translateZ(' + (RING_RADIUS+Math.floor(Math.random()*50)) + 'px)';
+        poster.style.webkitTransform = transform;
+        poster.style.opacity = Math.random();
+        poster.style.fontSize = (Math.floor(Math.random()*42)+8)+"px";   
+        poster.style.top = Math.floor(Math.random()*100)+"px";
+        poster.style.left = Math.floor(Math.random()*300)+"px";
+        
+        var content = poster.appendChild(document.createElement('p'));
+        content.textContent = randomList();
+        row.appendChild(poster);
+    }
+}
+
+function init(){
+    setup_posters(document.getElementById('ring-1'));
+    setup_posters(document.getElementById('ring-2'));
+    setup_posters(document.getElementById('ring-3'));
+}
+
+window.addEventListener('load', init, false);
+
+</script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="content">
+                    <h1>Конец инторнетов</h1>
+<p>Убивать людей — плохо</p>
+<p>Если человеку оторвать голову — он умрет</p>
+<p>Если человека разорвать пополам — он умрет</p>
+<p>Если лоли оторвать руки и ноги — она станет вдвое кавайнее</p>
+
+                    <div id="canvas"> 
+                              <div id="ring-1" class="ring"></div> 
+                              <div id="ring-2" class="ring"></div>
+                              <div id="ring-3" class="ring"></div>  
+                            </div>
+                    <footer><a href="/" rel="home">Гайчан</a></footer>
+            </div>
+        </div>
+    </body>
+</html>
+

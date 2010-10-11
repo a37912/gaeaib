@@ -12,11 +12,11 @@
 
 <div class="thread">
   <div class="threadnum" >
-    {% if thread.subject %}
+    <a href="/{{ board }}/{{ thread.id }}">{% if thread.subject %}
     {{ thread.subject|escape }}
     {% else %}
     Тред номер {{thread.id}}
-    {% endif %}
+    {% endif %}</a>
   </div>
 
 <div class="oppost">

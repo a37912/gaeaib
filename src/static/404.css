@@ -1,0 +1,127 @@
+/* @override 
+    http://idzr.org/styles/fourowhat.css
+*/
+
+*{
+    margin:0;
+    padding:0;
+}
+a{
+    color: rgb(100,110,115);
+    text-decoration:none;
+}
+a:hover {
+    color: rgb(255,255,255);
+}
+a img {
+    border:none;
+}
+
+/* Page Layout */
+
+body {
+    background-color:rgb(39, 40, 44);   
+    color: rgb(240,241,242);
+    font-family:"Helvetica Neue","Helvetica","Lucida Grande","Lucida Sans Unicode", sans-serif;
+}
+
+#wrapper {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    margin: -155px 0;
+}
+#content {
+    width: 480px;
+    margin: 0 auto;
+}
+h1 {
+    font-size: 30px;
+    color: rgb(255,255,255);
+    font-weight: 400;
+    text-shadow: rgba(0,0,0,.7) 0px 2px 2px;
+}
+p {
+    font-size: 12px;
+    margin: 1em 0;
+    line-height: 1.2em;
+    text-shadow: rgba(0,0,0,.7) 0px 2px 1px;
+}
+p small {
+    color: rgb(200,200,200);
+    display: block;
+}
+footer {
+    text-align: right;
+    display: block;
+    padding: 1em 0;
+    font-size: 14px;
+}
+
+/* Animation */
+     #canvas {
+       margin: -100px auto -300px;
+       width: 400px;
+       height: 400px;
+       -webkit-perspective: 1000;
+     }      
+     .ring {
+       margin: 0 auto;
+       height: 110px;
+       width: 400px;
+       -webkit-transform-style: preserve-3d;
+       -webkit-animation-iteration-count: infinite;
+       -webkit-animation-timing-function: linear;
+     }
+     .code {
+        position: absolute;
+        top: 90px;
+        color: rgb(255,255,255);
+     }           
+     .code > p {
+        font-family:"Museo Sans","Helvetica Neue","Helvetica",sans-serif;
+        font-weight:500;
+        text-shadow: rgba(255,255,255,.5) 0px 0px 10px;
+     }
+
+     #ring-1 {
+       -webkit-animation-name: y-spin;
+       -webkit-animation-duration: 22s;
+       -webkit-transform: rotateY(30deg);
+     }
+
+     #ring-2 {
+        position: relative;
+        left: -60px;
+        top: -300px;
+       -webkit-animation-name: back-y-spin;
+       -webkit-animation-duration: 24s;
+       -webkit-transform: rotateX(20deg);
+     }
+
+     #ring-3 {
+       -webkit-animation-name: x-spin;
+       -webkit-animation-duration: 20s;
+        position: relative;
+        left: 0px;
+        top: -240px;
+     }
+
+     @-webkit-keyframes x-spin {
+       0%    { -webkit-transform: rotateX(0deg); }
+       50%   { -webkit-transform: rotateX(180deg); }
+       100%  { -webkit-transform: rotateX(360deg); }
+     }
+
+     @-webkit-keyframes y-spin {
+       0%    { -webkit-transform: rotateY(0deg); }
+       50%   { -webkit-transform: rotateY(180deg); }
+       100%  { -webkit-transform: rotateY(360deg); }
+     }
+
+     @-webkit-keyframes back-y-spin {
+       0%    { -webkit-transform: rotateY(360deg); }
+       50%   { -webkit-transform: rotateY(180deg); }
+       100%  { -webkit-transform: rotateY(0deg); }
+     }
+
