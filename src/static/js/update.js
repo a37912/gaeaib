@@ -25,6 +25,10 @@ function listen_updates(token) {
       var np = $(o.html);
       container.append(np);
 
+      if(notify) {
+        notify.show("thread updated");
+      }
+
 
     }
     
