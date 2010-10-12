@@ -81,6 +81,30 @@ class Thread(db.Model):
     else:
       return u"Тред номер %s" % self.id()
 
+  @property
+  def op(self):
+    return self.posts[0]
+
+  @property
+  def tail_posts(self):
+    if len(self.posts) > REPLIES_MAIN+1:
+      off = -REPLIES_MAIN
+    else:
+      off = 1
+
+    return self.posts[off:]
+
+  @property
+  def skip(self):
+    skip = len(self.posts) - REPLIES_MAIN - 1
+
+    if skip > 0:
+      return skip
+
+  @property
+  def id(self):
+    return self.key().id()
+
 
   @classmethod
   def load(cls, number, board):
