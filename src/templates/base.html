@@ -54,19 +54,24 @@
       </header>
       <!-- BODY -->
       {% block content %}{% endblock %}
-      <footer>
-      <div class="footer" > 
-        Winry Rokbell | Гайчан <sup style="color:red">βeta</sup> |
-        <a href="/about">Statement</a> | <a href="/api">API</a> | <a href="/faq">FAQ</a> | 
-        <a href="http://github.com/a37912/gaeaib/" >Соус</a>
-      </div>
+      <footer>  
+        <ul class="links">
+          <li><a href="/about">Statement</a></li>
+          <li><a href="/api">API</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="http://github.com/a37912/gaeaib/">Соус</a></li>
+        </ul>
+        <ul class="sosueme">
+          <li class="main">© 2010 Winry Rokbell</li>
+          <li>Гайкочан βeta </li>
+        </ul>
+        
       </footer>
+
+
       {% block scripts %}{% endblock %}
     </div>
     
-    {#<div id="menu">
-      <iframe id="navmenu" name="navmenu" src="/list" width="210" height="100%" align="left" frameborder="0">Навигация показывается через iframe.</iframe>
-    </div> #}
   {% endblock %}
     
  

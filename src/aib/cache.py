@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from google.appengine.ext import deferred
 from tipfy import RequestHandler, Response
 from models import Cache

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from google.appengine.ext import blobstore
 from google.appengine.api import images
