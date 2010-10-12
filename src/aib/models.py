@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 
 from google.appengine.ext import db
@@ -5,6 +6,7 @@ from google.appengine.api import memcache
 from tipfy.ext.db import PickleProperty
 from aetycoon import DerivedProperty, CompressedProperty
 from const import *
+from jinja2.utils import escape
 
 class Board(db.Model):
   TPL = "threadlist-%s"
@@ -69,6 +71,16 @@ class Thread(db.Model):
     return [p.get("post") for p in self.posts]
 
   subject = db.StringProperty()
+
+  @property
+  def safe_subject(self):
+    return "$$$"
+    logging.info("XXX:Subj %s " % self.subject)
+    if len(self.subject)==0:
+      return escape(subject)
+    else:
+      return u"Тред номер %s" % self.id()
+
 
   @classmethod
   def load(cls, number, board):

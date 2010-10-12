@@ -12,7 +12,7 @@
         </a>
         <label>
           <span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span>
-          <span class="rainbow">{{post.rainbow_html}}</span>
+          {{post.rainbow_html}}
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
         {{post.time}}

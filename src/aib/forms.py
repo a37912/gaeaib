@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 
 from tipfy import get_config

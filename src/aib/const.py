@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # temporary here is list of boards
 boardlist_order = (
    ( 'b' , 'Beating heart'),

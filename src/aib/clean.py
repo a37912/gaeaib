@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from google.appengine.ext.blobstore import BlobInfo
 from google.appengine.ext import deferred, db

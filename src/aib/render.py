@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from models import Cache
 from tipfy.ext.jinja2 import render_template
 from const import *

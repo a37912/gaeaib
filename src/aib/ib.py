@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 
 from google.appengine.api import memcache
@@ -5,6 +6,7 @@ from google.appengine.ext import db
 
 from tipfy import RequestHandler, redirect, Response, NotFound
 from tipfy.ext.jinja2 import render_response, render_template
+
 from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
 
 from forms import PostForm
@@ -143,3 +145,4 @@ class DeletePost(RequestHandler, SecureCookieMixin, CookieMixin):
         self.delete_cookie(key)
 
     return redirect("/%s/%d" %( board, thread) )
+

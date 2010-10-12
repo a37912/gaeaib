@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from uuid import uuid4 as uuid
 from tipfy import RequestHandler, Response, NotFound
