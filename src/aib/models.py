@@ -74,12 +74,7 @@ class Thread(db.Model):
 
   @property
   def safe_subject(self):
-    return "$$$"
-    logging.info("XXX:Subj %s " % self.subject)
-    if len(self.subject)==0:
-      return escape(subject)
-    else:
-      return u"Тред номер %s" % self.id()
+    return escape(self.subject)
 
   @property
   def op(self):

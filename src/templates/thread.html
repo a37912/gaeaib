@@ -14,8 +14,7 @@
   <div class="threadnum" >
     <h2>
     <a href="/{{ board }}/{{ thread.id }}">
-    {{ thread.subject }}
-    {{ thread.safe_subject }}
+    {{ thread.safe_subject if thread.subject else "Тред %d"|format(thread.id) }}
     </a>
     </h2>
   </div>
