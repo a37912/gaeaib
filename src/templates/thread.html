@@ -73,10 +73,10 @@
 <blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text_html }}</blockquote>
 </div>
 {% if thread.posts %}
-{% if thread.skipmsg %}
+{% if thread.skip %}
 <span class="omittedposts">Пропущено {{ thread.skip }}</span>
 {% endif %}
-{% for post in thread.posts %}
+{% for post in thread.tail_posts %}
 {% include 'post.html' %}
 {% endfor %}
 {% else %}

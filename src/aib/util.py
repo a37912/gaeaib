@@ -28,7 +28,7 @@ def get_threads(board, page=0, fmt_name="page"):
   else:
     fmt = thread_plain
 
-  threads = Board.load(board)
+  threads = Board.load(board) or []
   threads = threads[THREAD_PER_PAGE*page:THREAD_PER_PAGE*(page+1)]
   logging.info("threadlist in %r : %r" % (board, threads))
 
@@ -59,23 +59,7 @@ def thread_plain(num,thread):
 
 
 def thread_page(num,thread):
-  content = thread.get("posts")
-
-  if len(content) > REPLIES_MAIN+1:
-    end = content[-REPLIES_MAIN:]
-    omitt = len(content) - REPLIES_MAIN - 1
-  else:
-    end = content[1:]
-    omitt = 0
-      
-  return {
-      'op' : content[0],
-      'posts' : end,
-      'id' : int(num),
-      "skipmsg" : "%d omitted" % omitt if omitt else None,
-      "skip" : omitt,
-      "subject" : thread.get("subject"),
-  }
+  return thread
 
 def option_saem(request, data):
   if data.get('name') != 'SAEM':
