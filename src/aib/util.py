@@ -38,7 +38,7 @@ def get_threads(board, page=0, fmt_name="page"):
   return [ fmt(num,th) for num,th in data if th ]
 
 def thread_plain(num,thread):
-  content = thread.get("posts")
+  content = thread.posts
 
   if len(content) > REPLIES_MAIN+1:
     _content = [content[0]]
@@ -54,12 +54,12 @@ def thread_plain(num,thread):
   return {
     "posts" : _content,
     "skip" : omitt,
-    "subject" : thread.get("subject"),
+    "subject" : thread.subject,
   }
 
 
 def thread_page(num,thread):
-  content = thread.get("posts")
+  content = thread.posts
 
   if len(content) > REPLIES_MAIN+1:
     end = content[-REPLIES_MAIN:]
@@ -74,7 +74,7 @@ def thread_page(num,thread):
       'id' : int(num),
       "skipmsg" : "%d omitted" % omitt if omitt else None,
       "skip" : omitt,
-      "subject" : thread.get("subject"),
+      "subject" : thread.subject,
   }
 
 def option_saem(request, data):
