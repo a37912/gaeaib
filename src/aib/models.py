@@ -74,25 +74,35 @@ class Thread(db.Model):
 
   @property
   def safe_subject(self):
-    return "$$$"
-    logging.info("XXX:Subj %s " % self.subject)
-    if len(self.subject)==0:
-      return escape(subject)
+    return escape(self.subject)
+
+  @property
+  def op(self):
+    return self.posts[0]
+
+  @property
+  def tail_posts(self):
+    if len(self.posts) > REPLIES_MAIN+1:
+      off = -REPLIES_MAIN
     else:
-      return u"Тред номер %s" % self.id()
+      off = 1
+
+    return self.posts[off:]
+
+  @property
+  def skip(self):
+    skip = len(self.posts) - REPLIES_MAIN - 1
+
+    if skip > 0:
+      return skip
+
+  @property
+  def id(self):
+    return self.key().id()
 
 
   @classmethod
   def load(cls, number, board):
-    thread = None#memcache.get(cls.TPL_ONE % (board, number))
-
-    if thread == None:
-      thread = cls.load_db(number, board)
-
-    return thread
-
-  @classmethod
-  def load_db(cls, number, board):
     return cls.get(cls.gen_key(number, board))
 
   @classmethod
@@ -105,45 +115,13 @@ class Thread(db.Model):
 
   @classmethod
   def load_list(cls, numbers, board):
-    keys = map(str, numbers)
-
-    data =  {}#memcache.get_multi(keys, cls.TPL % board)
-    
-    ret = []
-    for num in numbers:
-      th = data.get(str(num))
-
-      if not th:
-        logging.info("cant find %d %r, go to db" %(num,th))
-        ret = cls.load_list_db(numbers, board)
-        memcache.set_multi(
-            dict([(str(num),th) for num, th in ret]),
-            key_prefix = cls.TPL % board
-        )
-        break
-
-      ret.append( (num, th) )
-
-    return ret
-
-  @classmethod
-  def load_list_db(cls, numbers, board):
 
     keys = [
-      db.Key.from_path("Board", board, "Thread", num)
+      cls.gen_key(num, board)
       for num in numbers
     ]
 
-    return zip(
-        numbers,
-        map(
-          lambda x : {
-            "posts":x.posts,
-            "subject":x.subject
-          } if x else {},
-          db.get(keys)
-        )
-    )
+    return zip( numbers, db.get(keys) )
 
 class Cache(db.Model):
   comp = CompressedProperty(6)
