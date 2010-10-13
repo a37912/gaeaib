@@ -376,9 +376,8 @@ display: block;
 .rainbow div {
 height: 8px;
 left: 0px;
-position: absolute;
-top: 0.2em;
 width: 8px;
+float:left;
 }
 
 /* scrollbar */
