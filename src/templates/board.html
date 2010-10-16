@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{board_name}} {% endblock %}
+
+{% block content %}
+{% include "postform.html" %}
+{% if not threads %}
+<center><h1>Этаж еще не затоплен</h1></center>
+{% endif %}
+
+{% for thread in threads %}
+{% include "thread_internal.html" %}
+{% endfor %}
+
+{% for page in pages %}
+[<a href = "{% if page %}page{{page}}{% else %}./{% endif %}">{{page}}</a>]
+{% endfor %}
+<hr/>
+
+{% include "scripts.html" %}
+
+{% endblock %}

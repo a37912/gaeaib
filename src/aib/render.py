@@ -26,11 +26,10 @@ class Render(object):
         "subject" : op.get("subject"),
     }
     self.html = render_template("thread.html", 
-        threads = (data,),
+        thread = data,
         board = self.board,
         board_name = boardlist.get(self.board, "Woooo???"),
         boards = boardlist_order,
-        thread = self.thread,
     )
 
   def add(self,post,new=False):

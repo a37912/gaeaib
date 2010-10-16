@@ -50,7 +50,7 @@ class Board(RequestHandler):
     data['boards'] = boardlist_order
     data['pages'] = range(BOARD_PAGES)
 
-    html = render_template("thread.html", **data)
+    html = render_template("board.html", **data)
 
     if page == 0:
       models.Cache.save(data = html, Board=board)
