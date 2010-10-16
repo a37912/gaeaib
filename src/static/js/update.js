@@ -109,6 +109,9 @@ sendform = function(e) {
     }
     button.removeAttr("disabled");
 
+    $("#upload_img").show();
+    $("#view_img").hide();
+
   }
 
   button.attr("disabled", "disabled");

@@ -1,0 +1,76 @@
+{%- macro op_image(image) -%}
+
+<a href="{{image.full}}" target="_blank"><img class="thumb" src="{{image.thumb}}"/></a>
+
+{%- endmacro -%}
+
+<h1><a class="header-link" href="/blog=170416" onclick="g_trackEvent('{{ board }}', '{{ thread.safe_subject }}', '');">{{ thread.safe_subject }}</a><span class="sub"> {{ thread.op.name|escape }} {{thread.op.rainbow_html}}
+ on {{thread.op.time}} </span></h1>
+
+<div class="thread">
+  <div class="threadnum" >
+    <h2>
+    <a href="/{{ board }}/{{ thread.id }}">
+    {{ thread.safe_subject if thread.subject else "Тред %d"|format(thread.id) }}
+    </a>
+    </h2>
+  </div>
+
+  <div class="oppost">
+  {% if thread.op.image %}
+  <span class="filesize">{{thread.op.image.content_type}}: {{ thread.op.image.size }}</span>
+
+  <span class="reflink">
+    <a class="reflink" name="p{{thread.op.post}}" href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+      threadid="{{thread.id}}"
+    >#{{thread.op.post}}</a>
+  </span>
+  <br/>
+  {{ op_image(thread.op.image) }}
+  <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}"><img 
+    alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png" /></a>
+  {% else %}
+  <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}"><img 
+    alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png" /></a>
+  {% endif %}
+
+<label>
+  <span class="postername {{thread.op.typ}}">{{ thread.op.name|escape }}</span>
+  {{thread.op.rainbow_html}}
+  {{thread.op.time}}
+</label>
+
+{% if reply %}
+  <a class="g-button" href="{{ thread.id }}/" >Ответить</a>
+{% else %}
+
+{% if thread.op.agent %}
+<span class="agent">{{thread.op.agent|escape}}</span>
+{% endif %}
+
+<span class="reflink">
+  <a class="reflink" name="p{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+    threadid="{{thread.id}}"
+  >#{{thread.op.post}}</a>
+</span>
+
+{% endif %}
+
+<br/>
+<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text_html }}</blockquote>
+</div>
+{% if thread.posts %}
+{% if thread.skip %}
+<span class="omittedposts">Пропущено {{ thread.skip }}</span>
+{% endif %}
+{% for post in thread.tail_posts %}
+{% include 'post.html' %}
+{% endfor %}
+{% else %}
+<!--NPHERE-->
+{% endif %}
+</div>
+
+<div style="clear: left"></div>
+<hr/>

@@ -53,7 +53,7 @@ class Board(RequestHandler):
       data['op_thread'] = data['threads'][0]
       data['threads'] = data['threads'][1:]
 
-    html = render_template("thread.html", **data)
+    html = render_template("board.html", **data)
 
     if page == 0:
       models.Cache.save(data = html, Board=board)
