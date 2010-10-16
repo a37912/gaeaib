@@ -16,8 +16,18 @@ body {
   bottom: 0;
   right: 10px;
   overflow-y: scroll;
-  overflow-x: hidden;  
+  overflow-x: hidden; 
+  text-shadow: #d8d8d8 0.1em 0.1em 2px; 
 }
+html, body {
+  height: 100%;
+}
+
+body {
+  font: 16px Arial, Helvetica, sans-serif;
+  position: relative;
+}
+
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -59,6 +69,7 @@ body {
   max-width: 958px;
   min-width: 200px;
   position: relative;
+  padding-top: 15px;
 }
 
 img {
@@ -83,14 +94,6 @@ tr,td,div,p,li {
   text-decoration: none;
 }
 
-html, body {
-  height: 100%;
-}
-
-body {
-  font: 16px Arial, Helvetica, sans-serif;
-  position: relative;
-}
 
 p {
   
@@ -112,7 +115,7 @@ q {
   quotes: "“" "”" "‘" "’"
 }
 
-/* Add form */
+/* @group Add Form */
 
 div #postarea {
   background-color: white;
@@ -185,7 +188,11 @@ input[type="checkbox"] + label:hover {
   font-size: 1.25em;
 }
 
-/* /Add form */
+
+
+/* @end */
+
+/* @group Top Nav */
 
 #topmenu {
   position: fixed;
@@ -196,6 +203,7 @@ input[type="checkbox"] + label:hover {
   filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#ffffff,endColorStr=#efefef);
   opacity: 0.8;
   right: 5px;
+  padding-right: 20px;
 }
 
 #topmenu nav {
@@ -220,7 +228,11 @@ input[type="checkbox"] + label:hover {
   font-size: 12px;
 }
 
-/* Footer */
+
+
+/* @end */
+
+/* @group Footer */
 
 footer {
   margin: 25px 0 0 0;
@@ -265,7 +277,7 @@ footer ul.sosueme li a {
   color: #666;
 }
 
-/* /footer */
+/* @end */
 
 .post {
   float: right;
@@ -500,7 +512,7 @@ button.g-button, a.g-button, input[type=submit].g-button {
   border: 1px solid #dce5eb;
 }
 
-/* Rainbow */
+/* @group Rainbow */
 
 .rainbow {
   height: 9px;
@@ -515,7 +527,7 @@ button.g-button, a.g-button, input[type=submit].g-button {
   float: left;
 }
 
-/* scrollbar */
+/* @end */
 
 
 /*

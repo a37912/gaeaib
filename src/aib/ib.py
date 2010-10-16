@@ -49,6 +49,9 @@ class Board(RequestHandler):
     data['board'] = board # board name
     data['boards'] = boardlist_order
     data['pages'] = range(BOARD_PAGES)
+    if data['threads']:
+      data['op_thread'] = data['threads'][0]
+      data['threads'] = data['threads'][1:]
 
     html = render_template("thread.html", **data)
 
