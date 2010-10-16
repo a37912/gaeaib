@@ -16,9 +16,9 @@ body {
   bottom: 0;
   right: 10px;
   overflow-y: scroll;
-  overflow-x: hidden; 
-  text-shadow: #d8d8d8 0.1em 0.1em 2px; 
+  overflow-x: hidden;
 }
+
 html, body {
   height: 100%;
 }
@@ -28,40 +28,42 @@ body {
   position: relative;
 }
 
-
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+    width: 10px !important;
+    height: 10px !important;
 }
 
-::-webkit-scrollbar-button:start:decrement {
-  display: block;
-  height: 43px;
-  width: 5px;
-  background-color: transparent;
+::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment {
+    border-bottom-left-radius: 5px 5px !important;
+    border-bottom-right-radius: 5px 5px !important;
+    border-top-left-radius: 5px 5px !important;
+    border-top-right-radius: 5px 5px !important;
+    height: 0px !important;
+    display: block !important;
+    background-color: transparent !important;
 }
 
-::-webkit-scrollbar-button:end:increment {
-  display: block;
-  height: 55px;
-  width: 5px;
-  background-color: transparent;
+::-webkit-scrollbar-track-piece {
+    background-color: #EEE !important;
+    border-bottom-left-radius: 5px 5px !important;
+    border-bottom-right-radius: 5px 5px !important;
+    border-top-left-radius: 5px 5px !important;
+    border-top-right-radius: 5px 5px !important;
 }
 
-::-webkit-scrollbar-track:enabled {
-  background-color: transparent;
+::-webkit-scrollbar-thumb:vertical, ::-webkit-scrollbar-thumb:horizontal {
+    height: 50px !important;
+    background-color: #9a9a9a !important;
+    -webkit-border-radius: 5px !important;
 }
 
-::-webkit-scrollbar-thumb:vertical {
-  height: 50px;
-  background-color: rgba(50, 50, 50, .9);
-  -webkit-border-radius: 5px;
+::-webkit-scrollbar-thumb:vertical:hover, ::-webkit-scrollbar-thumb:horizontal:hover {
+    background-color: #5e5e5e !important;
 }
 
-::-webkit-scrollbar-thumb:horizontal {
-  width: 50px;
-  background-color: rgba(50, 50, 50, .9);
-  -webkit-border-radius: 5px;
+::-webkit-scrollbar-corner {
+    display: none !important;
+    background-color: #FFF !important;
 }
 
 #bodyContent {
@@ -93,7 +95,6 @@ table td {
 tr,td,div,p,li {
   text-decoration: none;
 }
-
 
 p {
   
@@ -127,6 +128,7 @@ div #postarea {
   font-size: 82%;
   margin-right: 5px;
   min-width: 400px;
+  text-shadow: #d8d8d8 0.1em 0.1em 2px;
 }
 
 #postarea textarea {
@@ -190,7 +192,9 @@ input[type="checkbox"] + label:hover {
 
 
 
-/* @end */
+/* @
+
+end */
 
 /* @group Top Nav */
 
@@ -202,8 +206,10 @@ input[type="checkbox"] + label:hover {
   background-image: -webkit-gradient(linear,left top,left bottom,from(#ffffff),to(#efefef));
   filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#ffffff,endColorStr=#efefef);
   opacity: 0.8;
-  right: 5px;
-  padding-right: 20px;
+/*
+
+right: 5px;
+  padding-right: 20px;*/
 }
 
 #topmenu nav {
@@ -226,6 +232,11 @@ input[type="checkbox"] + label:hover {
 #topmenu nav a {
   color: #333;
   font-size: 12px;
+  opacity: 1;
+!impor
+
+tant
+;
 }
 
 
@@ -291,6 +302,21 @@ footer ul.sosueme li a {
   border-bottom: 1px solid #b3b3b3;
   background-color: rgba(255,255,255,0.90);
 }
+
+/*
+pre::-webkit-scrollbar {  
+    height: 1.5ex;  
+     -webkit-border-radius: 1ex;  
+    }  
+  
+pre::-webkit-scrollbar-thumb {  
+    border-top: 1px solid #fff;  
+    background: #ccc -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(240, 240, 240)), to(rgb(210, 210, 210)));  
+       -webkit-border-radius: 1ex;  
+      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);  
+}  
+
+*/
 
 blockquote blockquote {
   margin-left: 0em;
@@ -528,7 +554,6 @@ button.g-button, a.g-button, input[type=submit].g-button {
 }
 
 /* @end */
-
 
 /*
 -webkit-font-smoothing: antialiased;
