@@ -9,10 +9,12 @@ function upload_to(url) {
       {
         if (data.err) {
           alert(data.err);
-          $("#upload_img").change(do_up);
           return;
         }
-        $("#upload_img").remove();
+
+        $("#upload_img").val("");
+        $("#upload_img").change(do_up);
+
         $("#upload_key").val(data.img);
         var img = $("#view_img");
         img.attr("src", "/img/"+data.img);
