@@ -4,6 +4,7 @@ from google.appengine.ext import deferred, db
 from tipfy import RequestHandler, Response
 
 from aib.models import Thread, Board, Cache
+from aib.const import *
 
 class CleanBlob(RequestHandler):
   def get(self):
@@ -44,7 +45,7 @@ class CleanThread(RequestHandler):
     return Response("yarr")
 
 def do_clean_thread(cursor=None):
-  thq = Thread.all(keys_only=True)
+  thq = Thread.all()
 
   if cursor:
     thq.with_cursor(cursor)
@@ -55,13 +56,14 @@ def do_clean_thread(cursor=None):
     logging.info("stop thread clean")
     return
 
-  board = Board.get(thread.parent())
+  board = Board.get(thread.parent_key())
 
-  if not board or thread.id() not in board.thread:
+  if not board or thread.key().id() not in board.thread \
+      or len(thread.posts) == 1:
     db.delete(thread)
     logging.info("purged thread")
 
-  deferred.defer(do_clean_thread, thq.cursor(), _countdown=10)
+  deferred.defer(do_clean_thread, thq.cursor())
 
 
 class CleanCache(RequestHandler):
@@ -78,12 +80,13 @@ def do_clean_cache(cursor=None):
   cache = cacheq.get()
 
   if not cache:
+    logging.info("stop cache clean")
     return
 
   if cache.parent().kind() == 'Board':
     db.delete(cache)
 
-  deferred.defer(do_clean_cache, cacheq.cursor(), _countdown=2)
+  deferred.defer(do_clean_cache, cacheq.cursor())
 
 
 class CleanBoard(RequestHandler):
@@ -106,7 +109,24 @@ def do_clean_board(cursor=None):
   threads = Thread.load_list(board.thread, board.key().name())
 
   board.thread = [th for (th,data) in threads if data]
+  fill_board(board)
+
   board.put()
 
   deferred.defer(do_clean_board, thq.cursor())
+
+TMAX =THREAD_PER_PAGE*BOARD_PAGES
+def fill_board(board):
+  threads = Thread.all(keys_only=True)
+  threads.ancestor(board)
+  threads.order("-__key__")
+
+  for thread in threads.fetch(TMAX):
+
+    if len(board.thread) >= TMAX:
+      return
+
+    if thread.id() not in board.thread:
+      board.thread.append(  thread.id() )
+      logging.info("th: %r" % board.thread)
 

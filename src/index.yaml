@@ -14,3 +14,9 @@ indexes:
   properties:
   - name: room
   - name: date
+
+- kind: Thread
+  ancestor: yes
+  properties:
+  - name: __key__
+    direction: desc
