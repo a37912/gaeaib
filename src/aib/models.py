@@ -32,20 +32,6 @@ class Board(db.Model):
 
   @classmethod
   def load(cls, board):
-    threads = memcache.get(cls.TPL % board)
-
-    logging.info("cache threads %r" % threads) 
-    if threads == None:
-      logging.info("go to db")
-      threads = cls.load_db(board)
-
-      if threads:
-        memcache.set(cls.TPL % board, threads)
-
-    return threads or []
-
-  @classmethod
-  def load_db(cls, board):
     ent = cls.get_by_key_name(board)
 
     return ent.thread if ent else None
