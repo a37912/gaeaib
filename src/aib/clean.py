@@ -128,5 +128,4 @@ def fill_board(board):
 
     if thread.id() not in board.thread:
       board.thread.append(  thread.id() )
-      logging.info("th: %r" % board.thread)
 
