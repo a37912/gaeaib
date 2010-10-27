@@ -1,8 +1,18 @@
 function listen_updates(token) {
+
+  // TODO: its workarround remove later
+  while (token.length % 4 != 0) {
+    token += '='; 
+  }
   console.log("list token " + token);
 
   updates = new goog.appengine.Channel(token);
-  socket = updates.open();
+  try {
+    socket = updates.open();
+  }  catch (err) {
+    console.log("sock err " + err);
+    return;
+  }
   socket.onopen = function() {
     console.log("socket connected");
   };
@@ -108,6 +118,9 @@ sendform = function(e) {
       inp_f.value = "";
     }
     button.removeAttr("disabled");
+
+    $("#upload_img").show();
+    $("#view_img").hide();
 
   }
 
