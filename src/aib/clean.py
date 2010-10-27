@@ -5,7 +5,7 @@ from tipfy import RequestHandler, Response
 
 from aib.models import Thread, Board, Cache
 from aib.const import *
-import restore
+#import restore
 
 class CleanBlob(RequestHandler):
   def get(self):
@@ -85,8 +85,8 @@ def do_clean_cache(cursor=None):
 
   if cache.parent_key().kind() == 'Board':
     db.delete(cache)
-  elif cache.parent_key().kind() == 'Thread':
-    restore.from_cache(cache)
+  #elif cache.parent_key().kind() == 'Thread':
+  #  restore.from_cache(cache)
 
   deferred.defer(do_clean_cache, cacheq.cursor())
 
