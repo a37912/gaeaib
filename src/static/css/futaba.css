@@ -177,7 +177,7 @@ blockquote p.unkfunc, blockquote pre {
 }
 
 .post_quota_err {
-  background-color: #FF9999;
+  background-image: url("/static/images/trollface.png");
 }
 
 .post_quota_preerr {

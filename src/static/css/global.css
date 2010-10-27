@@ -48,13 +48,6 @@ quotes: "“" "”" "‘" "’"
 * html { overflow: hidden;  }
 * html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
 
-#menu { display: block; position:fixed; top:0px; left:0px; width:210px; height:100%; background:transparent; }
-
-* html #havmenu { position: absolute; }
-
-#bodyContent { margin-left: 210px; }
-* html #bodyContent { margin-left: 220px; }
-
 div #postarea {
 /*top: -1.5em;
 width: 225px; */
