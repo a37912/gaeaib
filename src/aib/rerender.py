@@ -24,10 +24,11 @@ def do_render_cache(cursor=None):
   render = Render(board=board, thread = thread.key().id())
 
   for idx,post in enumerate(thread.posts):
-    post['text_html'] = markup(
-          board=board, postid=post.get("post"),
-          data=escape(post.get('text', '')),
-    )
+    if 'text' in post:
+      post['text_html'] = markup(
+            board=board, postid=post.get("post"),
+            data=escape(post.get('text', '')),
+      )
 
     if idx == 0:
       render.create(post)
