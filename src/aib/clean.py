@@ -5,6 +5,7 @@ from tipfy import RequestHandler, Response
 
 from aib.models import Thread, Board, Cache
 from aib.const import *
+import restore
 
 class CleanBlob(RequestHandler):
   def get(self):
@@ -58,8 +59,7 @@ def do_clean_thread(cursor=None):
 
   board = Board.get(thread.parent_key())
 
-  if not board or thread.key().id() not in board.thread \
-      or len(thread.posts) == 1:
+  if len(thread.posts) < 5: # FIXME: magic number
     db.delete(thread)
     logging.info("purged thread")
 
@@ -72,7 +72,7 @@ class CleanCache(RequestHandler):
     return Response("yarr nom-nom")
 
 def do_clean_cache(cursor=None):
-  cacheq = Cache.all(keys_only=True)
+  cacheq = Cache.all()
 
   if cursor:
     cacheq.with_cursor(cursor)
@@ -83,8 +83,10 @@ def do_clean_cache(cursor=None):
     logging.info("stop cache clean")
     return
 
-  if cache.parent().kind() == 'Board':
+  if cache.parent_key().kind() == 'Board':
     db.delete(cache)
+  elif cache.parent_key().kind() == 'Thread':
+    restore.from_cache(cache)
 
   deferred.defer(do_clean_cache, cacheq.cursor())
 
