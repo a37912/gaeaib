@@ -1,9 +1,5 @@
 function listen_updates(token) {
 
-  // TODO: its workarround remove later
-  while (token.length % 4 != 0) {
-    token += '='; 
-  }
   console.log("list token " + token);
 
   updates = new goog.appengine.Channel(token);
@@ -54,6 +50,16 @@ try {
   thread = "";
 }
 
+post_quota = function(level) {
+  if (level == undefined) {
+    return;
+  }
+
+  console.log("set post level " + level)
+
+  $("textarea#id_text").addClass("post_quota_"+level);
+}
+
 if (thread != "") {
   $.ajax(
     {
@@ -63,6 +69,7 @@ if (thread != "") {
       success: function(data) {
         console.log(data.token);
         listen_updates(data.token);
+        post_quota(data.post_quota);
       }
     }
   )

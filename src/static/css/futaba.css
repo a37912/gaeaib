@@ -175,3 +175,11 @@ blockquote p.unkfunc, blockquote pre {
   margin-bottom: 0px;
   margin-top: 0px;
 }
+
+.post_quota_err {
+  background-color: #FF9999;
+}
+
+.post_quota_preerr {
+  background-color: #F0E0D6;
+}

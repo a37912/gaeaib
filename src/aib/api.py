@@ -13,6 +13,7 @@ from django.utils.simplejson import dumps
 import util
 from models import Board, Thread, Cache
 from mark import markup
+from const import *
 
 def json_response(data):
   return Response(
@@ -119,4 +120,22 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
 
     token = channel.create_channel(person+key)
 
-    return json_response( {"token" : token} )
+    # check post quota
+    qkey = "ip-%s" % self.request.remote_addr
+    post_quota = memcache.get(qkey) or 0
+
+    if post_quota >= POST_QUOTA:
+      quota_level = "err"
+    elif post_quota >= (POST_QUOTA - (POST_QUOTA/3)):
+      quota_level = "preerr"
+    elif post_quota >= (POST_QUOTA/2):
+      quota_level = "warn"
+    else:
+      quota_level = "ok"
+
+    return json_response( 
+        {
+          "token" : token,
+          "post_quota" : quota_level,
+        }
+    )
