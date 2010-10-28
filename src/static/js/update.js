@@ -149,7 +149,8 @@ sendform = function(e) {
     return;
   }
   try {
-    socket;
+    if(socket) 
+      return;
   } catch (err) {
     return;
   }
