@@ -1,4 +1,5 @@
 import logging
+from time import time
 
 from datetime import datetime
 from google.appengine.api import memcache
@@ -188,24 +189,63 @@ def save_post(request, data, board, thread):
   r.add(data, new)
   r.save()
 
-  key = "update-thread-%s-%d" % (board, thread)
-  if not new:
-    send = { 
-        "html" : r.post_html, 
-        "evt" : "newpost" ,
-        "count" : len(thread_db.posts),
-        "last" : board_db.counter,
-    }
-    watchers = memcache.get(key) or []
-    for person in watchers:
-      logging.info("send data to key %s" % (person+key))
-      channel.send_message(person+key, dumps(send))
+  if new:
+    return board_db.counter, thread
+
+  key = "updatetime-thread-%s-%d" % (board, thread)
+  send = { 
+      "html" : r.post_html, 
+      "evt" : "newpost" ,
+      "count" : len(thread_db.posts),
+      "last" : board_db.counter,
+  }
+
+  watchers = memcache.get(key) or []
+  watchers_send(
+      watchers_clean(watchers),
+      key,
+      send
+  )
 
   return board_db.counter, thread
 
+def watchers_send(watchers, key, data):
+  for wtime,person in watchers:
+    channel.send_message(person+key, dumps(data))
+
+def watchers_clean(watchers, exclude=None):
+  now = time()
+  nwatchers = []
+
+  for wtime,person_check in watchers[:WATCHERS_MAX]:
+    if (now - wtime) > WATCHER_TIME:
+      continue
+
+    if person_check == exclude:
+      continue
+
+    nwatchers.append((wtime, person_check))
+
+  return nwatchers
+
+def post_level(ip):
+  qkey = "ip-%s" % ip
+  post_quota = memcache.get(qkey) or 0
+
+  if post_quota >= POST_QUOTA:
+    quota_level = "err"
+  elif post_quota >= (POST_QUOTA - (POST_QUOTA/3)):
+    quota_level = "preerr"
+  elif post_quota >= (POST_QUOTA/2):
+    quota_level = "warn"
+  else:
+    quota_level = "ok"
+
+  return quota_level
+
 def get_post(board, num):
   key = "post-%(board)s-%(num)d" % {"board":board, "num":num}
-  post = None #memcache.get(key)
+  post = memcache.get(key)
 
   if post != None:
     logging.info("cache hit")

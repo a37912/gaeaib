@@ -76,7 +76,7 @@ class Post(RequestHandler, SecureCookieMixin):
 
     logging.info("ip: %s, quota: %d" % (ip, quota))
 
-    if quota >= POST_QUOTA:
+    if quota > POST_QUOTA:
       return redirect("http://winry.on.nimp.org" )
 
     # validate post form

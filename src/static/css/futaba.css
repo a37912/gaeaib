@@ -183,3 +183,8 @@ blockquote p.unkfunc, blockquote pre {
 .post_quota_preerr {
   background-color: #F0E0D6;
 }
+
+.watcher {
+  float: left;
+  margin: 3px;
+}
