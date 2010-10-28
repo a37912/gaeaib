@@ -46,8 +46,8 @@
 +      ('mips', 'mips'),
 +      ('dec', 'alpha'),
 +      ('alpha', 'alpha'),
-+      ('((i[346]|x)86|Intel Mac)', 'x86'),
 +      ('(x86_|amd|x)64', 'amd64'),
++      ('((i[346]|x)86|Intel Mac)', 'x86'),
 +      ('arm|gnueabi', 'arm'),
      )
  
