@@ -24,12 +24,12 @@ ITALIC = (
 )
 
 PRE_SPAN = (
-    "```(.*)```",
+    "```(.*?)```",
     r"<pre>\1</pre>",
 )
 
 SPOILER = (
-    "\%\%(.*)\%\%",
+    "\%\%(.*?)\%\%",
     r'<span class="spoiler">\1</span>',
 )
 
@@ -179,11 +179,11 @@ def install_jinja2():
 
 if __name__ == '__main__':
   inp = """&gt;&gt;13 yoba
-   *italic*
-   %%spoiler%%
-   %%*spoiler*%%
-   %%&gt;&gt;13%%
-   ```yoba neko```
+   *italic* hm... *italic*
+   %%spoiler%% hm... %%spoiler%%
+   %%*spoiler*%% hm... %%*spoiler*%%
+   %%&gt;&gt;13%% hm... %%&gt;&gt;13%%
+   ```yoba neko``` hm... ```yoba neko```
       1
       2
 
