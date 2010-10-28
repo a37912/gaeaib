@@ -149,7 +149,7 @@ sendform = function(e) {
     return;
   }
   try {
-    if(socket) 
+    if(socket.readyState != 1) 
       return;
   } catch (err) {
     return;
