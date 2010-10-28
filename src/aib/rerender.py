@@ -30,6 +30,10 @@ def do_render_cache(cursor=None):
             data=escape(post.get('text', '')),
       )
 
+    if 'image' in post and not post.get("key"):
+      post.pop("image")
+      post['name'] = 'Kuroneko'
+
     if idx == 0:
       render.create(post)
     else:
