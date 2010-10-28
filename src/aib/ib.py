@@ -16,6 +16,8 @@ from redir import RedirMW
 import mark
 mark.install_jinja2()
 
+import antiwipe
+
 ## View: Main page - board list
 #
 class Index(RequestHandler):
@@ -67,16 +69,8 @@ class Post(RequestHandler, SecureCookieMixin):
   def post(self, board, thread):
     logging.info("post called")
 
-    ip = self.request.remote_addr
-
-    qkey = "ip-%s" % ip
-    quota = memcache.get(qkey) or 0
-    quota += 1
-    memcache.set(qkey, quota, time=POST_INERVAL*quota)
-
-    logging.info("ip: %s, quota: %d" % (ip, quota))
-
-    if quota > POST_QUOTA:
+    if not antiwipe.check(self.request.remote_addr):
+      logging.warning("wipe redirect: %r" % self.request.remote_addr)
       return redirect("http://winry.on.nimp.org" )
 
     # validate post form
