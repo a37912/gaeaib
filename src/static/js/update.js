@@ -51,6 +51,8 @@ function listen_updates(token) {
         notify.show("thread " + thread_name + " updated");
       }
 
+      refresh_inthread();
+
 
     } else if(o.evt == "enter") {
       var now = new Date()
