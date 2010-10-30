@@ -74,7 +74,7 @@ def option_saem(request, data):
 def option_useragent(request, data):
   from werkzeug.useragents import UserAgent
   ua = UserAgent(request.environ)
-  data['agent'] = "%s@%s / %s" %(ua.platform, ua.cpu, ua.browser)
+  data['agent'] = "%s%s / %s" %(ua.platform, ("@"+ua.cpu if ua.cpu else ""), ua.browser)
 
 def option_modsign(request, data):
   if data.get('name') != MOD_NAME:

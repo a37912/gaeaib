@@ -41,12 +41,12 @@
 +      ('mips', 'mips'),
 +      ('dec', 'alpha'),
 +      ('alpha', 'alpha'),
-+      ('(i[346]|x)86', 'x86'),
++      ('((i[346]|x)86|Intel Mac)', 'x86'),
 +      ('(x86_|amd|x)64', 'amd64'),
 +    )
 +
      _browser_version_re = r'(?:%s)[/\sa-z(]*(\d+[.\da-z]+)?(?i)'
-+    _cpu_re = r'\([^;]+; [A-Z]+;[^;]+ %s;'
++    _cpu_re = r'\([^;]*;[^\)]*%s'
      _language_re = re.compile(
          r'(?:;\s*|\s+)(\b\w{2}\b(?:-\b\w{2}\b)?)\s*;|'
          r'(?:\(|\[|;)\s*(\b\w{2}\b(?:-\b\w{2}\b)?)\s*(?:\]|\)|;)'
