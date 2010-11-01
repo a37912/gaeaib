@@ -23,13 +23,6 @@ handlers:
   static_files: static/images/favicon.ico
   upload: static/images/favicon.ico
 
-- url: /statement
-  static_files: static/statement.html
-  upload: static/statement.html
-
-- url: /static
-  static_dir: static
-
 - url: /stats.*                                                                                                                          
   script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
   
@@ -52,3 +45,5 @@ admin_console:
   - name: "Stats"
     url: /stats
     
+error_handlers:
+  - file: static/404.html

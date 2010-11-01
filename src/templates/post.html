@@ -1,3 +1,49 @@
+{#<div id="comments" class="new-comments comment-holder">
+<div class="comment commit-comment repo-collab-tag adminable {% if post.sage %}sage{% endif %}" id="post-{{post.post}}">
+  <div class="cmeta">
+    <p class="author">
+      <strong class="author"><span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span></strong>
+    </p>
+      {{post.rainbow_html}}   
+      {# <span class="tag">repo collab</span> #}
+    <p class="info">
+      <em class="date"><abbr class="relatize relatized" title="{{post.time}}">{{post.time}}</abbr></em>
+      <span class="icon"></span>
+      {% if post.sage %}<strong>SAGE</strong>{% endif %}
+    </p>
+  </div>
+  <div class="body">   
+    <div class="formatted-content">
+      <ul class="actions">
+        {# <li><a href="#" class="minibutton btn-edit edit-button"><span><span class="icon"></span>Edit</span></a></li>
+        <li><a href="#" class="minibutton btn-delete delete-button"><span><span class="icon"></span>Delete</span></a></li> #}
+        {% if post.image %}
+        <li><a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"><span><span class="icon"></span>Delete</span>
+              <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png" /></a></li>
+        {% else %}
+        <li><a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"><span><span class="icon"></span>Delete</span>
+               <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png" />
+            </a>
+        </li>
+        {% endif %}
+      </ul>
+      <div class="content-body wikistyle">
+        {{ post.text_html }}
+        <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
+      </div>
+      {% if post.image %}
+      <div class="">
+       <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span><br/>
+       <a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a>
+      </div>
+      {% endif %}
+
+    </div>    
+  </div>
+</div>
+
+</div>#}
+
 <table id="post-{{post.post}}" class="tablepost" >
   <tbody>
     <tr>
@@ -41,3 +87,4 @@
 </table>
 <!--POST-->
 <!--NPHERE-->
+

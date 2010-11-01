@@ -550,7 +550,7 @@ button.g-button, a.g-button, input[type=submit].g-button {
   height: 8px;
   left: 0px;
   width: 8px;
-  float: left;
+  /*float: left;*/
 }
 
 /* @end */
@@ -558,3 +558,9 @@ button.g-button, a.g-button, input[type=submit].g-button {
 /*
 -webkit-font-smoothing: antialiased;
 */
+
+/* @group Thread comments */
+
+
+/* @end */
+

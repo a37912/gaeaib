@@ -1,33 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{board_name}} {% endblock %}
 
-<<<<<<< HEAD
-{%- macro op_image(image) -%}
-
-<a href="{{image.full}}" target="_blank"><img class="thumb" src="{{image.thumb}}"/></a>
-
-{%- endmacro -%}
-
-{% block precontent %}
-111
-  {%- if op_thread %}
-  <div class="title-actions-bar">
-    <h1>
-      <a href="/{{ board }}/">{{ board_name }}</a> / <strong><a href="/{{ board }}/{{ op_thread.id }}">{{ op_thread.safe_subject }}</a></strong>
-      <span class="fork-flag">
-        <span class="text">forked from <a href="/a37912/gaeaib">a37912/gaeaib</a></span>
-      </span>
-    </h1>    
-    <ul class="actions">
-      <li><a href="http://github.com/xen/gaeaib/tree/master" class="minibutton btn-back"><span><span class="icon"></span>Ответить</span></a></li>
-    </ul>
-  </div>  
-  {%- endif %}
-
-{% endblock %}
-
-=======
->>>>>>> 8d8e751ba230e9462ef4c6c3912cc7883d11e391
 {% block content %}
 {% include "thread_internal.html" %}
 
