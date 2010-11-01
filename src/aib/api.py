@@ -41,21 +41,9 @@ class ApiPost(RequestHandler):
 
 class ApiLastPost(RequestHandler):
   def get(self, board):
-    key = "posts-%s" % board
-    post = memcache.get(key)
-
-    if post != None:
-      return json_response(post)
-
     board = Board.get_by_key_name(board)
 
-    if board:
-      post = board.counter
-      memcache.set(key, post)
-    else:
-      post = None
-
-    return json_response(post)
+    return json_response(board.counter if board else None)
 
 class ApiThreadList(RequestHandler):
   def get(self, board):

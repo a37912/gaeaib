@@ -176,14 +176,7 @@ def save_post(request, data, board, thread):
   thread_db.posts.append(data)
 
   db.put( (thread_db, board_db))
-  Cache.delete(
-    (
-      dict(Board=board),
-    )
-  )
-  memcache.set("threadlist-%s" % board, board_db.thread)
-
-  memcache.set("post-%s-%d" %(board, board_db.counter), data)
+  Cache.delete("board", board)
 
   r = Render(board, thread)
   r.add(data, new)
@@ -252,7 +245,7 @@ def get_post(board, num):
     return post
 
   thq = Thread.all()
-  thq.ancestor( db.Key.from_path("Board", board))
+  thq.filter("board", board)
   thq.filter("post_numbers", num)
 
   thread = thq.get()
@@ -276,10 +269,7 @@ def get_post(board, num):
 def delete_post(board, thread_num, post_num, rape_msg):
 
   last_deletion = False
-  th = Thread.get(db.Key.from_path(
-      "Board", board, 
-      "Thread", thread_num
-      ))
+  th = Thread.load(thread_num, board)
 
   [post] = [p for p in th.posts if p.get('post') == post_num]
   logging.info("found: %r" % post)
@@ -319,6 +309,4 @@ def delete_post(board, thread_num, post_num, rape_msg):
     r.append(a_post)
   r.save()
   
-  #FIXME: update records in memcache 
-
   return last_deletion

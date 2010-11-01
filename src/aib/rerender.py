@@ -20,7 +20,7 @@ def do_render_cache(cursor=None):
     logging.info("stop thread clean")
     return
 
-  board = thread.parent_key().name()
+  board = thread.board
   render = Render(board=board, thread = thread.key().id())
 
   for idx,post in enumerate(thread.posts):

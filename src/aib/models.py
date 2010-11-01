@@ -1,13 +1,11 @@
 import logging
 
 from google.appengine.ext import db
-from google.appengine.api import memcache
 from tipfy.ext.db import PickleProperty
 from aetycoon import DerivedProperty, CompressedProperty
 from const import *
 
 class Board(db.Model):
-  TPL = "threadlist-%s"
   thread = db.ListProperty(int)
   counter = db.IntegerProperty(default=0)
 
@@ -26,7 +24,6 @@ class Board(db.Model):
       return 1
     ent.counter+=1
     ent.put()
-    memcache.set("posts-%s" % board, ent.counter)
 
     return ent.counter
 
@@ -37,8 +34,6 @@ class Board(db.Model):
     return ent.thread if ent else None
 
 class Thread(db.Model):
-  TPL = "posts-%s-"
-  TPL_ONE = "posts-%s-%d"
 
   posts = PickleProperty()
 
@@ -55,6 +50,8 @@ class Thread(db.Model):
     return [p.get("post") for p in self.posts]
 
   subject = db.StringProperty()
+  board = db.StringProperty()
+  id = db.IntegerProperty()
 
   @property
   def op(self):
@@ -76,27 +73,24 @@ class Thread(db.Model):
     if skip > 0:
       return skip
 
-  @property
-  def id(self):
-    return self.key().id()
-
   @classmethod
   def load(cls, number, board):
-    return cls.get(cls.gen_key(number, board))
+    return cls.get(cls.gen_key(board, number))
 
   @classmethod
-  def gen_key(cls, number, board):
-    return db.Key.from_path("Board", board, "Thread", number)
+  def gen_key(cls, board, number):
+    return db.Key.from_path("Thread", "%s/%d"%(board,number))
 
   @classmethod
   def create(cls, number, board):
-    return cls(key=cls.gen_key(number, board))
+    return cls(key=cls.gen_key(board, number), 
+        board=board, id=number)
 
   @classmethod
   def load_list(cls, numbers, board):
 
     keys = [
-      db.Key.from_path("Board", board, "Thread", num)
+      cls.gen_key(board, num)
       for num in numbers
     ]
 
@@ -105,53 +99,44 @@ class Thread(db.Model):
 class Cache(db.Model):
   comp = CompressedProperty(6)
 
-  @classmethod
-  def gen_key(cls, **kw):
-    key_list  = []
-    keys = kw.keys()
-    keys.sort()
+  def get_data(self):
+    return self.comp.decode("utf8")
 
-    for key in keys:
-      key_list.extend( [key, kw.get(key)] )
+  def set_data(self, val):
+    self.comp = val.encode("utf8")
 
-    key_list.extend( ["Cache", "html"] )
 
-    return str.join("/", map(str,key_list)), db.Key.from_path(*key_list)
+  data = property(get_data, set_data)
 
   @classmethod
-  def load(cls, **kw):
+  def gen_key(cls, mode, *a):
+    f = getattr(cls, "gen_key_" + mode)
 
-    key_str,key = cls.gen_key(**kw)
-
-    data = None #memcache.get(key_str)
-
-    if data:
-      logging.info("got from cache %r" % key_str)
-      return data
-
-    ent = cls.get(key)
-
-    if ent:
-      logging.info("got from db cache %r" % key)
-      memcache.set(key_str, ent.comp)
-      return ent.comp
-
-    logging.info("no cache %r" % key_str)
+    return f(*a)
 
   @classmethod
-  def save(cls, data, **kw):
-
-    key_str,key = cls.gen_key(**kw)
-
-    memcache.set(key_str, data)
-
-    ent = cls(comp=data.encode('utf8'), key=key)
-    ent.put()
+  def gen_key_board(cls, board):
+    return db.Key.from_path("Board", board, "Cache", "html")
 
   @classmethod
-  def delete(cls, keys):
-    keys = [cls.gen_key(**x) for x in  keys]
-    logging.info("keys: %r" % keys)
-    db.delete( [key for key_str,key in keys] )
-    memcache.delete_multi( [key_str for key_str,key in keys] ) 
+  def gen_key_thread(cls, board, thread):
+    tkey = Thread.gen_key(board, thread)
 
+    return db.Key.from_path("Cache", "html", parent=tkey)
+
+  @classmethod
+  def create(cls, *a, **kw):
+    return cls(key=cls.gen_key(*a), **kw)
+
+
+  @classmethod
+  def load(cls, *a):
+    cache = cls.get(cls.gen_key(*a))
+
+    return cache
+
+  @classmethod
+  def delete(cls, *a):
+    key=cls.gen_key(*a)
+
+    db.delete(key)

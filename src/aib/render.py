@@ -10,10 +10,10 @@ class Render(object):
     self.thread = thread
 
   def load(self,):
-    self.html = Cache.load(Board=self.board, Thread=self.thread)
+    self.cache = Cache.load("thread", self.board, self.thread)
 
-    if self.html:
-      self.html = self.html.decode('utf8')
+    if not self.cache:
+      self.cache = Cache.create("thread", self.board, self.thread)
 
 
   def create(self,op):
@@ -24,7 +24,8 @@ class Render(object):
         "board" : self.board,
         "subject" : op.get("subject"),
     }
-    self.html = render_template("thread.html", 
+    self.cache = Cache.create("thread", self.board, self.thread)
+    self.cache.data = render_template("thread.html", 
         threads = (data,),
         board = self.board,
         board_name = boardlist.get(self.board, "Woooo???"),
@@ -40,11 +41,11 @@ class Render(object):
       self.append(post)
 
   def append(self, post):
-    assert self.html, 'nowhere to append'
+    assert self.cache.data, 'nowhere to append'
 
     self.post_html = render_template("post.html", post=post, board=self.board)
 
-    self.html = self.html.replace(
+    self.cache.data = self.cache.data.replace(
         u"<!--NPHERE-->", self.post_html)
 
     refs = re.findall(">>([0-9]+)", post.get("text", "")) or []
@@ -59,8 +60,7 @@ class Render(object):
 
     for ref in refs[:self.MAXREFS]:
       pattern = u"<!--REF-%s-->" % ref
-      self.html = self.html.replace(pattern, refhtml+pattern)
+      self.cache.data = self.cache.data.replace(pattern, refhtml+pattern)
 
   def save(self):
-    Cache.save(self.html, Board=self.board, Thread=self.thread)
-
+    self.cache.put()
