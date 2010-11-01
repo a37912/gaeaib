@@ -1,48 +1,45 @@
-{#<div id="comments" class="new-comments comment-holder">
-<div class="comment commit-comment repo-collab-tag adminable {% if post.sage %}sage{% endif %}" id="post-{{post.post}}">
-  <div class="cmeta">
-    <p class="author">
-      <strong class="author"><span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span></strong>
-    </p>
-      {{post.rainbow_html}}   
-      {# <span class="tag">repo collab</span> #}
-    <p class="info">
-      <em class="date"><abbr class="relatize relatized" title="{{post.time}}">{{post.time}}</abbr></em>
-      <span class="icon"></span>
-      {% if post.sage %}<strong>SAGE</strong>{% endif %}
-    </p>
-  </div>
-  <div class="body">   
-    <div class="formatted-content">
-      <ul class="actions">
-        {# <li><a href="#" class="minibutton btn-edit edit-button"><span><span class="icon"></span>Edit</span></a></li>
-        <li><a href="#" class="minibutton btn-delete delete-button"><span><span class="icon"></span>Delete</span></a></li> #}
-        {% if post.image %}
-        <li><a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"><span><span class="icon"></span>Delete</span>
-              <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png" /></a></li>
-        {% else %}
-        <li><a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"><span><span class="icon"></span>Delete</span>
-               <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png" />
-            </a>
-        </li>
+<div class="b-post {% if post.sage %}b-sage{% endif %}" id="post-{{post.post}}">
+		<div class="b-post-head">
+			<div class="b-left">
+        {{post.rainbow_html}}
+        <strong class="b-name {{post.typ}}">{{ post.name|escape }}</strong>
+        {% if post.sage %}<em>SAGE</em>{% endif %}
+        {% if post.agent %}
+        <span class="b-os">{{post.agent|escape}}</span>
         {% endif %}
-      </ul>
-      <div class="content-body wikistyle">
-        {{ post.text_html }}
-        <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
-      </div>
-      {% if post.image %}
-      <div class="">
-       <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span><br/>
-       <a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a>
-      </div>
-      {% endif %}
+			</div>
+			<div class="b-right">
+				<span class="b-date">{{post.time}}</span>
+				<span class="b-permalink"><a class="reflink" name="p{{post.post}}" 
+            href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
+            threadid="{{post.thread}}" 
+          >#{{post.post}}</a></span>
+			</div>
+		</div>
+		<div class="b-post-body">
+       <a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"
+        >{%- if post.image %}del pic{% else %}del post{%- endif %}</a>
+			<div class="b-post-body-text" postid="{{post.post}}">{{ post.text_html }}</div>
+			<div class="b-post-body-funcs"><a href="#">delete</a></div>
+			<br clear="all"; />
+		</div>
+    <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
 
-    </div>    
-  </div>
-</div>
+    {% if post.image %}
+     <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span>
+     <br/>
+     <a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a>
+    {% endif %}
 
-</div>#}
+	</div>
+
+{#
+
+
+
+
+
+
 
 <table id="post-{{post.post}}" class="tablepost" >
   <tbody>
@@ -87,4 +84,4 @@
 </table>
 <!--POST-->
 <!--NPHERE-->
-
+#}

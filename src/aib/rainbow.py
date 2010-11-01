@@ -2,8 +2,8 @@
 import logging
 from md5 import md5
 
-TWRAPER = "<div class='rainbow'>%s</div>"
-TEMPLATE='<div style="background: rgb(%d, %d, %d);"></div>'
+TWRAPER = "<span class='rainbow'>%s</span>"
+TEMPLATE='<span style="background: rgb(%d, %d, %d);">&nbsp;</span>'
 
 ## Tag flter: renders color codes to html
 def rainbow(codes):
