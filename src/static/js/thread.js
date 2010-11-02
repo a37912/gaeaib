@@ -1,3 +1,42 @@
+function DrawRainbow(colors, elementId, face){
+  var canvas = document.getElementById(elementId);
+  if (canvas.getContext){  
+    var c = canvas.getContext('2d');
+    var s = 20
+    var x = s/2;
+    var y = s/2;
+    var r = s;
+    var d = 0.05; //delta to remove stitch between sections  
+    var startAngle = 0;
+    for(var j=0;j<6;j++){
+      var endAngle = Math.PI*(j*0.33-0.1);
+      c.beginPath();
+      c.moveTo(x, y);
+      c.fillStyle = colors[j];
+      c.arc(x, y, r, startAngle, endAngle, false);
+      startAngle = endAngle-d;
+      c.moveTo(x, y);
+      c.closePath();
+      c.fill();
+    }
+    if (face != null){
+      c.drawImage(face,2,2,face.width,face.height);
+    }
+  } else {  
+    // canvas-unsupported code here
+    //
+    //
+    alert(1);
+    var oldrainbow = '';
+    for(var j=0;j<5;j++){
+      oldrainbow += "<span style='background: none repeat scroll"+ 
+       colors[j] + "'>&nbsp;&nbsp;</span>"
+    }
+    canvas.innerHTML(oldrainbow);
+  }
+}
+
+
 $(document).ready(function() {
 
   var loc = window.location.toString();
@@ -152,7 +191,17 @@ $(document).ready(function() {
 
     }
   );
-
+  $("span.rainbow").each(
+    function() {
+      var rainbow = $(this).attr("rainbow");
+      var canvas_id = $(this).attr("cid");
+      var hex = [];
+      for(i=0;i<rainbow.length;i=i+3){
+        hex.push("#"+rainbow.substring(i,i+3));
+      }
+      DrawRainbow(hex, "rc-"+canvas_id);
+    }
+  );
  
 }); // end doc ready
 

@@ -2,6 +2,8 @@
 import logging
 from md5 import md5
 
+from tipfy import get_config
+
 TWRAPER = "<span class='rainbow'>%s</span>"
 TEMPLATE='<span style="background: rgb(%d, %d, %d);">&nbsp;</span>'
 
@@ -17,7 +19,8 @@ def rainbow(codes):
   )
 
 ## Helper: calculates 5 colors for post
-def make_rainbow(*a):
+def old_make_rainbow(*a):
+  # remove this shit 
   secret = 'YOBA'# FIXME
   a = map(str,a)
   a.insert(0,secret)
@@ -34,3 +37,13 @@ def make_rainbow(*a):
 
   return codes[:-1]
 
+def make_rainbow(*a):
+  """ function makes rainbow codes """
+  secret = get_config('aib.rainbow', 'secret')
+  a = map(str,a)
+  a.insert(0,secret)
+  key = str.join("-", a)
+  rb_hash = md5(key).hexdigest()[:18]
+  logging.info("rainbow code: %s" % rb_hash)
+  return rb_hash
+  

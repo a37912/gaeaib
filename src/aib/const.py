@@ -36,3 +36,5 @@ board_options = {
     'b': ['saem'],
     'mod' : [ 'modsign'],
 }
+
+board_overlay = ['s', 'g', 'ne']

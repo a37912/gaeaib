@@ -50,6 +50,8 @@ class Board(RequestHandler):
     data['board'] = board # board name
     data['boards'] = boardlist_order
     data['pages'] = range(BOARD_PAGES)
+    if board in board_overlay: #omfg this variable comes from evil * import, and I'm edit this shit
+      data['overlay'] = True
 
     html = render_template("board.html", **data)
 

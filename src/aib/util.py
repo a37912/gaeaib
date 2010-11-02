@@ -139,7 +139,7 @@ def save_post(request, data, board, thread):
 
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb
-  data['rainbow_html'] = rainbow.rainbow(rb)
+  # data['rainbow_html'] = rainbow.rainbow(rb) #XXX: dont needed anymoar?
   data['text_html'] = markup(
         board=board, postid=board_db.counter,
         data=escape(data.get('text', '')),
