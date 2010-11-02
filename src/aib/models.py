@@ -17,7 +17,7 @@ class Board(db.Model):
 
   @property
   def name(self):
-    return boardlist.get(self.code)
+    return get_config("aib.boards", self.code)
 
   @classmethod
   def load_counter(cls, board):
@@ -65,8 +65,9 @@ class Thread(db.Model):
 
   @property
   def tail_posts(self):
-    if len(self.posts) > REPLIES_MAIN+1:
-      off = -REPLIES_MAIN
+    replies_main = get_config("aib.ib", 'replies_main')
+    if len(self.posts) > replies_main+1:
+      off = -replies_main
     else:
       off = 1
 
@@ -74,7 +75,9 @@ class Thread(db.Model):
 
   @property
   def skip(self):
-    skip = len(self.posts) - REPLIES_MAIN - 1
+    replies_main = get_config("aib.ib", 'replies_main')
+
+    skip = len(self.posts) - replies_main - 1
 
     if skip > 0:
       return skip

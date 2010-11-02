@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from models import Cache
+from tipfy import get_config
 from tipfy.ext.jinja2 import render_template
 from const import *
 import re
@@ -30,8 +31,8 @@ class Render(object):
     self.cache.data = render_template("thread.html", 
         thread = data,
         board = self.board,
-        board_name = boardlist.get(self.board, "Woooo???"),
-        boards = boardlist_order,
+        board_name = get_config("aib.ib", self.board) or "Woooo???",
+        boards = get_config("aib", "boardlist"),
     )
 
   def add(self,post,new=False):

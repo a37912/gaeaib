@@ -118,7 +118,7 @@ def do_clean_board(cursor=None):
 
   deferred.defer(do_clean_board, thq.cursor())
 
-TMAX =THREAD_PER_PAGE*BOARD_PAGES
+TMAX = get_config('aib.ib', 'thread_per_page') * get_config('aib.ib','board_pages')
 def fill_board(board):
   threads = Thread.all(keys_only=True)
   threads.filter("board", board)

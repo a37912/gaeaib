@@ -3,7 +3,7 @@ import logging
 
 from google.appengine.ext import db
 
-from tipfy import RequestHandler, redirect, Response, NotFound
+from tipfy import RequestHandler, redirect, Response, NotFound, get_config
 from tipfy.ext.jinja2 import render_response, render_template
 
 from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
@@ -24,7 +24,7 @@ import antiwipe
 class Index(RequestHandler):
   middleware = [RedirMW]
   def get(self, tpl):
-    return render_response(tpl, boards = boardlist_order)
+    return render_response(tpl, boards =  get_config("aib", "boardlist"))
 
 ## View: board page is a list of threads
 #
@@ -46,9 +46,9 @@ class Board(RequestHandler):
     data['threads'] = get_threads(board,page=page) # last threads
     data['show_captcha'] = True
     data['reply'] = True
-    data['board_name'] = boardlist.get(board, 'WHooo??')
+    data['board_name'] = get_config("aib.boards", board) or "Woooo???"
     data['board'] = board # board name
-    data['boards'] = boardlist_order
+    data['boards'] =  get_config("aib", "boardlist")
     data['pages'] = range(BOARD_PAGES)
 
     html = render_template("board.html", **data)

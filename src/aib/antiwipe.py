@@ -1,30 +1,32 @@
 from google.appengine.api import memcache
 from time import time
 import logging
-from const import *
-
+from tipfy import get_config
 
 def check(ip):
 
-  statnum = int(time()/WIPE_STAT_INTERVAL)
+  stat_interval = get_config('aib.antiwipe', "wipe_stat_interval")
+
+  statnum = int(time()/stat_interval)
   statkey = "poststat-%d" % statnum
 
   poststat = memcache.get(statkey) or 0
   logging.info("wipe stat: %d" % poststat)
 
-  interval = POST_INERVAL
-  maxquota = POST_QUOTA
+  interval = get_config('aib.antiwipe', "interval")
+  maxquota = get_config('aib.antiwipe', "quota")
+  maxquota_all = get_config('aib.antiwipe', "quota_all")
 
-  if poststat > POST_QUOTA_ALL:
-    interval *= WIPE_INTERVAL_RATIO
-    maxquota /= WIPE_QUOTA_RATIO
+  if poststat > maxquota_all:
+    interval *= get_config('aib.antiwipe', "wipe_interval_ratio")
+    maxquota /= get_config('aib.antiwipe', "wipe_quota_ratio")
     logging.info("looks like wipe, increase interval: %d" %  interval)
-  elif poststat > (POST_QUOTA_ALL*10):
+  elif poststat > (maxquota_all*10):
     logging.info("increase limit even more!")
-    interval *= (WIPE_INTERVAL_RATIO * 10)
+    interval *= get_config('aib.antiwipe', "wipe_huge_interval_ratio")
     maxquota = 1
 
-  memcache.set(statkey, poststat+1, time=WIPE_STAT_INTERVAL)
+  memcache.set(statkey, poststat+1, time=stat_interval)
   qkey = "ip-%s" % ip
   quota = memcache.get(qkey) or 0
   quota += 1

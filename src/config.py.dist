@@ -25,3 +25,45 @@ config['aib.forms'] = {
     '\[link=',
   ],
 }
+
+config['aib'] = {
+    "boardlist" : (
+     ( 'b', 'Beating heart'),
+     ( 'a', 'Anime',),
+     ( 's', 'School days',),
+     ( 'ne', 'Nekospot'),
+     ( 'g', '/g/ is for Games'),
+     ( 'mod' , 'Dating with Winry',),
+     
+  #  ( 'ped' , 'Church of Pedaliq Scripts',),
+  #  ( 'wh' , 'Imperium', ),
+    )
+}
+
+# errrr derr hmm
+config['aib.boards'] = dict(config['aib']['boardlist'])
+
+config['aib.ib'] = {
+    "thread_per_page" : 10,
+    "board_pages" : 5,
+    "replies_main" : 5,
+
+    "mod_name" : 'Winry',
+}
+
+config['aib.antiwipe'] = {
+    "quota" : 6,
+    "quota_all" : 20,
+    "interval" : 100,
+
+    "wipe_interval_ratio" : 5,
+    "wipe_huge_interval_ratio" : 50,
+    "wipe_quota_ratio" : 3,
+    "wipe_stat_interval" : 120,
+}
+
+config['aib.options'] = {
+    's': ['useragent'],
+    'b': ['saem'],
+    'mod' : [ 'modsign'],
+}

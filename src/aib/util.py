@@ -11,7 +11,7 @@ from google.appengine.api import users
 
 from google.appengine.api import channel
 from django.utils.simplejson import dumps
-from tipfy import NotFound
+from tipfy import NotFound, get_config
 import rainbow
 from const import *
 from models import Board, Thread, Cache
@@ -30,8 +30,10 @@ def get_threads(board, page=0, fmt_name="page"):
   else:
     fmt = thread_plain
 
+  per_page = get_config('aib.ib', 'thread_per_page')
+
   threads = Board.load(board) or []
-  threads = threads[THREAD_PER_PAGE*page:THREAD_PER_PAGE*(page+1)]
+  threads = threads[per_page*page:per_page*(page+1)]
   logging.info("threadlist in %r : %r" % (board, threads))
 
   # grab data from cache
@@ -40,22 +42,14 @@ def get_threads(board, page=0, fmt_name="page"):
   return [ fmt(num,th) for num,th in data if th ]
 
 def thread_plain(num,thread):
-  content = thread.posts
+  content = thread.tail_posts
 
-  if len(content) > REPLIES_MAIN+1:
-    _content = [content[0]]
-    _content.extend( content[-REPLIES_MAIN:] )
-    omitt = len(content) - REPLIES_MAIN - 1
-  else:
-    _content = content
-    omitt = 0
-
-  for post in _content:
+  for post in content:
     post.pop("rainbow_html")
 
   return {
-    "posts" : _content,
-    "skip" : omitt,
+    "posts" : content,
+    "skip" : thread.skip,
     "subject" : thread.subject,
   }
 
@@ -83,7 +77,7 @@ def option_useragent(request, data):
     data['agent'] = 'gays heaven'
 
 def option_modsign(request, data):
-  if data.get('name') != MOD_NAME:
+  if data.get('name') != get_config("aib.ib", "mod_name"):
     return
 
   user = users.get_current_user()
@@ -135,7 +129,10 @@ def save_post(request, data, board, thread):
   if not data.get("sage"):
     board_db.thread.insert(0, thread)
 
-  board_db.thread = board_db.thread[:THREAD_PER_PAGE*BOARD_PAGES]
+  per_page = get_config('aib.ib', 'thread_per_page')
+  pages = get_config('aib.ib', 'board_pages')
+
+  board_db.thread = board_db.thread[:per_page*pages]
 
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb
