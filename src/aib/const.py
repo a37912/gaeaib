@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # temporary here is list of boards
 boardlist_order = (
-   ( 'b' , 'Beating heart'),
-   ( 'a' , 'Anime',),
-   ( 's' , 'School days',),
+   ( 'b', 'Beating heart'),
+   ( 'a', 'Anime',),
+   ( 's', 'School days',),
    ( 'ne', 'Nekospot'),
-   ( 'vg', 'Video Games'),
+   ( 'g', '/g/ is for Games'),
    ( 'mod' , 'Dating with Winry',),
    
 #   ( 'ped' , 'Church of Pedaliq Scripts',),
