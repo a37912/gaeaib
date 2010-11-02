@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from google.appengine.api import memcache
 from google.appengine.ext import db
 
 from tipfy import RequestHandler, redirect, Response, NotFound
@@ -39,9 +38,9 @@ class Board(RequestHandler):
       raise NotFound()
 
     if page == 0:
-      cache = models.Cache.load(Board=board)
+      cache = models.Cache.load("board", board)
       if cache:
-        return Response(cache)
+        return Response(cache.data)
 
     data = {}
     data['threads'] = get_threads(board,page=page) # last threads
@@ -55,7 +54,9 @@ class Board(RequestHandler):
     html = render_template("board.html", **data)
 
     if page == 0:
-      models.Cache.save(data = html, Board=board)
+      cache = models.Cache.create("board", board)
+      cache.data = html
+      cache.put()
 
     return Response(html)
 
@@ -99,9 +100,9 @@ class Thread(RequestHandler):
   middleware = [RedirMW]
 
   def get(self, board, thread):
-    cache = models.Cache.load(Board=board, Thread=thread)
+    cache = models.Cache.load("thread", board, thread)
     if cache:
-      return Response(cache)
+      return Response(cache.data)
     else:
       raise NotFound
 
@@ -110,7 +111,7 @@ class PostRedirect(RequestHandler):
     post_data = get_post(board, post)
 
     thq = models.Thread.all(keys_only=True)
-    thq.ancestor( db.Key.from_path("Board", board))
+    thq.filter("board", board)
     thq.filter("post_numbers", post)
 
     thread = thq.get()

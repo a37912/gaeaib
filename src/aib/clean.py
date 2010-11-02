@@ -58,7 +58,7 @@ def do_clean_thread(cursor=None):
     logging.info("stop thread clean")
     return
 
-  board = Board.get(thread.parent_key())
+  board = Board.get_by_key_name(thread.board)
 
   if len(thread.posts) < 5: # FIXME: magic number
     db.delete(thread)
@@ -121,7 +121,7 @@ def do_clean_board(cursor=None):
 TMAX =THREAD_PER_PAGE*BOARD_PAGES
 def fill_board(board):
   threads = Thread.all(keys_only=True)
-  threads.ancestor(board)
+  threads.filter("board", board)
   threads.order("-__key__")
 
   for thread in threads.fetch(TMAX):
