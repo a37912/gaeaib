@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from time import time
 from uuid import uuid4 as uuid
 from tipfy import RequestHandler, Response, NotFound
 from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
@@ -14,6 +15,8 @@ from django.utils.simplejson import dumps
 import util
 from models import Board, Thread, Cache
 from mark import markup
+from const import *
+import rainbow
 
 def json_response(data):
   return Response(
@@ -108,16 +111,40 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   middleware = [SessionMiddleware]
 
   def post(self, board, thread):
-    key = "update-thread-%s-%d" % (board, thread)
+    # FIXME: move subscribe crap somewhere out
+
+    key = "updatetime-thread-%s-%d" % (board, thread)
     person_cookie = self.get_secure_cookie("person", True)
     person = person_cookie.get("update", str(uuid()))
+
+    # FIXME: tt sucks, temporary workarround
+    while len(person+key) % 4:
+      person += '='
+
     person_cookie['update'] = person
 
     watchers = memcache.get(key) or []
-    if person not in watchers:
-      watchers.append(person)
-      memcache.set(key, watchers[:20], time=60*20) # FIXME
+
+    nwatchers = util.watchers_clean(watchers, person)
+    nwatchers.insert(0, (time(),person))
+
+    memcache.set(key, nwatchers, time=WATCHER_TIME)
 
     token = channel.create_channel(person+key)
+    post_level = util.post_level(self.request.remote_addr)
 
-    return json_response( {"token" : token} )
+    rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
+
+    util.watchers_send(watchers, key, {
+      "evt" : "enter",
+      "rainbow" : rainbow.rainbow(rb),
+      }
+    )
+
+    return json_response( 
+        {
+          "token" : token,
+          "post_quota" : post_level,
+          "watcher_time" : WATCHER_TIME,
+        }
+    )

@@ -10,7 +10,8 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: Message
+- kind: Thread
+  ancestor: yes
   properties:
-  - name: room
-  - name: date
+  - name: __key__
+    direction: desc

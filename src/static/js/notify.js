@@ -1,7 +1,7 @@
 function delegate( that, thatMethod ) { return function() { return thatMethod.call(that); } }
 
 function Notify() {
-  this.focus = null; // hmmm
+  this.focus = true; // hmmm
   this.notifier = null;
   this.msg = null;
   this.title_back = document.title;

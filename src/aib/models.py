@@ -34,20 +34,6 @@ class Board(db.Model):
 
   @classmethod
   def load(cls, board):
-    threads = memcache.get(cls.TPL % board)
-
-    logging.info("cache threads %r" % threads) 
-    if threads == None:
-      logging.info("go to db")
-      threads = cls.load_db(board)
-
-      if threads:
-        memcache.set(cls.TPL % board, threads)
-
-    return threads or []
-
-  @classmethod
-  def load_db(cls, board):
     ent = cls.get_by_key_name(board)
 
     return ent.thread if ent else None
@@ -100,7 +86,6 @@ class Thread(db.Model):
   def id(self):
     return self.key().id()
 
-
   @classmethod
   def load(cls, number, board):
     return cls.get(cls.gen_key(number, board))
@@ -121,7 +106,7 @@ class Thread(db.Model):
       for num in numbers
     ]
 
-    return zip( numbers, db.get(keys) )
+    return zip( numbers, db.get(keys))
 
 class Cache(db.Model):
   comp = CompressedProperty(6)
