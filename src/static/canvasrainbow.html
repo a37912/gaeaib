@@ -1,0 +1,50 @@
+<!doctype html><html>
+<head>
+  <meta charset="UTF-8">
+  <title>Rainbow</title>
+</head>
+<body>
+
+<canvas id="rainbow" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
+<script>
+function DrawRainbow(colors, elementId){
+  var canvas = document.getElementById(elementId);
+  if (canvas.getContext){  
+    var c = canvas.getContext('2d');
+    var s = 20
+    var x = s/2;
+    var y = s/2;
+    var r = s;
+    var d = 0.05; //delta to remove stitch between sections  
+    var startAngle = 0;
+    for(var j=0;j<6;j++){
+      var endAngle = Math.PI*(j*0.33-0.1);
+      c.beginPath();
+      c.moveTo(x, y);
+      c.fillStyle = colors[j];
+      c.arc(x, y, r, startAngle, endAngle, false);
+      startAngle = endAngle-d;
+      c.moveTo(x, y);
+      c.closePath();
+      c.fill();
+    }  
+  } else {  
+    // canvas-unsupported code here
+    //
+    //
+    alert(1);
+    var oldrainbow = '';
+    for(var j=0;j<5;j++){
+      oldrainbow += "<span style='background: none repeat scroll"+ 
+       colors[j] + "'>&nbsp;&nbsp;</span>"
+    }
+    canvas.innerHTML(oldrainbow);
+  }
+}
+var colors = Array();
+colors = ['#A996BE', '#C78C36', '#28EF49', '#08532C', '#54F98B', '#DDFF00'];
+DrawRainbow(colors, 'rainbow');
+</script>
+
+</body>
+</html>
