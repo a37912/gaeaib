@@ -139,6 +139,9 @@ def save_post(request, data, board, thread):
 
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb
+  if board in board_overlay: #omfg this variable comes from evil * import, and I'm edit this shit
+    data['overlay'] = True
+  
   # data['rainbow_html'] = rainbow.rainbow(rb) #XXX: dont needed anymoar?
   data['text_html'] = markup(
         board=board, postid=board_db.counter,

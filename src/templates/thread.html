@@ -2,6 +2,13 @@
 {% block title %}{{board_name}} {% endblock %}
 
 {% block content %}
+{% if overlay %}
+<script>
+overlay = new Image();
+overlay.src = "/static/images/{{board}}.png";
+</script>
+{% endif %}
+
 {% include "thread_internal.html" %}
 
 {% include "postform.html" %}

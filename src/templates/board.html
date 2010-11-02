@@ -2,6 +2,12 @@
 {% block title %}{{board_name}} {% endblock %}
 
 {% block content %}
+{% if overlay %}
+<script>
+overlay = new Image();
+overlay.src = "/static/images/{{board}}.png";
+</script>
+{% endif %}
 {% include "postform.html" %}
 {% if not threads %}
 <center><h1>Этаж еще не затоплен</h1></center>

@@ -199,7 +199,11 @@ $(document).ready(function() {
       for(i=0;i<rainbow.length;i=i+3){
         hex.push("#"+rainbow.substring(i,i+3));
       }
-      DrawRainbow(hex, "rc-"+canvas_id);
+      if (typeof overlay=="undefined"){ //XXX: global variable, yes its should be fixed 
+        DrawRainbow(hex, "rc-"+canvas_id);
+      } else {
+        DrawRainbow(hex, "rc-"+canvas_id, overlay);
+      }
     }
   );
  
