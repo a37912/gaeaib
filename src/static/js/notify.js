@@ -47,10 +47,9 @@ function Notify() {
 
   this.prototype.show = function(msg) {
     
-    /* // hmmm
     if (this.focus) {
       return;
-    } */
+    }
 
     console.log(this.title_back);
     document.title = "#! " + __obj.title_back;
