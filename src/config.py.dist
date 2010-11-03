@@ -39,6 +39,8 @@ config['aib'] = {
   #  ( 'wh' , 'Imperium', ),
     ),
     "default_name" : "Whoooo?",
+    "overlay": ['s', 'g', 'ne'],
+    
 }
 
 config['aib.ib'] = {
