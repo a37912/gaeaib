@@ -1,37 +1,42 @@
+{%- macro rainbow(hex, id) %}
+<span class="rainbow" rainbow="{{hex}}" cid="{{id}}">
+<canvas id="rc-{{id}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
+</span>
+{% endmacro %}
+
 <div class="tablepost b-post {% if post.sage %}b-sage{% endif %}" id="post-{{post.post}}">
-		<div class="b-post-head">
-			<div class="b-left">
-        {{post.rainbow_html}}
+  <div class="b-post-head">
+      <div class="b-left">
+        {# {{post.rainbow_html}} #}
+        {{ rainbow(post.rainbow, post.post) }}
         <strong class="b-name {{post.typ}}">{{ post.name|escape }}</strong>
         {% if post.sage %}<em>SAGE</em>{% endif %}
         {% if post.agent %}
         <span class="b-os">{{post.agent|escape}}</span>
         {% endif %}
-			</div>
-			<div class="b-right">
-				<span class="b-date">{{post.time}}</span>
-				<span class="b-permalink"><a class="reflink" name="p{{post.post}}" 
+      </div>
+      <div class="b-right">
+        <span class="b-date">{{post.time}}</span>
+        <span class="b-permalink"><a class="reflink" name="p{{post.post}}" 
             href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
             threadid="{{post.thread}}" 
           >#{{post.post}}</a></span>
-			</div>
-		</div>
-		<div class="b-post-body">
+      </div>
+    </div>
+    <div class="b-post-body">
        <a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"
         >{%- if post.image %}del pic{% else %}del post{%- endif %}</a>
-			<div class="b-post-body-text" postid="{{post.post}}">{{ post.text_html }}</div>
-			<div class="b-post-body-funcs"><a href="#">delete</a></div>
-			<br clear="all"; />
-		</div>
+      <div class="b-post-body-text" postid="{{post.post}}">{{ post.text_html }}</div>
+      <div class="b-post-body-funcs"><a href="#">delete</a></div>
+      <br clear="all"; />
+    </div>
     <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
-
     {% if post.image %}
      <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span>
      <br/>
      <a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a>
     {% endif %}
-
-	</div>
+</div>
 
 <!--NPHERE-->
 {#

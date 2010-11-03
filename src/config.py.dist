@@ -25,6 +25,7 @@ config['aib.forms'] = {
     '\[link=',
   ],
 }
+
 config['aib'] = {
     "boardlist" : (
      ( 'b', 'Beating heart'),
@@ -67,4 +68,9 @@ config['aib.util'] = {
       'b': ['saem'],
       'mod' : [ 'modsign'],
     }
+}
+
+config['aib.rainbow'] = {
+  'secret' : 'YOBA', #XXX: fixme
+
 }

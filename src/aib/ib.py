@@ -33,6 +33,7 @@ class Board(RequestHandler):
 
   PAGES = get_config("aib.ib", "board_pages")
   NAMES = dict(get_config("aib", "boardlist"))
+  OVER = get_config("aib", "overlay")
  
   def get(self, board, page=0):
 
@@ -52,6 +53,8 @@ class Board(RequestHandler):
     data['board'] = board # board name
     data['boards'] =  get_config("aib", "boardlist")
     data['pages'] = range(self.PAGES)
+
+    data['overlay'] = board in self.OVER
 
     html = render_template("board.html", **data)
 

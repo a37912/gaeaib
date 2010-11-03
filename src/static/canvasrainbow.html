@@ -6,8 +6,12 @@
 <body>
 
 <canvas id="rainbow" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
+<canvas id="rainbow2" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
+<canvas id="rainbow3" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
+<canvas id="rainbow4" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
 <script>
-function DrawRainbow(colors, elementId){
+
+function DrawRainbow(colors, elementId, face){
   var canvas = document.getElementById(elementId);
   if (canvas.getContext){  
     var c = canvas.getContext('2d');
@@ -27,7 +31,10 @@ function DrawRainbow(colors, elementId){
       c.moveTo(x, y);
       c.closePath();
       c.fill();
-    }  
+    }
+    if (face != null){
+      c.drawImage(face,2,2,face.width,face.height);
+    }
   } else {  
     // canvas-unsupported code here
     //
@@ -41,9 +48,26 @@ function DrawRainbow(colors, elementId){
     canvas.innerHTML(oldrainbow);
   }
 }
-var colors = Array();
-colors = ['#A996BE', '#C78C36', '#28EF49', '#08532C', '#54F98B', '#DDFF00'];
-DrawRainbow(colors, 'rainbow');
+
+_ne = new Image();
+_s = new Image();
+_g = new Image();
+
+function load(){
+  _ne.src = "/static/images/ne.png";
+  _s.src = "/static/images/s.png";
+  _g.src = "/static/images/g.png";
+}
+load();
+function show(){
+  var colors = [];
+  colors = ['#A996BE', '#C78C36', '#28EF49', '#08532C', '#54F98B', '#DDFF00'];
+  DrawRainbow(colors, 'rainbow');
+  DrawRainbow(colors, 'rainbow2', _ne);
+  DrawRainbow(colors, 'rainbow3', _s);
+  DrawRainbow(colors, 'rainbow4', _g);
+}
+window.onload = show;
 </script>
 
 </body>
