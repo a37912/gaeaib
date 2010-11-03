@@ -22,7 +22,7 @@ def do_render_cache(cursor=None):
     return
 
   board = thread.board
-  render = Render(board=board, thread = thread.key().id())
+  render = Render(board=board, thread = thread.id)
 
   for idx,post in enumerate(thread.posts):
     if 'text' in post:

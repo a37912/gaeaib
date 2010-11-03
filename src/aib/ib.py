@@ -11,7 +11,6 @@ from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
 from forms import PostForm
 from util import get_threads, save_post, get_post, delete_post
 
-from const import *
 import models
 from redir import RedirMW
 import mark
@@ -32,9 +31,12 @@ class Index(RequestHandler):
 class Board(RequestHandler):
   middleware = [RedirMW]
 
+  PAGES = get_config("aib.ib", "board_pages")
+  NAMES = dict(get_config("aib", "boardlist"))
+ 
   def get(self, board, page=0):
 
-    if page > BOARD_PAGES:
+    if page > self.PAGES:
       raise NotFound()
 
     if page == 0:
@@ -46,10 +48,10 @@ class Board(RequestHandler):
     data['threads'] = get_threads(board,page=page) # last threads
     data['show_captcha'] = True
     data['reply'] = True
-    data['board_name'] = get_config("aib.boards", board) or "Woooo???"
+    data['board_name'] = self.NAMES.get(board) or "Woooo???"
     data['board'] = board # board name
     data['boards'] =  get_config("aib", "boardlist")
-    data['pages'] = range(BOARD_PAGES)
+    data['pages'] = range(self.PAGES)
 
     html = render_template("board.html", **data)
 

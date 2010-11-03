@@ -13,7 +13,6 @@ from google.appengine.api import channel
 from django.utils.simplejson import dumps
 from tipfy import NotFound, get_config
 import rainbow
-from const import *
 from models import Board, Thread, Cache
 from render import Render
 from mark import markup
@@ -86,6 +85,7 @@ def option_modsign(request, data):
 
 
 SUBJECT_MAX = 25
+OPTIONS = get_config("aib.util", "options")
 ## Helper: saves post to thread
 #
 # @param request - request object
@@ -165,7 +165,7 @@ def save_post(request, data, board, thread):
         "thumb" : images.get_serving_url(img_key, 200),
     }
 
-  for fname in board_options.get(board, []):
+  for fname in OPTIONS.get(board, []):
     func = globals().get('option_'+fname)
 
     if func:
@@ -204,6 +204,9 @@ def watchers_send(watchers, key, data):
   for wtime,person in watchers:
     channel.send_message(person+key, dumps(data))
 
+WATCHERS_MAX = get_config('aib.util', 'watches_max')
+WATCHER_TIME = get_config('aib.util', 'watch_time')
+
 def watchers_clean(watchers, exclude=None):
   now = time()
   nwatchers = []
@@ -219,6 +222,7 @@ def watchers_clean(watchers, exclude=None):
 
   return nwatchers
 
+POST_QUOTA = get_config('aib.antiwipe', 'quota')
 def post_level(ip):
   qkey = "ip-%s" % ip
   post_quota = memcache.get(qkey) or 0

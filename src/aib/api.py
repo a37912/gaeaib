@@ -2,7 +2,7 @@
 import logging
 from time import time
 from uuid import uuid4 as uuid
-from tipfy import RequestHandler, Response, NotFound
+from tipfy import RequestHandler, Response, NotFound, get_config
 from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
 from tipfy.ext.jinja2 import render_template
 
@@ -15,7 +15,6 @@ from django.utils.simplejson import dumps
 import util
 from models import Board, Thread, Cache
 from mark import markup
-from const import *
 import rainbow
 
 def json_response(data):
@@ -98,6 +97,8 @@ class Unban(RequestHandler):
 class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   middleware = [SessionMiddleware]
 
+  WATCH_TIME = get_config("aib.util", "watch_time")
+
   def post(self, board, thread):
     # FIXME: move subscribe crap somewhere out
 
@@ -116,7 +117,7 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
     nwatchers = util.watchers_clean(watchers, person)
     nwatchers.insert(0, (time(),person))
 
-    memcache.set(key, nwatchers, time=WATCHER_TIME)
+    memcache.set(key, nwatchers, time=self.WATCH_TIME)
 
     token = channel.create_channel(person+key)
     post_level = util.post_level(self.request.remote_addr)
@@ -125,7 +126,7 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
 
     util.watchers_send(watchers, key, {
       "evt" : "enter",
-      "rainbow" : rainbow.rainbow(rb),
+      "rainbow" : rb,
       }
     )
 
@@ -133,6 +134,6 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
         {
           "token" : token,
           "post_quota" : post_level,
-          "watcher_time" : WATCHER_TIME,
+          "watcher_time" : self.WATCH_TIME,
         }
     )

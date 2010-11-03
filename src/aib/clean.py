@@ -2,10 +2,9 @@
 import logging
 from google.appengine.ext.blobstore import BlobInfo
 from google.appengine.ext import deferred, db
-from tipfy import RequestHandler, Response
+from tipfy import RequestHandler, Response, get_config
 
 from aib.models import Thread, Board, Cache
-from aib.const import *
 #import restore
 
 class CleanBlob(RequestHandler):
@@ -119,6 +118,7 @@ def do_clean_board(cursor=None):
   deferred.defer(do_clean_board, thq.cursor())
 
 TMAX = get_config('aib.ib', 'thread_per_page') * get_config('aib.ib','board_pages')
+
 def fill_board(board):
   threads = Thread.all(keys_only=True)
   threads.filter("board", board)

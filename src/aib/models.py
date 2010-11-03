@@ -2,9 +2,9 @@
 import logging
 
 from google.appengine.ext import db
+from tipfy import get_config
 from tipfy.ext.db import PickleProperty
 from aetycoon import DerivedProperty, CompressedProperty
-from const import *
 from jinja2.utils import escape
 
 class Board(db.Model):
@@ -37,6 +37,7 @@ class Board(db.Model):
 
 class Thread(db.Model):
 
+  REPLIES_MAIN = get_config("aib.ib", 'replies_main')
   posts = PickleProperty()
 
   @DerivedProperty
@@ -65,8 +66,7 @@ class Thread(db.Model):
 
   @property
   def tail_posts(self):
-    replies_main = get_config("aib.ib", 'replies_main')
-    if len(self.posts) > replies_main+1:
+    if len(self.posts) > self.REPLIES_MAIN+1:
       off = -replies_main
     else:
       off = 1
@@ -75,9 +75,7 @@ class Thread(db.Model):
 
   @property
   def skip(self):
-    replies_main = get_config("aib.ib", 'replies_main')
-
-    skip = len(self.posts) - replies_main - 1
+    skip = len(self.posts) - self.REPLIES_MAIN - 1
 
     if skip > 0:
       return skip

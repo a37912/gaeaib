@@ -25,7 +25,6 @@ config['aib.forms'] = {
     '\[link=',
   ],
 }
-
 config['aib'] = {
     "boardlist" : (
      ( 'b', 'Beating heart'),
@@ -37,11 +36,9 @@ config['aib'] = {
      
   #  ( 'ped' , 'Church of Pedaliq Scripts',),
   #  ( 'wh' , 'Imperium', ),
-    )
+    ),
+    "default_name" : "Whoooo?",
 }
-
-# errrr derr hmm
-config['aib.boards'] = dict(config['aib']['boardlist'])
 
 config['aib.ib'] = {
     "thread_per_page" : 10,
@@ -62,8 +59,12 @@ config['aib.antiwipe'] = {
     "wipe_stat_interval" : 120,
 }
 
-config['aib.options'] = {
-    's': ['useragent'],
-    'b': ['saem'],
-    'mod' : [ 'modsign'],
+config['aib.util'] = {
+    'watch_time' : 20*60,
+    'watches_max' : 20,
+    'options' : {
+      's': ['useragent'],
+      'b': ['saem'],
+      'mod' : [ 'modsign'],
+    }
 }

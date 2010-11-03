@@ -7,21 +7,8 @@ from google.appengine.api import memcache
 from tipfy import RequestHandler, Response
 from tipfy.ext.blobstore import BlobstoreDownloadMixin, BlobstoreUploadMixin
 
-from const import *
-
 class PostUrl(RequestHandler):
   def get(self):
-    qkey = "ip-img-%s" % self.request.remote_addr
-    quota = memcache.get(qkey) or 0
-    quota += 1
-    memcache.set(qkey, quota, time=POST_IMG_INERVAL*quota)
-
-    logging.info("image quota %r = %d" % (self.request.remote_addr, quota ) )
-
-    #if quota > POST_IMG_QUOTA:
-    #  return Response("http://winry.on.nimp.org/")
-
-
     return Response( 
       blobstore.create_upload_url("/post_img")
     )
@@ -61,4 +48,3 @@ class ViewImage(RequestHandler, BlobstoreDownloadMixin):
       headers = { "Location" : str(url) },
     )
  
-
