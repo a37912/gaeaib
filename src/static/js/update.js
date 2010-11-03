@@ -142,6 +142,14 @@ sendupdate();
 sendform = function(e) {
   var button = $("#post_submit");
 
+  try {
+    _gaq.push('_trackPageview', "/post/");
+    _gaq.push('_trackPageview', "/post/" + _board);
+
+  } catch(err) {
+    console.err("gaq fail " + err);
+  }
+
   if(uploading) {
     uploading = false;
     e.preventDefault();
