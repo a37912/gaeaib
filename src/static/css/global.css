@@ -139,6 +139,11 @@ div#postarea.reply {
   background-color: #D6FFD9;
 }
 
+.sending textarea {
+  background-color: gray;
+}
+
+
 #postarea h3 {
   padding: 0px 0px 0px;
   margin: 5px 0;
@@ -575,4 +580,5 @@ button.g-button, a.g-button, input[type=submit].g-button {
 
 
 /* @end */
+
 

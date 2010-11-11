@@ -8,6 +8,7 @@ from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.api import images
 from google.appengine.api import users
+from google.appengine.ext import deferred
 
 from google.appengine.api import channel
 from django.utils.simplejson import dumps
@@ -116,8 +117,6 @@ def save_post(request, data, board, thread):
     thread_db.subject = data.get("subject")[:SUBJECT_MAX]
   else:
     thread = int(thread)
-    #if thread not in board_db.thread:
-    #  raise NotFound()
 
     if thread in board_db.thread and not data.get("sage"):
       board_db.thread.remove(thread)
@@ -143,9 +142,6 @@ def save_post(request, data, board, thread):
         board=board, postid=board_db.counter,
         data=escape(data.get('text', '')),
   )
-
-  # FIXME: move to field
-  data['name'] = data.get("name") or "Anonymous"
 
   # save thread and post number
   data['post'] = board_db.counter
@@ -182,15 +178,22 @@ def save_post(request, data, board, thread):
   r.add(data, new)
   r.save()
 
-  if new:
-    return board_db.counter, thread
+  if not new:
+    deferred.defer(
+        watchers_post_notify,
+        board, thread, r.post_html, 
+        len(thread_db.posts), board_db.counter
+    )
 
+  return board_db.counter, thread
+
+def watchers_post_notify(board, thread, html, count, last):
   key = "updatetime-thread-%s-%d" % (board, thread)
   send = { 
-      "html" : r.post_html, 
+      "html" : html, 
       "evt" : "newpost" ,
-      "count" : len(thread_db.posts),
-      "last" : board_db.counter,
+      "count" : count,
+      "last" : last,
   }
 
   watchers = memcache.get(key) or []
@@ -199,8 +202,6 @@ def save_post(request, data, board, thread):
       key,
       send
   )
-
-  return board_db.counter, thread
 
 def watchers_send(watchers, key, data):
   for wtime,person in watchers:

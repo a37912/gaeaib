@@ -176,7 +176,7 @@ sendform = function(e) {
   for (var idx in fields) {
     var field = fields[idx];
     var inp_f = $("#" + field).get(0);
-    if (inp_f == undefined) {
+    if (inp_f == undefined || !inp_f.value || inp_f.value=="") {
       continue
     }
     data[inp_f.name] = inp_f.value
@@ -198,6 +198,7 @@ sendform = function(e) {
       inp_f.value = "";
     }
     button.removeAttr("disabled");
+    $("#postarea").removeClass("sending");
 
     $("#upload_img").show();
     $("#view_img").hide();
@@ -205,7 +206,8 @@ sendform = function(e) {
   }
 
   button.attr("disabled", "disabled");
-  $.post( "post/", data, unlock)
+  $("#postarea").addClass("sending");
+  $.post( "post/ajax", data, unlock)
 
   e.preventDefault();
   sendupdate();
