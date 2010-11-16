@@ -28,15 +28,18 @@
         >{%- if post.image %}del pic{% else %}del post{%- endif %}</a>
       <div class="b-post-body-text" postid="{{post.post}}">{{ post.text_html }}</div>
       <div class="b-post-body-funcs"><a href="#">delete</a></div>
+      {% if post.image %}
+       <div class="b-thumb">
+       <a href="{{post.image.full}}" target="_blank"><img 
+          class="thumb" src="{{post.image.thumb}}" alt="{{post.image.content_type}}:{{ post.image.size }}"
+          /></a><br />
+       <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span></div>
+       {% endif %}
+
       <br clear="all"; />
     </div>
     <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
-    {% if post.image %}
-     <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span>
-     <br/>
-     <a href="{{post.image.full}}" target="_blank"><img class="thumb" src="{{post.image.thumb}}"/></a>
-    {% endif %}
-</div>
+    </div>
 
 <!--NPHERE-->
 {#

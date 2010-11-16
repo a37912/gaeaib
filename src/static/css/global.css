@@ -233,10 +233,6 @@ right: 5px;
   color: #333;
   font-size: 12px;
   opacity: 1;
-!impor
-
-tant
-;
 }
 
 
@@ -555,6 +551,25 @@ button.g-button, a.g-button, input[type=submit].g-button {
 
 /* @end */
 
+/* @group Watcher */
+
+.watcher {
+  /* display: none; */
+  position: fixed;
+  bottom: 0px;
+  z-index: 100;
+  right: 30px;
+  background-image: -moz-linear-gradient(top,#ffffff,#efefef);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#ffffff),to(#efefef));
+  filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#ffffff,endColorStr=#efefef);
+  opacity: 0.8;
+  
+}
+
+
+/* @end */
+
+
 /*
 -webkit-font-smoothing: antialiased;
 */
@@ -573,6 +588,16 @@ button.g-button, a.g-button, input[type=submit].g-button {
 
 .b-sage .b-post-head{background:-moz-linear-gradient(top, #f7f7f7, #dedede); background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #fefbf7), color-stop(1, #ecd5cd));}
 
+.b-thumb{
+  float: left;
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+  padding-top: 5px;
+}
 
+.b-thumb img{
+  margin:0px;
+  padding:0px;
+}
 /* @end */
 

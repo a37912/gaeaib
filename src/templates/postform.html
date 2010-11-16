@@ -5,11 +5,13 @@
  <div class="field">
    <label class="formQuestion" for="id_name">Имя</label>
    <div class="formHelp"></div>
-   <input type="text" name="name" id="id_name" value="" size="31" maxlength="30" placeholder="Anonymous" />
+   <input type="text" name="name" id="id_name" value="" 
+          size="31" maxlength="30" placeholder="Anonymous"
+          tabIndex="1" />
  </div>
 {% if not reply %}
  <div class="field">
-   <input class="noborder" type="checkbox" value="on" name="sage" id="id_sage">
+   <input class="noborder" type="checkbox" value="on" name="sage" id="id_sage" tabIndex="2" >
    <label class="formQuestion" for="id_sage">Сажа</label>
    <div class="formHelp"></div>
  </div>
@@ -17,26 +19,34 @@
  <div id="title" class="field title">
    <label class="formQuestion" for="id_subject">Тема</label>
    <div class="formHelp"></div>
-   <input type="text" name="subject" id="id_subject" value="" size="26" maxlength="25" placeholder="25 буковок" />
+   <input type="text" name="subject" id="id_subject" value="" 
+          size="26" maxlength="25" placeholder="25 буковок"
+           tabIndex="3"  />
  </div>
 {% endif %} 
  <div class="field">
    <label class="formQuestion" for="id_text">Вброс</label>
-   <div class="formHelp">А теперь и с языком разметки со <a href="/faq#markup">вкусом апельсина</a></div>
-   <div><textarea rows="10" cols="40" name="text" id="id_text" placeholder="Дай анонимусу текстовое поле и он напишет туда что?"></textarea></div>
+   <div class="formHelp">
+    А теперь и с языком разметки со 
+    <a href="/faq#markup"  tabIndex="100" >вкусом апельсина</a>
+   </div>
+   <div><textarea rows="10" cols="40" name="text" id="id_text" 
+      placeholder="Дай анонимусу текстовое поле и он напишет туда что?"
+       tabIndex="4" ></textarea></div>
  </div>
 
  <div class="field">
    <label class="formQuestion" for="image">Изображение</label>
    <div class="formHelp" id="image_help"></div>
    <span id="view_img_nojs">Включите javascript для загрузки файлов</span>
-   <input style="display: none" id="upload_img" type="file" name="image" id="image" size="30"/> 
+   <input style="display: none" id="upload_img" type="file" 
+           tabIndex="5" name="image" id="image" size="30"/> 
    <img id="view_img" style="display: none" src="" />
    <br />
    <span id="view_img_msg"  style="display: none" >Подождите, пока грузится картинка</span>
  </div>
  <input type="hidden" id="upload_key" name="key" />
-  <input type="submit" class="g-button" id="post_submit" value="Отправить" />
+  <input type="submit" class="g-button" id="post_submit" value="Отправить"  tabIndex="6" />
 </form>
 </div>
 {% endblock %}
