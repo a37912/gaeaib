@@ -19,11 +19,15 @@ def spam(form, field):
 
   if re.search(SIGN, field.data):
     raise ValidationError("possible spam")
+
+def fixempty(form, field):
+  if not field.data:
+    field.data = field.default
   
 # New post or thread form
 class PostForm(Form):
 
-  name = TextField()
+  name = TextField(validators=[fixempty], default="Anonymous")
   sage = BooleanField()
   text = TextField(validators=[spam])
   key = TextField()

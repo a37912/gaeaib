@@ -74,7 +74,7 @@ class Post(RequestHandler, SecureCookieMixin):
   def get(self, board, thread):
     return redirect("/%s/%d" %( board, thread) )
 
-  def post(self, board, thread):
+  def post(self, board, thread, ajax=False):
     logging.info("post called")
 
     if not antiwipe.check(self.request.remote_addr):
@@ -87,15 +87,20 @@ class Post(RequestHandler, SecureCookieMixin):
     if not form.validate():
       return redirect("/%s/" % board)
 
+    logging.info("data: %r" % form.data)
+    logging.info("form: %r" % self.request.form)
+
     # if ok, save
-    logging.info("data valid %r" %( form.data,))
     post, thread = save_post(self.request, form.data, board, thread)
     
     key = board + "%d" % post
     cookie = self.get_secure_cookie(key)
     cookie["win"] = key
 
-    return redirect("/%s/%d" % (board, thread))
+    if ajax:
+      return Response('{"post":%d }' % post)
+
+    return redirect("/%s/%d/" % (board, thread))
 
 ## View: show all posts in thread
 #

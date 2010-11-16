@@ -119,7 +119,12 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
 
     memcache.set(key, nwatchers, time=self.WATCH_TIME)
 
-    token = channel.create_channel(person+key)
+    token = memcache.get(person+key)
+
+    if not token:
+      token = channel.create_channel(person+key)
+      memcache.set(person+key, token)
+
     post_level = util.post_level(self.request.remote_addr)
 
     rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
