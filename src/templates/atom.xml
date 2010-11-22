@@ -1,7 +1,7 @@
 <entry>
     <title>New post in /{{board}}/{{thread}}/</title>
     <link href="http://gaech.org/{{board}}/{{thread}}"/>
-    <id>{{board}}/{{thread}}/{{post}}</id>
-    <updated>2003-12-13T18:30:02Z</updated>
+    <id>http://gaech.org/{{board}}/{{thread}}/{{post}}</id>
+    <updated>{{cache.date_modify.strftime("%Y-%m-%dT%H:%M:%SZ")}}</updated>
     <summary>{{data}}</summary>
 </entry>

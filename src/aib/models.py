@@ -160,3 +160,7 @@ class Cache(db.Model, GenKey):
 class Rss(db.Model, GenKey):
   DEF_KEY = "rss"
   posts = db.ListProperty(unicode, indexed=False)
+
+  date_modify = db.DateTimeProperty(auto_now=True)
+
+  xml = CompressedProperty(6)

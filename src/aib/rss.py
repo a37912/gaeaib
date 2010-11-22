@@ -12,12 +12,16 @@ def add(board, thread, post, data):
 	board = board,
         thread = thread,
         data = data,
-        posts = post,
+        post = post,
+        cache = cache,
    )
-   import logging
-   logging.info("render: %r" % rendered)
+   # FIXME: cant save long posts (>500)
 
    cache.posts.append(rendered)
+   cache.posts = cache.posts[-20:]
+   xml = render_template("atom_full.xml",
+	board = board, thread = thread, cache=cache)
+   cache.xml = xml.encode("utf8")
    cache.put()
 
 class ViewThread(RequestHandler):
@@ -27,9 +31,5 @@ class ViewThread(RequestHandler):
     if not cache:
       raise NotFound()  
 
-    xml = render_template("atom_full.xml",
-	board = board, thread = thread, posts = cache. posts)
-
-    
-    return Response(xml, content_type="application/atom+xml")
+    return Response(cache.xml, content_type="application/atom+xml")
    

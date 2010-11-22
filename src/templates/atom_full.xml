@@ -2,12 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Thread /{{board}}/{{thread}}/</title>
   <link href="http://gaech.org/{{board}}/{{thread}}/"/>
-  <updated>2003-12-13T18:30:02Z</updated>
+  <updated>{{cache.date_modify.strftime("%Y-%m-%dT%H:%M:%SZ")}}</updated>
   <author>
 	<name>Anonymous</name>
   </author>
   <id>http://gaech.org/{{board}}/{{thread}}/</id>
-  {% for post in posts %}
-  {{ post }}
+  {% for post in cache.posts %}
+{{ post }}
   {% endfor %}
 </feed>
