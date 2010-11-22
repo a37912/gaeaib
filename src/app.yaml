@@ -45,5 +45,5 @@ admin_console:
   - name: "Stats"
     url: /stats
     
-error_handlers:
-  - file: static/404.html
+#error_handlers:
+#  - file: static/404.html
