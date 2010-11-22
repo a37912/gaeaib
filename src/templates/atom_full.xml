@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Thread /{{board}}/{{thread}}/</title>
+  <link href="http://gaech.org/{{board}}/{{thread}}/"/>
+  <updated>2003-12-13T18:30:02Z</updated>
+  <author>
+	<name>Anonymous</name>
+  </author>
+  <id>http://gaech.org/{{board}}/{{thread}}/</id>
+  {% for post in posts %}
+  {{ post }}
+  {% endfor %}
+</feed>

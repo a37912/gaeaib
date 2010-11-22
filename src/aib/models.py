@@ -4,7 +4,7 @@ import logging
 from google.appengine.ext import db
 from tipfy import get_config
 from tipfy.ext.db import PickleProperty
-from aetycoon import DerivedProperty, CompressedProperty
+from aetycoon import DerivedProperty, CompressedProperty, TransformProperty 
 from jinja2.utils import escape
 
 class Board(db.Model):
@@ -39,6 +39,8 @@ class Thread(db.Model):
 
   REPLIES_MAIN = get_config("aib.ib", 'replies_main')
   posts = PickleProperty()
+  posts_count = TransformProperty(posts, len)
+  
 
   @DerivedProperty
   def images(self):
@@ -67,7 +69,7 @@ class Thread(db.Model):
   @property
   def tail_posts(self):
     if len(self.posts) > self.REPLIES_MAIN+1:
-      off = -replies_main
+      off = -self.REPLIES_MAIN
     else:
       off = 1
 
@@ -103,7 +105,47 @@ class Thread(db.Model):
 
     return zip( numbers, db.get(keys))
 
-class Cache(db.Model):
+class GenKey(object):
+
+  @classmethod
+  def gen_key(cls, mode, *a, **kw):
+    f = getattr(cls, "gen_key_" + mode)
+
+    return f(*a, **kw)
+
+  @classmethod
+  def gen_key_board(cls, board, name=None):
+    name = name or cls.DEF_KEY
+    return db.Key.from_path("Board", board, cls.kind(), name)
+
+  @classmethod
+  def gen_key_thread(cls, board, thread, name=None):
+    name = name or cls.DEF_KEY
+    tkey = Thread.gen_key(thread, board)
+
+    return db.Key.from_path(cls.kind(), name, parent=tkey)
+
+  @classmethod
+  def create(cls, *a, **kw):
+    return cls(key=cls.gen_key(*a), **kw)
+
+
+  @classmethod
+  def load(cls, *a, **kw):
+    cache = cls.get(cls.gen_key(*a, **kw))
+
+    return cache
+
+  @classmethod
+  def remove(cls, *a):
+    key=cls.gen_key(*a)
+
+    db.delete(key)
+
+
+class Cache(db.Model, GenKey):
+  DEF_KEY = "html"
+
   comp = CompressedProperty(6)
 
   def get_data(self):
@@ -115,35 +157,6 @@ class Cache(db.Model):
 
   data = property(get_data, set_data)
 
-  @classmethod
-  def gen_key(cls, mode, *a):
-    f = getattr(cls, "gen_key_" + mode)
-
-    return f(*a)
-
-  @classmethod
-  def gen_key_board(cls, board):
-    return db.Key.from_path("Board", board, "Cache", "html")
-
-  @classmethod
-  def gen_key_thread(cls, board, thread):
-    tkey = Thread.gen_key(thread, board)
-
-    return db.Key.from_path("Cache", "html", parent=tkey)
-
-  @classmethod
-  def create(cls, *a, **kw):
-    return cls(key=cls.gen_key(*a), **kw)
-
-
-  @classmethod
-  def load(cls, *a):
-    cache = cls.get(cls.gen_key(*a))
-
-    return cache
-
-  @classmethod
-  def delete(cls, *a):
-    key=cls.gen_key(*a)
-
-    db.delete(key)
+class Rss(db.Model, GenKey):
+  DEF_KEY = "rss"
+  posts = db.ListProperty(unicode, indexed=False)

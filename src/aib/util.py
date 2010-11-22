@@ -16,6 +16,7 @@ from tipfy import NotFound, get_config
 import rainbow
 from models import Board, Thread, Cache
 from render import Render
+import rss
 from mark import markup
 from cgi import escape
 
@@ -172,11 +173,14 @@ def save_post(request, data, board, thread):
   thread_db.posts.append(data)
 
   db.put( (thread_db, board_db))
-  Cache.delete("board", board)
+  Cache.remove("board", board)
 
   r = Render(board, thread)
   r.add(data, new)
   r.save()
+
+  deferred.defer(rss.add, board, thread, board_db.counter, 
+	data.get("text_html") )
 
   if not new:
     deferred.defer(
@@ -301,11 +305,7 @@ def delete_post(board, thread_num, post_num, rape_msg):
     post['rainbow_html'] = u'<b>' + rape_msg + '</b>'
 
   th.put()
-  Cache.delete(
-    (
-      dict(Board=board),
-    )
-  )
+  Cache.remove("board", board)
 
   r = Render(board, thread_num)
   #kind of shit:

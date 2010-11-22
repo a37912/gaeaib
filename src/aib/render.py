@@ -32,7 +32,7 @@ class Render(object):
     self.cache.data = render_template("thread.html", 
         thread = data,
         board = self.board,
-        board_name = NAMES.get(self.board) or get_cofig("aib",
+        board_name = NAMES.get(self.board) or get_config("aib",
           "default_name"),
         boards = get_config("aib", "boardlist"), # context?
     )
