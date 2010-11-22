@@ -114,6 +114,7 @@ def do_clean_board(cursor=None):
   fill_board(board)
 
   board.put()
+  Cache.remove("board", board.key().name())
 
   deferred.defer(do_clean_board, thq.cursor())
 
