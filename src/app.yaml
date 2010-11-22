@@ -1,5 +1,5 @@
-application: gaeaib
-version: release-0-18
+application: bankaiapp
+version: release-0-19
 runtime: python
 api_version: 1
 
