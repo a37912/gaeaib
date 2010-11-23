@@ -116,6 +116,18 @@ q {
   quotes: "“" "”" "‘" "’"
 }
 
+span.modpost {
+  color:red;
+}
+
+.post_quota_err {
+  background-image: url("/static/images/trollface.png");
+}
+
+.post_quota_preerr {
+  background-color: #F0E0D6;
+}
+
 /* @group Add Form */
 
 div #postarea {

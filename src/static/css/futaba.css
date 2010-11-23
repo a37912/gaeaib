@@ -82,9 +82,6 @@ a:hover {
 	color:#117743;
 	font-weight:bold;
 }
-span.modpost {
-  color:red;
-}
 .postertrip {
 	color:#228854;
 }
@@ -176,13 +173,6 @@ blockquote p.unkfunc, blockquote pre {
   margin-top: 0px;
 }
 
-.post_quota_err {
-  background-image: url("/static/images/trollface.png");
-}
-
-.post_quota_preerr {
-  background-color: #F0E0D6;
-}
 
 .watcher {
   float: left;
