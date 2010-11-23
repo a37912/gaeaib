@@ -43,10 +43,9 @@ def get_threads(board, page=0, fmt_name="page"):
   return [ fmt(num,th) for num,th in data if th ]
 
 def thread_plain(num,thread):
-  content = thread.tail_posts
 
   return {
-    "posts" : content,
+    "posts" : thread.posts,
     "skip" : thread.skip,
     "subject" : thread.subject,
   }
