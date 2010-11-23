@@ -45,9 +45,6 @@ def get_threads(board, page=0, fmt_name="page"):
 def thread_plain(num,thread):
   content = thread.tail_posts
 
-  for post in content:
-    post.pop("rainbow_html")
-
   return {
     "posts" : content,
     "skip" : thread.skip,

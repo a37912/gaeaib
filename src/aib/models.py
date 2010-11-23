@@ -17,7 +17,7 @@ class Board(db.Model):
 
   @property
   def name(self):
-    return get_config("aib.boards", self.code)
+    return get_config("aib.boards", self.code, "Whoooo")
 
   @classmethod
   def load_counter(cls, board):
