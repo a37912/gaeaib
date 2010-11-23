@@ -1,55 +1,3 @@
-{%- macro rainbow(hex, id) %}
-<span class="rainbow" rainbow="{{hex}}" cid="{{id}}">
-<canvas id="rc-{{id}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas>
-</span>
-{% endmacro %}
-
-<div class="tablepost b-post {% if post.sage %}b-sage{% endif %}" id="post-{{post.post}}">
-  <div class="b-post-head">
-      <div class="b-left">
-        {# {{post.rainbow_html}} #}
-        {{ rainbow(post.rainbow, post.post) }}
-        <strong class="b-name {{post.typ}}">{{ post.name|escape }}</strong>
-        {% if post.sage %}<em>SAGE</em>{% endif %}
-        {% if post.agent %}
-        <span class="b-os">{{post.agent|escape}}</span>
-        {% endif %}
-      </div>
-      <div class="b-right">
-        <span class="b-date">{{post.time}}</span>
-        <span class="b-permalink"><a class="reflink" name="p{{post.post}}" 
-            href="/{{board}}/p{{post.post}}" postid="{{post.post}}" 
-            threadid="{{post.thread}}" 
-          >#{{post.post}}</a></span>
-      </div>
-    </div>
-    <div class="b-post-body">
-       <a class="erase-link" href="/delete/{{board}}/{{post.thread}}/{{post.post}}"
-        >{%- if post.image %}del pic{% else %}del post{%- endif %}</a>
-      <div class="b-post-body-text" postid="{{post.post}}">{{ post.text_html }}</div>
-      <div class="b-post-body-funcs"><a href="#">delete</a></div>
-      {% if post.image %}
-       <div class="b-thumb">
-       <a href="{{post.image.full}}" target="_blank"><img 
-          class="thumb" src="{{post.image.thumb}}" alt="{{post.image.content_type}}:{{ post.image.size }}"
-          /></a><br />
-       <span class="filesize">{{post.image.content_type}}:{{ post.image.size }}</span></div>
-       {% endif %}
-
-      <br clear="all"; />
-    </div>
-    <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
-    </div>
-
-<!--NPHERE-->
-{#
-
-
-
-
-
-
-
 <table id="post-{{post.post}}" class="tablepost" >
   <tbody>
     <tr>
@@ -64,7 +12,9 @@
         </a>
         <label>
           <span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span>
-          {{post.rainbow_html}}
+          <span class="rainbow" cid="{{post.post}}" rainbow="{{post.rainbow}}"></span>
+	  <canvas id="rc-{{post.post}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas> 
+
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
         {{post.time}}
@@ -92,4 +42,4 @@
   </tbody>
 </table>
 <!--POST-->
-#}
+<!--NPHERE-->

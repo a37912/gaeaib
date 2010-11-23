@@ -1,18 +1,40 @@
 <!doctype html>
 <html>
-  <head>
+  <head profile="http://gmpg.org/xfn/11">
     <title>Гайкочян: {% block title %}{% endblock %}</title>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAAdlQbR14UCdaGbl9h7-YS_RQLRbSg8g6RseZCp7-mwHyp02pSyRS8uBkl04dqhrqP_5ng5Zo3SgqNwA" type="text/javascript"></script>
     <script language="Javascript" type="text/javascript">
         //<![CDATA[
         google.load("jquery", "1.4.2");
         //]]>
     </script> -->
-    <link rel="stylesheet" href="/static/css/global.css?19.1">    
-    <!-- <link rel="stylesheet" type="text/css" href="/static/css/futaba.css?17.2" title="Futaba"> -->
+    <link rel="stylesheet" href="/static/css/global.css?17">
+    <link rel="stylesheet" type="text/css" href="/static/css/futaba.css?17.4" title="Futaba">
     {% block head %}{% endblock %}
-    <script>
+  </head>
+  <body>
+  {% block body %}
+    <div id="bodyContent">
+      <div id="topmenu">
+      [{% for board,text in boards %}<a href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
+      </div>
+      {% block precontent %}
+        <div class="logo"></div>
+        <h1>Добро пожаловать. Снова. Опять.</h1>
+      {% endblock %}
+      {% block content %}{% endblock %}
+      <div class="footer" > 
+        Winry Rokbell | 
+        <a href="/about">Statement</a> | <a href="/api">API</a> |
+        <a href="http://github.com/a37912/gaeaib/" >GAE AIB</a>
+      </div>
+      {% block scripts %}{% endblock %}
+    </div>
+    
+  {% endblock %}
+    
+  <script type="text/javascript">
     var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-18488138-1']);_gaq.push(['_trackPageview']);
     (function() {
       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -20,60 +42,6 @@
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
     </script>
-  </head>
-  <body>
-  {% block body %}
-    <div id="bodyContent">
-      <div id="topmenu">
-      {#<nav>
-      <ul id="nav">
-        <li><a href="/" class="logo"><span>Гайчан</span></a></li>
-        [{%- for boardid,text in boards %}<li><a href="/{{boardid}}/" {% if boardid==board %} class="currentboard"{% endif %}>/{{boardid}}/</a></li>{% endfor %}]
-         <li class="search_container">
-           <form class="search" method="get" action="#">
-             <label for="search"><input type="text" id="search" placeholder="Search" /></label>
-           </form>
-        </li> 
-      </ul>
-      </nav>#}
 
-      <nav>
-       <a href="/" {% if not board %}class="currentboard"{% endif %}>Гайкочан</a> | 
-       {%- for boardid,text in boards %}
-        <a href="/{{boardid}}/" {%- if boardid==board %} class="currentboard"{% endif %}>/{{boardid}}/</a>
-        {%- if not loop.last %} | {% endif %} 
-       {% endfor %}
-      </nav>
-      </div>
-      <header>
-      {% block precontent %}
-        {#<div class="logo"></div>
-        <h1>Добро пожаловать. Снова. Опять.</h1>#}
-        {% if board %}<h1><a href="/{{ board }}/">{{ board_name }}</a></h1>{% endif %}
-      {% endblock %}
-      </header>
-      <!-- BODY -->
-      {% block content %}{% endblock %}
-      <footer>  
-        <ul class="links">
-          <li><a href="/about">Statement</a></li>
-          <li><a href="/api">API</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="http://github.com/a37912/gaeaib/">Соус</a></li>
-        </ul>
-        <ul class="sosueme">
-          <li class="main">© 2010 Winry Rokbell</li>
-          <li>Гайкочан βeta </li>
-        </ul>
-        
-      </footer>
-
-
-      {% block scripts %}{% endblock %}
-    </div>
-    
-  {% endblock %}
-    
- 
   </body>
 </html>

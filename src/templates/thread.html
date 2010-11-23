@@ -1,21 +1,108 @@
 {% extends "base.html" %}
 {% block title %}{{board_name}} {% endblock %}
-
 {% block content %}
-{% if overlay %}
-<script>
-overlay = new Image();
-overlay.src = "/static/images/{{board}}.png";
-</script>
+{% if reply %}
+{% include "postform.html" %}
+{% endif %}
+{% if not threads %}
+<center><h1>Этаж еще не затоплен</h1></center>
 {% endif %}
 
-{% include "thread_internal.html" %}
+{% for thread in threads %}
 
+<div class="thread">
+  <div class="threadnum" >
+    {% if thread.subject %}
+    {{ thread.subject|escape }}
+    {% else %}
+    Тред номер {{thread.id}}
+    {% endif %}
+  </div>
+
+<div class="oppost">
+{% if thread.op.image %}
+
+<span class="filesize">{{thread.op.image.content_type}}: 
+  {{ thread.op.image.size }}</span>
+
+<span class="reflink">
+  <a class="reflink" name="p{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+    threadid="{{thread.id}}"
+  >#{{thread.op.post}}</a>
+</span>
+
+
+<br/>
+<a href="{{thread.op.image.full}}" target="_blank">
+  <img class="thumb" src="{{thread.op.image.thumb}}"/>
+</a>
+<a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
+  <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
+</a>
+{% else %}
+<a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
+  <img alt="Очистить текст" title="Очистить текст" src="/static/img/edit-clear.png">
+</a>
+{% endif %}
+
+<label>
+  <span class="postername {{thread.op.typ}}">{{ thread.op.name|escape }}</span>
+  <span class="rainbow" cid="{{thread.op.post}}" rainbow="{{thread.op.rainbow}}"></span>
+  <canvas id="rc-{{thread.op.post}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas> 
+
+  {{thread.op.time}}
+</label>
+
+{% if reply %}
+  <a class="g-button" href="{{ thread.id }}/" >Ответить</a>
+{% else %}
+
+{% if thread.op.agent %}
+<span class="agent">{{thread.op.agent|escape}}</span>
+{% endif %}
+
+<span class="reflink">
+  <a class="reflink" name="p{{thread.op.post}}" 
+    href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
+    threadid="{{thread.id}}"
+  >#{{thread.op.post}}</a>
+</span>
+
+{% endif %}
+
+<br/>
+<blockquote postid="{{thread.id}}" class="postdata">{{ thread.op.text_html }}</blockquote>
+</div>
+{% if thread.posts %}
+{% if thread.skip %}
+<span class="omittedposts">Пропущено {{ thread.skip }}</span>
+{% endif %}
+{% for post in thread.tail_posts %}
+{% include 'post.html' %}
+{% endfor %}
+{% else %}
+<!--NPHERE-->
+{% endif %}
+</div>
+
+<div style="clear: left"></div>
+<hr/>
+
+{% endfor %}
+
+{% if not reply %}
 {% include "postform.html" %}
+{% endif %}
 
-<script>
-  thread = "{{thread.id}}";
-</script>
+{% if pages %}
+Страницы:
+{% for page in pages %}
+[<a href = "{% if page %}page{{page}}{% else %}./{% endif %}">{{page}}</a>]
+{% endfor %}
+<hr/>
+{% endif %}
+
 {% include "scripts.html" %}
 
 {% endblock %}
