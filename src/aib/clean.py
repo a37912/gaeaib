@@ -47,6 +47,7 @@ class CleanThread(RequestHandler):
 
 def do_clean_thread(cursor=None):
   thq = Thread.all()
+  thq.filter("posts_count <", 5)
 
   if cursor:
     thq.with_cursor(cursor)
@@ -62,6 +63,8 @@ def do_clean_thread(cursor=None):
   if len(thread.posts) < 5: # FIXME: magic number
     db.delete(thread)
     logging.info("purged thread")
+  else:
+    assert False, "oops invalid post count"
 
   deferred.defer(do_clean_thread, thq.cursor())
 
