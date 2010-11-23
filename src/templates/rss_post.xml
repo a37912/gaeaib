@@ -1,0 +1,7 @@
+<item>
+    <title>New post in /{{board}}/{{thread}}/</title>
+    <link>"http://gaech.org/{{board}}/{{thread}}</link>
+    <guid>http://gaech.org/{{board}}/{{thread}}/{{post}}</guid>
+    <pubDate>{{cache.date_modify.strftime("%Y-%m-%dT%H:%M:%SZ")}}</pubDate>
+    <description>{{data}}</description>
+</item>

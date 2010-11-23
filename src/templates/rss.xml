@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+  <title>Thread /{{board}}/{{thread}}/</title>
+  <link>http://gaech.org/{{board}}/{{thread}}/</link>
+  <pubDate>{{cache.date_modify.strftime("%Y-%m-%dT%H:%M:%SZ")}}</pubDate>
+  {% for post in cache.posts %}
+{{ post }}
+  {% endfor %}
+</channel>
+</rss>
