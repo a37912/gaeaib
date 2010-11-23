@@ -129,8 +129,8 @@ class PostRedirect(RequestHandler):
     if not thread:
       raise NotFound()
 
-    return redirect("/%s/%d/#p%d"% 
-        (board, thread.id(), post)
+    return redirect("/%s/#p%d"% 
+        (thread.name(), post)
       )
 
 
