@@ -8,6 +8,7 @@ from tipfy import RequestHandler, Response
 from render import Render
 from models import Thread
 from mark import markup
+import rainbow
 
 def do_render_cache(cursor=None):
   thq = Thread.all()
@@ -21,19 +22,6 @@ def do_render_cache(cursor=None):
     logging.info("stop thread clean")
     return
 
-  if thread.parent_key():
-    
-    thread.board = thread.parent_key().name()
-    thread.id = thread.key().id()
-
-    _thread = Thread.create(thread.id, thread.board)
-    _thread.posts = thread.posts
-
-    thread.put()
-    _thread.delete()
-
-    thread = _thread
-
   board = thread.board
   render = Render(board=board, thread = thread.id)
 
@@ -43,6 +31,9 @@ def do_render_cache(cursor=None):
             board=board, postid=post.get("post"),
             data=escape(post.get('text', '')),
       )
+      if 'rainbow_html' in post:
+        post.pop("rainbow_html")
+        post['rainbow'] = rainbow.make_rainbow(post['rainbow'])
 
     if 'image' in post and not post.get("key"):
       post.pop("image")
