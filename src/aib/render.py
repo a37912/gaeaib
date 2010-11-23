@@ -31,6 +31,7 @@ class Render(object):
     self.cache = Cache.create("thread", self.board, self.thread)
     self.cache.data = render_template("thread.html", 
         thread = data,
+	threads = [data],
         board = self.board,
         board_name = NAMES.get(self.board) or get_config("aib",
           "default_name"),
@@ -59,7 +60,7 @@ class Render(object):
           board = self.board,
           thread = self.thread,
           refpost = post.get("post"),
-          rainbow = post.get("rainbow_html")
+          rainbow = post.get("rainbow")
       )
 
     for ref in refs[:self.MAXREFS]:
