@@ -31,6 +31,10 @@ R. I. P.
 
 
 <center>
-  <img src="/static/img/gadg1.jpg" alt="gadg" />
+  <img id="gadg" src="/static/img/gadg1.jpg" alt="gadg" />
 </center>
+<script type="text/javascript">
+  var gimg = document.getElementById("gadg");
+  gimg.setAttribute("src", "/static/img/gadg" + (Math.floor(Math.random()*2)+1) + ".jpg");
+</script>
 {% endblock %}
