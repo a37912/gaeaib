@@ -18,7 +18,13 @@ def add(board, thread, post, data):
    )
    # FIXME: cant save long posts (>500)
    if len(rendered) > 500:
-     rendered = u"too long"
+     rendered = render_template("rss_post.xml", 
+          board = board,
+          thread = thread,
+          data = "too long",
+          post = post,
+          cache = cache,
+     )
 
    cache.posts.append(rendered)
    cache.posts = cache.posts[-20:]
