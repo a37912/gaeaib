@@ -1,8 +1,18 @@
 {% extends "base.html" %}
 {% block title %}index{% endblock %}
 {% block content %}
-<h2>Привет, дорогой рак! Заходи, у нас уютненько</h2>
-<pre style="float:right">
+<h2>Разговоры неизвестных</h2>
+<div style="float: left">
+
+<hr/>
+{% for code, board  in boards %}
+<a href="/{{code}}/">/{{code}}/</a> - {{board}}<br/>
+{% endfor %}
+
+<hr/>
+Про борду: <a href="/about">statement</a>
+</div>
+<pre style="float: right">
 Двач. Комната. Один. Хуёво.
 Очередной ебланский тред.
 Добро пожаловать, блядь!
@@ -19,11 +29,7 @@ R. I. P.
 2006 — 2009
 </pre>
 
-<div>
-Немного про борду: <a href="/about">statement</a>
-</div>
 
-<a href="/b/">Раковать?</a>
 <center>
   <img src="/static/img/gadg1.jpg" alt="gadg" />
 </center>
