@@ -18,7 +18,7 @@ def add(board, thread, post, data):
    )
    # FIXME: cant save long posts (>500)
    if len(rendered) > 500:
-     rendered = "too long"
+     rendered = u"too long"
 
    cache.posts.append(rendered)
    cache.posts = cache.posts[-20:]
