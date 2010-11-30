@@ -116,12 +116,17 @@ $(document).ready(function() {
     np.css("top",  e.pageY+"px");
     np.find(".doubledash").remove();
 
+    np.find("canvas").attr("id", "rc-"+post+"-preview");
+    np.find("span.rainbow").attr("cid", post+"-preview");
+
+
+
     console.log("show");
 
     $('body').append(np);
+    setup_post(np);
     console.log("show!");
 
-    console.log(np.show);
     //np.slideUp(0).slideDown(500);
     var _x ;
     if( (e.pageX + np.width()) > $(window).width()) {
