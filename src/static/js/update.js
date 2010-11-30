@@ -45,6 +45,7 @@ function listen_updates(token) {
 
       var np = $(o.html);
       container.append(np);
+      setup_post(np);
 
       if(notify) {
         thread_name = "/" + _board + "/" + thread;

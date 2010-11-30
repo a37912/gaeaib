@@ -36,6 +36,46 @@ function DrawRainbow(colors, elementId, face){
   }
 }
 
+rainbow_draw_span = function() 
+{
+
+  var rainbow = $(this).attr("rainbow");
+  var canvas_id = $(this).attr("cid");
+  var hex = [];
+  for(i=0;i<rainbow.length;i=i+3){
+    hex.push("#"+rainbow.substring(i,i+3));
+  }
+  if (typeof overlay=="undefined"){ //XXX: global variable, yes its should be fixed 
+    DrawRainbow(hex, "rc-"+canvas_id);
+  } else {
+    DrawRainbow(hex, "rc-"+canvas_id, overlay || null);
+  }
+}
+set_postref_preview =function() {
+  console.log("set reflink")
+  var postid = $(this).attr("postid");
+
+  $(this).mouseover( function(e) {handle_preview(postid, e)} );
+
+}
+set_reflink_handler = function() {
+  $(this).click( function(e) {
+    var postid = $(this).attr("postid");
+
+    insertlink(postid);
+
+    if (!_reply) {
+      e.preventDefault();
+    }
+
+  });
+}
+
+setup_post = function(ct) {
+  ct.find("a.postref").each(set_postref_preview);
+  ct.find("span.rainbow").each(rainbow_draw_span); 
+  ct.find("a.reflink").each(set_reflink_handler);
+}
 
 $(document).ready(function() {
 
@@ -64,20 +104,6 @@ $(document).ready(function() {
     var postnum = loc.substring(dash+2,loc.length);
     insertlink(postnum);
   }
-  $("a.reflink").each(
-    function() {
-      $(this).click( function(e) {
-        var postid = $(this).attr("postid");
-
-        insertlink(postid);
-
-        if (!_reply) {
-          e.preventDefault();
-        }
-
-      });
-    }
-  ); // each
  
   show_preview = function(np, post, e) {
 
@@ -183,29 +209,6 @@ $(document).ready(function() {
         );
 
         }
-  $("a.postref").each(
-    function() {
-      var postid = $(this).attr("postid");
-
-      $(this).mouseover( function(e) {handle_preview(postid, e)} );
-
-    }
-  );
-  $("span.rainbow").each(
-    function() {
-      var rainbow = $(this).attr("rainbow");
-      var canvas_id = $(this).attr("cid");
-      var hex = [];
-      for(i=0;i<rainbow.length;i=i+3){
-        hex.push("#"+rainbow.substring(i,i+3));
-      }
-      if (typeof overlay=="undefined"){ //XXX: global variable, yes its should be fixed 
-        DrawRainbow(hex, "rc-"+canvas_id);
-      } else {
-        DrawRainbow(hex, "rc-"+canvas_id, overlay);
-      }
-    }
-  );
- 
+  setup_post($("body"));
 }); // end doc ready
 
