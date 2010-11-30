@@ -119,6 +119,9 @@ $(document).ready(function() {
     np.find("canvas").attr("id", "rc-"+post+"-preview");
     np.find("span.rainbow").attr("cid", post+"-preview");
 
+    np.find(".post-replies canvas").attr("id", "rc-"+post+"r-preview");
+    np.find(".post-replies span.rainbow").attr("cid", post+"r-preview");
+
 
 
     console.log("show");
