@@ -271,3 +271,20 @@ z-index: 2999;
 .watcher {
 display: none;
 }
+
+div.imgwrap:target img.thumb { 
+  display: none 
+}
+div.imgwrap:target {
+  position: absolute;
+  left: 5px;
+}
+div.imgwrap:target a.close {
+  margin-top: 25px;
+}
+div.imgwrap a.close {
+  display: none;
+}
+div.imgwrap:target a.close {
+  display: inline !important;
+}

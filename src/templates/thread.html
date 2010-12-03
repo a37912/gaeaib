@@ -24,9 +24,11 @@
 
 <div class="oppost">
 {% if thread.op.image %}
-
-<span class="filesize">{{thread.op.image.content_type}}: 
-  {{ thread.op.image.size }}</span>
+<span class="filesize">
+  <a href="{{thread.op.image.full}}"
+      target="_blank">{{thread.op.image.content_type}}</a>: 
+  {{ thread.op.image.size }}
+</span>
 
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
@@ -37,9 +39,18 @@
 
 
 <br/>
-<a href="{{thread.op.image.full}}" target="_blank">
-  <img class="thumb" src="{{thread.op.image.thumb}}"/>
-</a>
+<div class="imgwrap" id="img{{thread.op.post}}">
+  <style>
+    div#img{{thread.op.post}} a.close {
+      content: url({{thread.op.image.full}});
+    }
+  </style>
+  <a class="close" href="#"></a>
+  <a href="#img{{thread.op.post}}">
+    <img class="thumb" src="{{thread.op.image.thumb}}"/>
+  </a>
+</div>
+
 <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
   <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">
 </a>

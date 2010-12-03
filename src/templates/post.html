@@ -28,12 +28,24 @@
           >#{{post.post}}</a>
         </span>
         {% if post.image %}
-  <span class="filesize">{{post.image.content_type}}: 
-  {{ post.image.size }}</span>
+        <span class="filesize">
+          <a href="{{post.image.full}}"
+            target="_blank">{{post.image.content_type}}</a>: 
+          {{ post.image.size }}
+        </span>
         <br/>
-<a href="{{post.image.full}}" target="_blank">
-  <img class="thumb" src="{{post.image.thumb}}"/>
-</a>
+        <div class="imgwrap" id="img{{post.post}}">
+          <style>
+            div#img{{post.post}} a.close {
+              content: url({{post.image.full}});
+            }
+          </style>
+          <a class="close" href="#p{{post.post}}"></a>
+          {# <a href="post.image.full" target="_blank">view</a> #}
+          <a href="#img{{post.post}}">
+            <img class="thumb" src="{{post.image.thumb}}"/>
+          </a>
+        </div>
         {% endif %}
         <blockquote class="postdata" postid="{{post.post}}">{{ post.text_html }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>
