@@ -26,7 +26,6 @@ function DrawRainbow(colors, elementId, face){
     // canvas-unsupported code here
     //
     //
-    alert(1);
     var oldrainbow = '';
     for(var j=0;j<5;j++){
       oldrainbow += "<span style='background: none repeat scroll"+ 
