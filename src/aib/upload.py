@@ -19,9 +19,8 @@ class PostImage(RequestHandler, BlobstoreUploadMixin):
 
     info = blobstore.BlobInfo.get(blobstore.BlobKey(img))
 
-    if 'image/' not in info.content_type:
-      info.delete()
-      return Response('{"err": "not image"}')
+    if not info:
+      return Response('{"err": "no image"}')
 
     return Response( '{"img":"%s"}' % img )
 
@@ -30,6 +29,14 @@ class PostImage(RequestHandler, BlobstoreUploadMixin):
     blob_info = upload_files[0]
 
     key = str(blob_info.key())
+
+    image = images.Image(blob_key=key)
+    image.im_feeling_lucky()
+
+    try:
+      image.execute_transforms()
+    except (images.BadImageError, images.NotImageError):
+      blob_info.delete()
 
     return Response(
       status = 302,
