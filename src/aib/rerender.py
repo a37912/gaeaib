@@ -51,7 +51,7 @@ def do_render_cache(cursor=None):
 
   render.save()
 
-  deferred.defer(do_render_cache, thq.cursor())
+  deferred.defer(do_render_cache, thq.cursor(), _queue="render")
 
 
 class RenderCache(RequestHandler):
