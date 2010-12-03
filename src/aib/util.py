@@ -137,7 +137,7 @@ def save_post(request, data, board, thread):
   
   data['text_html'] = markup(
         board=board, postid=board_db.counter,
-        data=escape(data.get('text', '')),
+        data=escape(data.get('text')),
   )
 
   # save thread and post number
@@ -205,7 +205,11 @@ def watchers_post_notify(board, thread, html, count, last):
 
 def watchers_send(watchers, key, data):
   for wtime,person in watchers:
-    channel.send_message(person+key, dumps(data))
+    try:
+      channel.send_message(person+key, dumps(data))
+    except channel.Error:
+      pass
+
 
 WATCHERS_MAX = get_config('aib.util', 'watches_max')
 WATCHER_TIME = get_config('aib.util', 'watch_time')
@@ -285,7 +289,9 @@ def delete_post(board, thread_num, post_num, rape_msg):
     post.pop("image", None)
     info = blobstore.BlobInfo.get(
       blobstore.BlobKey(key))
-    info.delete()
+
+    if info:
+      info.delete()
     
     try:
       th.images.remove(post.get("key"))

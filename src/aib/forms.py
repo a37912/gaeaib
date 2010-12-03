@@ -29,7 +29,7 @@ class PostForm(Form):
 
   name = TextField(validators=[fixempty], default="Anonymous")
   sage = BooleanField()
-  text = TextField(validators=[spam])
+  text = TextField(validators=[spam], default="")
   key = TextField()
   subject = TextField()
 
