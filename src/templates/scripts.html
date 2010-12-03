@@ -2,7 +2,7 @@
 <script>
 _reply = {% if reply %}true{% else %}false{% endif %};
 _board = "{{board}}";
-thread = "{{thread}}";
+thread = "{{thread.id if thread else ""}}";
 
 try{
   console
@@ -16,7 +16,7 @@ if (console == undefined) {
 </script>
 <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/static/js/ajaxfileupload.js?2"></script>
-<script type="text/javascript" src="/static/js/thread.js?19.2"></script>
+<script type="text/javascript" src="/static/js/thread.js?19.3"></script>
 <script type="text/javascript" src="/static/js/uploader.js?18.1"></script>
 <script type="text/javascript" src="/static/js/winry.js?2"></script>
 <script src='/_ah/channel/jsapi'></script>
