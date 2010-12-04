@@ -26,7 +26,7 @@
 {% if thread.op.image %}
 <span class="filesize">
   <a href="{{thread.op.image.full}}"
-      target="_blank">{{thread.op.image.content_type}}</a>: 
+      target="_blank">{{thread.op.image.content_type|escape}}</a>: 
   {{ thread.op.image.size }}
 </span>
 
@@ -41,11 +41,16 @@
 <br/>
 <div class="imgwrap" id="img{{thread.op.post}}">
   <style>
-    div#img{{thread.op.post}} a.close span:before {
-      content: url({{thread.op.image.full}});
+    div#img{{thread.op.post}} .close span:before {
+      content: url({{thread.op.image.full}}=s800);
     }
   </style>
-  <a class="close" href="#"><span/></a>
+  
+  <div class="overlay"></div>
+  <div class="close">
+    <a href="#"><span/></a>
+  </div>
+
   <a href="#img{{thread.op.post}}">
     <img class="thumb" src="{{thread.op.image.thumb}}"/>
   </a>

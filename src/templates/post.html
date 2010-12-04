@@ -30,17 +30,20 @@
         {% if post.image %}
         <span class="filesize">
           <a href="{{post.image.full}}"
-            target="_blank">{{post.image.content_type}}</a>: 
+            target="_blank">{{post.image.content_type|escape}}</a>: 
           {{ post.image.size }}
         </span>
         <br/>
         <div class="imgwrap" id="img{{post.post}}">
           <style>
-            div#img{{post.post}} a.close span:before {
-              content: url({{post.image.full}});
+            div#img{{post.post}} div.close span:before {
+              content: url({{post.image.full}}=s800);
             }
           </style>
-          <a class="close" href="#p{{post.post}}"><span/></a>
+          <div class="overlay"></div>
+          <div class="close">
+            <a href="#p{{post.post}}"><span/></a>
+          </div>
           {# <a href="post.image.full" target="_blank">view</a> #}
           <a href="#img{{post.post}}">
             <img class="thumb" src="{{post.image.thumb}}"/>

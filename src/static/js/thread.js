@@ -217,5 +217,8 @@ $(document).ready(function() {
 
         }
   setup_post($("body"));
+
+  boxfix = "<style>div.imgwrap:target div.close {width: " + $(window).width() + "px !important}</style>"
+  $("body").append($(boxfix))
 }); // end doc ready
 

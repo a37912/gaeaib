@@ -278,15 +278,22 @@ div.imgwrap:target img.thumb {
 div.imgwrap:target {
   position: absolute;
   left: 5px;
+  overflow: visible;
 }
-div.imgwrap:target a.close {
-  margin-top: 25px;
+div.imgwrap:target div.close {
+  top: 0px;
+  left: 0px;
+  z-index: 110;
+  display: block;
+  position: fixed;
+  text-align: center;
+  width: 900px;
 }
-div.imgwrap a.close {
+div.imgwrap .close {
   display: none;
 }
-div.imgwrap:target a.close {
-  display: inline !important;
+div.imgwrap:target .close {
+  display: block !important;
 }
 
 div#controls {
@@ -311,5 +318,21 @@ div#controls:hover div.links {
 }
 
 div#controls:hover span#show {
+  display: none;
+}
+
+div.imgwrap:target div.overlay {
+  display: block !important;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  width: 2000px;
+  height: 1000px;
+  background-color: black;
+  z-index: 90;
+  opacity: 0.8;
+}
+
+div.overlay {
   display: none;
 }

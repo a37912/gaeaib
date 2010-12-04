@@ -1,11 +1,15 @@
 {%- macro op_image(image, post) -%}
 <div class="imgwrap" id="img{{post}}">
   <style>
-    div#img{{post}} a.close span:before {
-      content: url({{image.full}});
+    div#img{{post}} .close span:before {
+      content: url({{image.full}}=s800);
     }
   </style>
-  <a class="close" href="#p{{post}}"><span/></a>
+  <div class="overlay"></div>
+  <div class="close">
+    <a href="#p{{post}}"><span/></a>
+  </div>
+
   <a href="#img{{post}}">
     <img class="thumb" src="{{image.thumb}}"/>
   </a>
@@ -22,7 +26,7 @@
   {% if thread.op.image %}
   <span class="filesize">
     <a href="{{thread.op.image.full}}"
-        target="_blank">{{thread.op.image.content_type}}</a>: 
+        target="_blank">{{thread.op.image.content_type|escape}}</a>: 
     {{ thread.op.image.size }}
   </span>
 
