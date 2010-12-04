@@ -47,3 +47,6 @@ admin_console:
     
 #error_handlers:
 #  - file: static/404.html
+
+inbound_services:
+- warmup
