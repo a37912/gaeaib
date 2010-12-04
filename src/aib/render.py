@@ -8,6 +8,8 @@ NAMES = dict(get_config("aib", "boardlist"))
 
 class Render(object):
   MAXREFS = 5
+  OVER = get_config("aib", "overlay")
+
   def __init__(self, board, thread):
     self.board = board
     self.thread = thread
@@ -36,6 +38,7 @@ class Render(object):
         board_name = NAMES.get(self.board) or get_config("aib",
           "default_name"),
         boards = get_config("aib", "boardlist"), # context?
+        overlay = self.OVER,
     )
 
   def add(self,post,new=False):

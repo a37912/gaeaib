@@ -13,6 +13,10 @@ if (console == undefined) {
   console = new Object();
   console.log = function(msg) { msg }
 }
+
+overlay = new Image();
+overlay.src = "/static/images/{{board}}.png";
+
 </script>
 <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/static/js/ajaxfileupload.js?2"></script>
