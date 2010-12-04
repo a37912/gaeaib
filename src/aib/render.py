@@ -38,7 +38,7 @@ class Render(object):
         board_name = NAMES.get(self.board) or get_config("aib",
           "default_name"),
         boards = get_config("aib", "boardlist"), # context?
-        overlay = self.OVER,
+        overlay = self.board in self.OVER,
     )
 
   def add(self,post,new=False):

@@ -81,6 +81,34 @@ class ApiBoardList(RequestHandler):
         ]
     )
 
+class ApiBoardBumped(RequestHandler):
+  DEF_COUNT = 5
+  BOARDS = dict(get_config("aib", "boardlist"))
+  def load(self, lim=None):
+    boardq = Board.all(keys_only=True)
+    boardq.order("-date_modify")
+    boardq.filter("old", True)
+
+    if not lim:
+      lim = self.DEF_COUNT
+
+    return [
+          k.name() 
+          for k in boardq.fetch(lim)
+          if k.name() not in self.BOARDS
+        ]
+  def get(self, lim=None):
+
+    blist = memcache.get("bumplist")
+
+    if not blist:
+      blist = self.load(lim)
+      memcache.set("bumplist", blist, time=60*5)
+
+    return Response(
+        "boardbump = %s" % dumps(blist),
+        content_type="text/javascript",
+    )
 
 class Delete(RequestHandler):
   def post(self, board, thread, post):

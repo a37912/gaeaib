@@ -8,8 +8,15 @@ from aetycoon import DerivedProperty, CompressedProperty, TransformProperty
 from jinja2.utils import escape
 
 class Board(db.Model):
+  OLD_LIM = 50
+
   thread = db.ListProperty(int)
   counter = db.IntegerProperty(default=0)
+  date_modify = db.DateTimeProperty(auto_now=True)
+
+  @DerivedProperty
+  def old(self):
+    return self.counter > self.OLD_LIM
 
   @property
   def code(self):

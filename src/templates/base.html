@@ -17,7 +17,7 @@
   {% block body %}
     <div id="bodyContent">
       <div id="topmenu">
-      [{% for board,text in boards %}<a href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
+        [{% for board,text in boards %}<a title="{{text}}" href="/{{board}}/">/{{board}}/</a> | {% endfor %}]
       </div>
       {% block precontent %}
         <div class="logo"></div>

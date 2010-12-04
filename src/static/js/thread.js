@@ -220,5 +220,21 @@ $(document).ready(function() {
 
   boxfix = "<style>div.imgwrap:target div.close {width: " + $(window).width() + "px !important}</style>"
   $("body").append($(boxfix))
+
+  if(typeof(boardbump) != "undefined") {
+    for(boardcode in boardbump) {
+      boardcode = boardbump[boardcode];
+      var blink = $("<a></a>");
+      var name =  "/" + boardcode;
+      blink.attr("href", name+"/");
+      blink.text(name.substr(0, 4)+"/");
+      console.log("name " + name)
+      console.log("code " + boardcode)
+
+      $("#topmenu a").last().after("<b> | </b>")
+      $("#topmenu b").last().after(blink)
+    }
+  }
+
 }); // end doc ready
 

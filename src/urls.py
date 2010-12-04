@@ -3,6 +3,10 @@ from tipfy import Rule
 
 def get_rules():
   return [
+    Rule(
+      "/_ah/warmup",
+      handler="warmup.Do"
+    ),
     Rule( 
       "/", 
       endpoint="index", 
@@ -116,7 +120,10 @@ def get_rules():
       endpoint = "api:boardlist",
       handler = "aib.api.ApiBoardList",
     ),
-
+    Rule(
+      "/api/boardbump",
+      handler = "aib.api.ApiBoardBumped",
+    ),
     Rule(
       "/api/post/<board>/<int:num>",
       endpoint = "api:post",  
