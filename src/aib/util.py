@@ -188,7 +188,7 @@ def save_post(request, data, board, thread):
   return board_db.counter, thread
 
 def watchers_post_notify(board, thread, html, count, last):
-  key = "updatetime-thread-%s-%d" % (board, thread)
+  key = "upt-%s-%d" % (board, thread)
   send = { 
       "html" : html, 
       "evt" : "newpost" ,

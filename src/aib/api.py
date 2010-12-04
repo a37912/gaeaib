@@ -130,7 +130,7 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   def post(self, board, thread):
     # FIXME: move subscribe crap somewhere out
 
-    key = "updatetime-thread-%s-%d" % (board, thread)
+    key = "upt-%s-%d" % (board, thread)
     person_cookie = self.get_secure_cookie("person", True)
     person = person_cookie.get("update", str(uuid()))
 
