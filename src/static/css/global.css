@@ -288,3 +288,28 @@ div.imgwrap a.close {
 div.imgwrap:target a.close {
   display: inline !important;
 }
+
+div#controls {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 4px 2px;
+  border-bottom: dotted 1px red;
+  border-left: dotted 1px red;
+}
+
+div#controls div.links {
+  display: none;
+}
+
+div#controls:hover {
+  border: none;
+}
+
+div#controls:hover div.links {
+  display: block !important;
+}
+
+div#controls:hover span#show {
+  display: none;
+}
