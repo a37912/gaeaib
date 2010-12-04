@@ -12,6 +12,13 @@ indexes:
 
 - kind: Board
   properties:
+  - name: named
+  - name: old
+  - name: date_modify
+    direction: desc
+
+- kind: Board
+  properties:
   - name: old
   - name: date_modify
     direction: desc

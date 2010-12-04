@@ -14,9 +14,15 @@ class Board(db.Model):
   counter = db.IntegerProperty(default=0)
   date_modify = db.DateTimeProperty(auto_now=True)
 
+  NAMES = dict(get_config("aib", "boardlist"))
+
   @DerivedProperty
   def old(self):
     return self.counter > self.OLD_LIM
+
+  @DerivedProperty
+  def named(self):
+    return self.code in self.NAMES
 
   @property
   def code(self):
@@ -24,7 +30,7 @@ class Board(db.Model):
 
   @property
   def name(self):
-    return get_config("aib.boards", self.code, "Whoooo")
+    return self.NAMES.get(self.code)
 
   @classmethod
   def load_counter(cls, board):

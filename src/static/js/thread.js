@@ -231,7 +231,9 @@ $(document).ready(function() {
       console.log("name " + name)
       console.log("code " + boardcode)
 
-      $("#topmenu a").last().after("<b> | </b>")
+      var menulen = $("#topmenu a").length
+
+      $("#topmenu a").slice(-2,-1).after("<b> | </b>")
       $("#topmenu b").last().after(blink)
     }
   }

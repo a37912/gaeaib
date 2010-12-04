@@ -88,6 +88,7 @@ class ApiBoardBumped(RequestHandler):
     boardq = Board.all(keys_only=True)
     boardq.order("-date_modify")
     boardq.filter("old", True)
+    boardq.filter("named", False)
 
     if not lim:
       lim = self.DEF_COUNT
@@ -95,8 +96,7 @@ class ApiBoardBumped(RequestHandler):
     return [
           k.name() 
           for k in boardq.fetch(lim)
-          if k.name() not in self.BOARDS
-        ]
+    ]
   def get(self, lim=None):
 
     blist = memcache.get("bumplist")
