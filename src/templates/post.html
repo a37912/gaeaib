@@ -36,11 +36,11 @@
         <br/>
         <div class="imgwrap" id="img{{post.post}}">
           <style>
-            div#img{{post.post}} a.close {
+            div#img{{post.post}} a.close span:before {
               content: url({{post.image.full}});
             }
           </style>
-          <a class="close" href="#p{{post.post}}"></a>
+          <a class="close" href="#p{{post.post}}"><span/></a>
           {# <a href="post.image.full" target="_blank">view</a> #}
           <a href="#img{{post.post}}">
             <img class="thumb" src="{{post.image.thumb}}"/>

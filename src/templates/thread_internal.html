@@ -1,5 +1,15 @@
-{%- macro op_image(image) -%}
-<a href="{{image.full}}" target="_blank"><img class="thumb" src="{{image.thumb}}"/></a>
+{%- macro op_image(image, post) -%}
+<div class="imgwrap" id="img{{post}}">
+  <style>
+    div#img{{post}} a.close span:before {
+      content: url({{image.full}});
+    }
+  </style>
+  <a class="close" href="#p{{post}}"><span/></a>
+  <a href="#img{{post}}">
+    <img class="thumb" src="{{image.thumb}}"/>
+  </a>
+</div>
 {%- endmacro -%}
 <div class="thread">
   <div class="threadnum" >
@@ -10,7 +20,11 @@
 
   <div class="oppost">
   {% if thread.op.image %}
-  <span class="filesize">{{thread.op.image.content_type}}: {{ thread.op.image.size }}</span>
+  <span class="filesize">
+    <a href="{{thread.op.image.full}}"
+        target="_blank">{{thread.op.image.content_type}}</a>: 
+    {{ thread.op.image.size }}
+  </span>
 
   <span class="reflink">
     <a class="reflink" name="p{{thread.op.post}}" href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
@@ -18,7 +32,7 @@
     >#{{thread.op.post}}</a>
   </span>
   <br/>
-  {{ op_image(thread.op.image) }}
+  {{ op_image(thread.op.image, thread.op.post) }}
   <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}"><img 
     alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png" /></a>
   {% else %}
