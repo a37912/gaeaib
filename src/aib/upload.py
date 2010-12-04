@@ -47,7 +47,7 @@ class ViewImage(RequestHandler, BlobstoreDownloadMixin):
   def get(self, img):
     key = blobstore.BlobKey(img)
 
-    url = images.get_serving_url(img, 48)
+    url = images.get_serving_url(img, 288)
     url = url.replace("0.0.0.0", self.request.host.split(":")[0])
 
     return Response(
