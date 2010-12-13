@@ -17,20 +17,8 @@ indexes:
   - name: date_modify
     direction: desc
 
-- kind: Board
-  properties:
-  - name: old
-  - name: date_modify
-    direction: desc
-
 - kind: Thread
   properties:
   - name: board
-  - name: __key__
-    direction: desc
-
-- kind: Thread
-  ancestor: yes
-  properties:
   - name: __key__
     direction: desc
