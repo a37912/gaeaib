@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import 'postmacro.html' as postmacro %}
 {% block title %}{{board_name}} {% endblock %}
 {% block head %}
 <link rel="alternate" type="application/rss+xml" href="rss" />
@@ -24,12 +25,7 @@
 
 <div class="oppost">
 {% if thread.op.image %}
-<span class="filesize">
-  <a href="{{thread.op.image.full}}"
-      target="_blank">{{thread.op.image.content_type|escape}}</a>: 
-  {{ thread.op.image.size }}
-</span>
-
+{{ postmacro.imagesize(thread.op.image) }}
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
     href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
@@ -39,22 +35,7 @@
 
 
 <br/>
-<div class="imgwrap" id="img{{thread.op.post}}">
-  <style>
-    div#img{{thread.op.post}} .close span:before {
-      content: url({{thread.op.image.full}}=s800);
-    }
-  </style>
-  
-  <div class="overlay"></div>
-  <div class="close">
-    <a href="#"><span/></a>
-  </div>
-
-  <a href="#img{{thread.op.post}}">
-    <img class="thumb" src="{{thread.op.image.thumb}}"/>
-  </a>
-</div>
+{{ postmacro.imagecode(thread.op.image, thread.op.post) }}
 
 <a class="erase-link" href="/delete/{{board}}/{{thread.id}}/{{thread.id}}">
   <img alt="Очистить картинку" title="Очистить картинку" src="/static/img/edit-clear.png">

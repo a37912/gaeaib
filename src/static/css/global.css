@@ -272,30 +272,6 @@ z-index: 2999;
 display: none;
 }
 
-div.imgwrap:target img.thumb { 
-  display: none 
-}
-div.imgwrap:target {
-  position: absolute;
-  left: 5px;
-  overflow: visible;
-}
-div.imgwrap:target div.close {
-  top: 0px;
-  left: 0px;
-  z-index: 110;
-  display: block;
-  position: fixed;
-  text-align: center;
-  width: 900px;
-}
-div.imgwrap .close {
-  display: none;
-}
-div.imgwrap:target .close {
-  display: block !important;
-}
-
 div#controls {
   position: absolute;
   top: 0px;
@@ -321,18 +297,3 @@ div#controls:hover span#show {
   display: none;
 }
 
-div.imgwrap:target div.overlay {
-  display: block !important;
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  width: 2000px;
-  height: 1000px;
-  background-color: black;
-  z-index: 90;
-  opacity: 0.8;
-}
-
-div.overlay {
-  display: none;
-}

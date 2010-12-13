@@ -74,6 +74,13 @@ setup_post = function(ct) {
   ct.find("a.postref").each(set_postref_preview);
   ct.find("span.rainbow").each(rainbow_draw_span); 
   ct.find("a.reflink").each(set_reflink_handler);
+  ct.find("a.fullimg").prettyPhoto(
+      {
+        theme:'dark_rounded',
+        overlay_gallery: false,
+
+      }
+  );
 }
 
 $(document).ready(function() {
@@ -217,9 +224,6 @@ $(document).ready(function() {
 
         }
   setup_post($("body"));
-
-  boxfix = "<style>div.imgwrap:target div.close {width: " + $(window).width() + "px !important}</style>"
-  $("body").append($(boxfix))
 
   if(typeof(boardbump) != "undefined") {
     for(boardcode in boardbump) {

@@ -1,3 +1,4 @@
+{% import 'postmacro.html' as postmacro %}
 <table id="post-{{post.post}}" class="tablepost" >
   <tbody>
     <tr>
@@ -28,27 +29,9 @@
           >#{{post.post}}</a>
         </span>
         {% if post.image %}
-        <span class="filesize">
-          <a href="{{post.image.full}}"
-            target="_blank">{{post.image.content_type|escape}}</a>: 
-          {{ post.image.size }}
-        </span>
+        {{ postmacro.imagesize(post.image) }}
         <br/>
-        <div class="imgwrap" id="img{{post.post}}">
-          <style>
-            div#img{{post.post}} div.close span:before {
-              content: url({{post.image.full}}=s800);
-            }
-          </style>
-          <div class="overlay"></div>
-          <div class="close">
-            <a href="#p{{post.post}}"><span/></a>
-          </div>
-          {# <a href="post.image.full" target="_blank">view</a> #}
-          <a href="#img{{post.post}}">
-            <img class="thumb" src="{{post.image.thumb}}"/>
-          </a>
-        </div>
+        {{ postmacro.imagecode(post.image, post.post) }}
         {% endif %}
         <blockquote class="postdata" postid="{{post.post}}">{{ post.text_html }}</blockquote>
         <div class="post-replies" id="post-replies-{{post.post}}"><!--REF-{{post.post}}--></div>

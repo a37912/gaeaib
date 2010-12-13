@@ -136,9 +136,13 @@ span.modpost {
   background-color: #F0E0D6 !important;
   -moz-box-shadow: 0 0 8px #999999;
   -webkit-transition-property: opacity, -webkit-box-shadow:;
-  -webkit-transition-duration: 0.5s, 2s;
+  -webkit-transition-duration: 0.2s, 0.2s;
   opacity: 0;
   max-width: 60%;
+  border: dotted white 2px;
+  -moz-border-radius: 9px 9px 9px 9px;
+  border-radius: 9px 9px 9px 9px;
+
 }
 
 span.spoiler, span.spoiler a {
