@@ -1,0 +1,21 @@
+{% macro imagesize(image) -%}
+<span class="filesize">
+  <a href="{{image.full}}"
+      target="_blank">{{image.content_type|escape}}</a>: 
+  {{ image.size }}
+</span>
+{%- endmacro %}
+
+{% macro imagecode(image, post) -%}
+<a href="{{image.full}}" rel="prettyPhoto[posts]" img="{{post}}" class="fullimg">
+  <img class="thumb" src="{{image.thumb}}"/>
+</a>
+{%- endmacro %}
+
+{% macro tsubj(thread) -%}
+  {% if thread.subject %}
+  {{ thread.subject|escape }}
+  {% else %}
+  Тред номер {{thread.id}}
+  {% endif %}
+{%- endmacro %}
