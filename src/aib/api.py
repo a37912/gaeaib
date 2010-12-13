@@ -134,10 +134,6 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
     person_cookie = self.get_secure_cookie("person", True)
     person = person_cookie.get("update", str(uuid()))
 
-    # FIXME: tt sucks, temporary workarround
-    while len(person+key) % 4:
-      person += '='
-
     person_cookie['update'] = person
 
     watchers = memcache.get(key) or []
@@ -150,6 +146,7 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
     token = memcache.get(person+key)
 
     if not token:
+      logging.debug("cr: %r + %r" % (person, key))
       token = channel.create_channel(person+key)
       memcache.set(person+key, token)
 
