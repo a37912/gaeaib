@@ -10,7 +10,7 @@ from jinja2.utils import escape
 class Board(db.Model):
   OLD_LIM = 50
 
-  thread = db.ListProperty(int)
+  thread = db.ListProperty(int, indexed=False)
   counter = db.IntegerProperty(default=0)
   date_modify = db.DateTimeProperty(auto_now=True)
 
@@ -48,26 +48,34 @@ class Board(db.Model):
 
     return ent.thread if ent else None
 
-class Thread(db.Model):
-
-  REPLIES_MAIN = get_config("aib.ib", 'replies_main')
-  posts = PickleProperty()
-  posts_count = TransformProperty(posts, len)
-  
-
+class ThreadIndex(db.Model):
   @DerivedProperty
   def images(self):
     return [
         p.get("key") 
-        for p in self.posts 
+        for p in self.parent().posts 
         if p.get('key')
     ] 
 
   @DerivedProperty
   def post_numbers(self):
-    return [p.get("post") for p in self.posts]
+    return [p.get("post") for p in self.parent().posts]
 
-  subject = db.StringProperty()
+  @DerivedProperty
+  def post_count(self):
+    return len(self.parent().posts)
+
+  @DerivedProperty
+  def board(self):
+    return self.parent().board
+
+
+class Thread(db.Model):
+
+  REPLIES_MAIN = get_config("aib.ib", 'replies_main')
+  posts = PickleProperty()
+
+  subject = db.StringProperty(indexed=False)
   board = db.StringProperty()
   id = db.IntegerProperty()
 

@@ -118,9 +118,8 @@ class Thread(RequestHandler):
 
 class PostRedirect(RequestHandler):
   def get(self, board, post):
-    post_data = get_post(board, post)
 
-    thq = models.Thread.all(keys_only=True)
+    thq = models.ThreadIndex.all(keys_only=True)
     thq.filter("board", board)
     thq.filter("post_numbers", post)
 
@@ -130,9 +129,8 @@ class PostRedirect(RequestHandler):
       raise NotFound()
 
     return redirect("/%s/#p%d"% 
-        (thread.name(), post)
+        (thread.parent().name(), post)
       )
-
 
 ## View: Rapes specifiend post
 #

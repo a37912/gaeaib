@@ -14,7 +14,7 @@ from google.appengine.api import channel
 from django.utils.simplejson import dumps
 from tipfy import NotFound, get_config
 import rainbow
-from models import Board, Thread, Cache
+from models import Board, Thread, ThreadIndex, Cache
 from render import Render
 import rss
 from mark import markup
@@ -177,6 +177,7 @@ def save_post(request, data, board, thread):
 
   deferred.defer(rss.add, board, thread, board_db.counter, 
 	data.get("text_html") )
+  deferred.defer(index_regen, thread_db.key())
 
   if not new:
     deferred.defer(
@@ -186,6 +187,10 @@ def save_post(request, data, board, thread):
     )
 
   return board_db.counter, thread
+
+def index_regen(tkey):
+  index = ThreadIndex(parent=tkey, key_name="idx")
+  index.put()
 
 def watchers_post_notify(board, thread, html, count, last):
   key = "upt-%s-%d" % (board, thread)
@@ -253,14 +258,16 @@ def get_post(board, num):
     logging.info("cache hit")
     return post
 
-  thq = Thread.all()
+  thq = ThreadIndex.all(keys_only=True)
   thq.filter("board", board)
   thq.filter("post_numbers", num)
 
-  thread = thq.get()
+  thread_idx = thq.get()
 
-  if not thread:
+  if not thread_idx:
     return 
+
+  thread = db.get(thread_idx.parent())
 
   [post] = [p for p in thread.posts if p.get('post') == num]
 

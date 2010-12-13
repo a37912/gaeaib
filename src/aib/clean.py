@@ -4,7 +4,7 @@ from google.appengine.ext.blobstore import BlobInfo
 from google.appengine.ext import deferred, db
 from tipfy import RequestHandler, Response, get_config
 
-from aib.models import Thread, Board, Cache
+from aib.models import Thread, ThreadIndex, Board, Cache
 #import restore
 
 class CleanBlob(RequestHandler):
@@ -26,7 +26,7 @@ def do_clean(cursor=None):
 
   key = str(blob.key())
 
-  thq = Thread.all(keys_only=True)
+  thq = ThreadIndex.all(keys_only=True)
   thq.filter("images", key)
 
   th = thq.get()
@@ -46,17 +46,19 @@ class CleanThread(RequestHandler):
     return Response("yarr")
 
 def do_clean_thread(cursor=None):
-  thq = Thread.all()
-  thq.filter("posts_count <", 5)
+  thq = ThreadIndex.all(keys_only=True)
+  thq.filter("post_count <", 5)
 
   if cursor:
     thq.with_cursor(cursor)
 
-  thread = thq.get()
+  thread_idx = thq.get()
 
-  if not thread:
+  if not thread_idx:
     logging.info("stop thread clean")
     return
+
+  thread = db.get(thread_idx.parent())
 
   board = Board.get_by_key_name(thread.board)
 
