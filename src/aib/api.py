@@ -10,6 +10,7 @@ from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.ext import blobstore
 from google.appengine.api import channel
+from google.appengine.api import images
 
 from django.utils.simplejson import dumps
 import util
@@ -166,4 +167,19 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
           "post_quota" : post_level,
           "watcher_time" : self.WATCH_TIME,
         }
+    )
+
+class ApiLastImage(RequestHandler):
+  def get(self):
+    bbq = blobstore.BlobInfo.all()
+    bbq.order("-creation")
+
+    return json_response(
+      [
+          {
+            "key" : str(info.key()),
+            "url" : images.get_serving_url(str(info.key())),
+          }  
+          for info in bbq
+      ]
     )
