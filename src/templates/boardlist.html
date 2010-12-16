@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Что у нас тут?{% endblock %}
+{% block content %}
+
+<center><b>Доски создаются просто. Зашел и создал.</b></center>
+<div class="allboards">
+{% for board in allboards %}
+<a style="font-size: {{board.size}}px" href="/{{board.code}}/" class="board">{{board.name}}</a>
+{% endfor %}
+</div>
+{% endblock %}
