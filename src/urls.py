@@ -32,10 +32,9 @@ def get_rules():
       defaults = {"tpl" : "about.html" }
     ),
     Rule( 
-      "/list/", 
+      "/boardlist", 
       endpoint="list", 
-      handler="aib.ib.Index",
-      defaults = {"tpl" : "list.html" }
+      handler="aib.ib.Boardlist",
     ),
     Rule( 
       "/<board>/", 
@@ -144,6 +143,10 @@ def get_rules():
       "/api/threadlist/<board>",
       endpoint = "api",
        handler = "aib.api.ApiThreadList",
+    ),
+    Rule(
+      "/api/lastblob",
+      handler = "aib.api.ApiLastImage",
     ),
     Rule(
       "/winry/delete/<board>/<int:thread>/<int:post>",

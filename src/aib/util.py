@@ -171,7 +171,7 @@ def save_post(request, data, board, thread):
   db.put( (thread_db, board_db))
   Cache.remove("board", board)
 
-  r = Render(board, thread)
+  r = Render(thread=thread_db)
   r.add(data, new)
   r.save()
 
@@ -316,7 +316,7 @@ def delete_post(board, thread_num, post_num, rape_msg):
   th.put()
   Cache.remove("board", board)
 
-  r = Render(board, thread_num)
+  r = Render(thread=th)
   #kind of shit:
   r.create(th.posts[0])
   for a_post in th.posts[1:]:

@@ -13,9 +13,5 @@
 {%- endmacro %}
 
 {% macro tsubj(thread) -%}
-  {% if thread.subject %}
-  {{ thread.subject|escape }}
-  {% else %}
-  Тред номер {{thread.id}}
-  {% endif %}
+{% if thread.subject %}{{ thread.subject|escape }}{% else %}Тред номер {{thread.id}}{% endif %}
 {%- endmacro %}

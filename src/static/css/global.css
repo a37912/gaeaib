@@ -59,6 +59,7 @@ padding: 0px 13px 10px 13px;
 margin-left: 1em;
 font-size: 82%;
 margin-right: 5px;
+width: 500px;
 }
 
 div#postarea.reply {
@@ -295,5 +296,18 @@ div#controls:hover div.links {
 
 div#controls:hover span#show {
   display: none;
+}
+
+/* boardlist */
+a.board {
+  font-size: 50px;
+  text-decoration: none;
+  padding: 5px;
+}
+a.board:nth-child(odd) {
+  color: #000040;
+}
+div.allboards {
+  padding: 10px;
 }
 

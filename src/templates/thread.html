@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% import 'postmacro.html' as postmacro %}
-{% block title %}{{board_name}} {% endblock %}
+{% block title %}{{board_name}}/{{ postmacro.tsubj(thread)}}{% endblock %}
 {% block head %}
 <link rel="alternate" type="application/rss+xml" href="rss" />
 {% endblock %}

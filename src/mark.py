@@ -151,8 +151,6 @@ def markup(data, **kw):
 
   data = str.join("\n", lines)
 
-  import logging
-  logging.info("kw: %r" % kw)
   assert 'board' in kw
   assert kw.get('board')
 

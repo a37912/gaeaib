@@ -22,13 +22,12 @@ def do_render_cache(cursor=None):
     logging.info("stop thread clean")
     return
 
-  board = thread.board
-  render = Render(board=board, thread = thread.id)
+  render = Render(thread = thread)
 
   for idx,post in enumerate(thread.posts):
     if 'text' in post:
       post['text_html'] = markup(
-            board=board, postid=post.get("post"),
+            board=thread.board, postid=post.get("post"),
             data=escape(post.get('text', '')),
       )
       if 'rainbow_html' in post:
@@ -44,10 +43,7 @@ def do_render_cache(cursor=None):
     else:
       render.append(post)
 
-  if len(thread.posts) > 1:
-    thread.put()
-  else:
-    thread.delete()
+  thread.put()
 
   render.save()
 

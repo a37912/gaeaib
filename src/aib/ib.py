@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import re
 
 from google.appengine.ext import db
 
@@ -24,6 +25,28 @@ class Index(RequestHandler):
   middleware = [RedirMW]
   def get(self, tpl):
     return render_response(tpl, boards =  get_config("aib", "boardlist"))
+
+def boardlink(board):
+
+  import math
+  return {
+      "code" : board.code,
+      "name" : board.name or board.code,
+      "size" : min(50,max(20,math.sqrt(board.counter))),
+  }
+
+class Boardlist(RequestHandler):
+  BOARDLIM = 100
+  def get(self):
+    return render_response(
+        "boardlist.html", 
+        boards =  get_config("aib", "boardlist"),
+        allboards = map(
+          boardlink,
+          models.Board.all().fetch(self.BOARDLIM)
+        ),
+    )
+
 
 ## View: board page is a list of threads
 #
@@ -75,6 +98,8 @@ class Post(RequestHandler, SecureCookieMixin):
     return redirect("/%s/%d" %( board, thread) )
 
   def post(self, board, thread, ajax=False):
+    if not re.match('^\w+$', board):
+      raise NotFound
     logging.info("post called")
 
     if not antiwipe.check(self.request.remote_addr):

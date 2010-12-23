@@ -10,9 +10,10 @@ class Render(object):
   MAXREFS = 5
   OVER = get_config("aib", "overlay")
 
-  def __init__(self, board, thread):
-    self.board = board
-    self.thread = thread
+  def __init__(self, thread):
+    self.board = thread.board
+    self.thread = thread.id
+    self.subj = thread.subject
 
   def load(self,):
     self.cache = Cache.load("thread", self.board, self.thread)
@@ -27,7 +28,7 @@ class Render(object):
         "op" : op,
         "id" : self.thread,
         "board" : self.board,
-        "subject" : op.get("subject"),
+        "subject" : self.subj,
     }
 
     self.cache = Cache.create("thread", self.board, self.thread)

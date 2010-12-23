@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}index{% endblock %}
+{% block title %}Тут ничего нет{% endblock %}
 {% block content %}
 <h2>Разговоры неизвестных</h2>
 <div style="float: left">
@@ -8,6 +8,7 @@
 {% for code, board  in boards %}
 <a href="/{{code}}/">/{{code}}/</a> - {{board}}<br/>
 {% endfor %}
+Все остальные - <a href="/boardlist">тут</a>
 
 <hr/>
 Про борду: <a href="/about">statement</a>
