@@ -74,11 +74,13 @@ def option_useragent(request, data):
     data['agent'] = 'gays heaven'
 
 def option_modsign(request, data):
-  if data.get('name') != get_config("aib.ib", "mod_name"):
-    return
+  mods = get_config("aib.ib", "mod_name")
 
   user = users.get_current_user()
-  if users.is_current_user_admin():
+  if not user or user.email() not in mods:
+    return
+
+  if data.get('name') == mods.get(user.email()):
     data['typ'] = 'modpost'
 
 

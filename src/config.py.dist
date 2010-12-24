@@ -8,6 +8,7 @@ config['tipfy'] = {
 
 config['tipfy.ext.jinja2'] = {
   'templates_dir': ['templates'],
+  'templates_compiled_target': 'templates_cache',
 }
 
 config['tipfy.ext.session'] = {
@@ -48,7 +49,9 @@ config['aib.ib'] = {
     "board_pages" : 5,
     "replies_main" : 5,
 
-    "mod_name" : 'Winry',
+    "mod_name" : {
+      "admin@somewhere" : 'Winry',
+    },
 }
 
 config['aib.antiwipe'] = {

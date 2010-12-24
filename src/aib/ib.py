@@ -3,6 +3,7 @@ import logging
 import re
 
 from google.appengine.ext import db
+from google.appengine.api import users
 
 from tipfy import RequestHandler, redirect, Response, NotFound, get_config
 from tipfy.ext.jinja2 import render_response, render_template
@@ -168,7 +169,11 @@ class DeletePost(RequestHandler, SecureCookieMixin, CookieMixin):
     
     key = board + "%d" % post
     cookie = self.get_secure_cookie(key, True)
-    if cookie.get('win') == key:
+
+    user = users.get_current_user()
+    mods = get_config("aib.ib", "mod_name")
+
+    if cookie.get('win') == key or (user and user.email() in mods):
       if delete_post(board, thread, post, "AN HERO"):
         self.delete_cookie(key)
 
