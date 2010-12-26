@@ -2,8 +2,9 @@
 <div id="controls" >
   <span id="show">N</span>
   <div class="links">
+    {# FIXME: read from dir or config #}
     {% for style in ["gaech", "photon", "futaba", "neutron"] %}
-    <a class="setstyle" set="{{style}}" href="#" >{{style}}</a>
+    <a class="setstyle" set="{{style}}" href="#" >{{style}}</a> <b>|</b>
     {% endfor %}
     <a href="javascript:notify.req()">enable notify</a>
   </div>

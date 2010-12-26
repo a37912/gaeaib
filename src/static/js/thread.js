@@ -105,7 +105,10 @@ set_style = function(name) {
 
   return true;
 };
-set_style($.cookie("style"));
+
+if($.cookie) {
+  set_style($.cookie("style"));
+}
 
 $(document).ready(function() {
 

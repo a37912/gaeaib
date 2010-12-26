@@ -218,6 +218,7 @@ div#controls div.links {
 
 div#controls:hover {
   border: none;
+  top: 15px;
 }
 
 div#controls:hover div.links {
