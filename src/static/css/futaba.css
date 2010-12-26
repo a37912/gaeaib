@@ -1,35 +1,50 @@
 html, body {
-	background:#FFFFEE;
-	color:#800000;
+         background:#FFFFEE;
+         color:#800000;
 }
 a {
-	color:#0000EE;
+        color:#0000EE;
 }
 a:hover {
-	color:#DD0000;
+        color:#DD0000;
 }
-.reflink {
-        color: #900000;
-        font-weight: bold;
+.adminbar {
+        text-align:right;
+        background:inherit;
+        clear:both;
+        float:right;
 }
-.reflink a:hover {
-	font-weight: bold;
-        font-style: italic;
+.logo {
+        clear:both;
+        text-align:center;
+        font-size:2em;
+        color:#800000;
+        width:100%;
+}
+.theader {
+        background:#E04000;
+        text-align:center;
+        padding:2px;
+        color:#FFFFFF;
+        width:100%;
 }
 .postarea {
 }
-
-.postarea th {
-	background:#EEAA88;
-	color:#800000;
-	font-weight:800;
+.rules {
+        font-size:0.8em;
 }
-
+.postblock {
+        background:#EEAA88;
+        color:#800000;
+        font-weight:800;
+		border-radius: 3px;
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+}
 .footer {
-        clear: both;
-	text-align:center;
-	font-size:12px;
-	font-family:serif;
+        text-align:center;
+        font-size:12px;
+        font-family:serif;
 }
 .passvalid {
 	background:#EEAA88;
@@ -62,11 +77,11 @@ a:hover {
 	color:#800000;
 }
 .row2 {
-	background:#DDDDAA;
-	color:#800000;
+        background:#DDDDAA;
+        color:#800000;
 }
 .unkfunc {
-	background:inherit;
+	background:inert;
 	color:#789922;
 }
 .filesize {
@@ -82,113 +97,89 @@ a:hover {
 	color:#117743;
 	font-weight:bold;
 }
-span.modpost {
-  color:red;
-}
 .postertrip {
 	color:#228854;
 }
 .oldpost {
-	color:#CC1105;
-	font-weight:800;
+        color:#CC1105;
+        font-weight:800;
 }
 .omittedposts {
-	color:#707070;
+        color:#707070;
 }
 .reply {
-	background: #F0E0D6;
-	color: #800000;
-  -moz-border-radius: 9px 9px 9px 9px;
-  border-radius: 9px 9px 9px 9px;
+	background:#F0E0D6;
+	color:#800000;
+	border: solid 1px #F0D0B6;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
-.replyhl {
-	background: #F0C0B0;
-	color: #800000;
+.doubledash {
+ 	vertical-align:top;
+	clear:both;
+	float:left;
 }
 .replytitle {
 	font-size: 1.2em;
-	color:#CC1105;
-	font-weight:800;
+        color:#CC1105;
+        font-weight:800;
 }
 .commentpostername {
-	color:#117743;
+        color:#117743;
 	font-weight:800;
 }
 .thumbnailmsg {
 	font-size: small;
 	color:#800000;
 }
-
 .abbrev {
-	color:#707070;
+        color:#707070;
 }
 .highlight {
 	background:#F0E0D6;
 	color:#800000;
 	border: 2px dashed #EEAA88;
 }
-
-#watchedthreads {
-	background-color: #F0E0D6 !important;
+.menu {
+    border-left: 1px solid #F0E0D6;
+    border-right: 1px solid #F0E0D6;
+    border-bottom: 1px solid #F0E0D6;
 }
-
-.preview {
-  background-color: #F0E0D6 !important;
-  -moz-box-shadow: 0 0 8px #999999;
-  -webkit-transition-property: opacity, -webkit-box-shadow:;
-  -webkit-transition-duration: 0.2s, 0.2s;
-  opacity: 0;
-  max-width: 60%;
-  border: dotted white 2px;
-  -moz-border-radius: 9px 9px 9px 9px;
-  border-radius: 9px 9px 9px 9px;
-
+.menu dt {
+    background: #EEAA88;
+	color: #800000;
+	padding: 0px 3px 0px 3px;
+	font-weight: bold;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
-
-span.spoiler, span.spoiler a {
-  background: #F0D0B6;
-  color: #F0D0B6;
+.menu dd {
+	display: block;
+	text-decoration: none;
+	color: #800000;
+	padding: 0px 3px 0px 3px;
+	background: #FFFFEE;
+}
+/*.menu dd a:hover {
+	background: #FFFFEE;
+}*/
+dl.menu dd.hidden {
+	display: none;
+}
+p.spoiler > span.warning {
+	color: #FF6600;
+	font-weight: bolder;
+}
+span.spoiler {
+	background: #F0D0B6;
+	color: #F0D0B6;
 }
 span.spoiler:hover {
-  background: #F0D0B6;
-  color: #800000;
+	background: #F0D0B6;
+	color: #800000;
 }
-
-span.spoiler:hover a {
-  color: #0000EE;
-}
-
-.threadnum {
-  float: right;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.doubledash {
-  color: #d0d0d0;
-}
-
-.post-replies {
-  text-align: right;
-  font-size: 11px;
-  font-style: italic;
-  padding: 2px 6px;
-}
-
-blockquote p.unkfunc, blockquote pre {
-  margin-bottom: 0px;
-  margin-top: 0px;
-}
-
-.post_quota_err {
-  background-image: url("/static/images/trollface.png");
-}
-
-.post_quota_preerr {
-  background-color: #F0E0D6;
-}
-
-.watcher {
-  float: left;
-  margin: 3px;
+span.mod {
+color:#CC1105;
 }

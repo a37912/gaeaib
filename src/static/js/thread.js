@@ -81,7 +81,31 @@ setup_post = function(ct) {
 
       }
   );
-}
+};
+
+set_style = function(name) {
+  if (!name) {
+    return;
+  }
+
+
+  if(typeof(name) != "string") {
+    name = $(this).attr("set");
+  }
+
+  $("link.style[rel|=stylesheet]").each(function() {
+    $(this).attr(
+      "href", 
+      "/static/css/"+name+".css?"+$(this).attr("ver")
+    );
+    }
+  );
+
+  $.cookie("style", name);
+
+  return true;
+};
+set_style($.cookie("style"));
 
 $(document).ready(function() {
 
@@ -241,6 +265,8 @@ $(document).ready(function() {
       $("#topmenu b").last().after(blink)
     }
   }
+
+  $("a.setstyle").click ( set_style );
 
 }); // end doc ready
 

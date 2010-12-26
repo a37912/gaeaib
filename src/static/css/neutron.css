@@ -1,0 +1,344 @@
+/* Neutron 2.84 light */
+html, body {
+	background-color: #212121;
+	color: #698CC0;
+	font-family: "Trebuchet MS",Trebuchet,tahoma,serif;
+}
+dl#menu {
+	background-color: #212121 !important;
+}
+a {
+	color: #C9BE89;
+}
+a:hover {
+	color: #EEFEBB;
+}
+a[href$=sage],  a[href$=Sage], a[href$=SAGE] {
+	color: #993333 !important;
+	text-shadow: #000 0px 0px 5px;
+}
+a[href$=sage]:before,  a[href$=Sage]:before, a[href$=SAGE]:before {
+	content: "[sage] " !important;
+}
+a:hover[href$=sage],  a:hover[href$=Sage], a:hover[href$=SAGE] {
+	color: #CC1212 !important;
+	text-shadow: black 0px 0px 5px;
+}
+input[type="password"], select[name=embedtype] {
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	color: #BBBBBB;
+	border: 2px solid #545454;
+	background-color: #111111;
+}
+input[type="file"], input[type="image"] {
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	border: 2px solid #545454;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #111111;
+	color: #BBBBBB;
+}
+input[type="text"] {
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #111111;
+	color: #FFFFFF;
+	border: 2px solid #545454;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+input:hover[type="text"], input:focus[type="text"] {
+	background-color: #151515;
+	color: #AAAAFF;
+}
+textarea, #path {
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #111111;
+	color: #CCCCCC;
+	border: 2px solid #545454;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+textarea:hover, textarea:focus, #path:hover, #path:focus {
+	background-color: #151515;
+	color: #EEEEEE;
+}
+.adminbar {
+        text-align:right;
+        background:inherit;
+        clear:both;
+        float:right;
+        font-size: 13px;
+}
+.adminbar a {
+	font-weight: bold;
+	text-shadow: none;
+}
+.logo {
+	clear:both;
+	text-align:left;
+	font-size:2em;
+	font-weight: bold;
+	color:#FFAB3F;
+}
+.logo2 {
+	text-align:center;
+}
+.rules {
+	font-size:.8em;
+}
+ul li strong {
+	color: #993333 !important;
+}
+.postblock {
+	background:transparent;
+	color: #0061AA;
+	font-weight:bold;
+}
+.footer {
+	text-align:center;
+	font-size:12px;
+	font-family:serif;
+	margin: 2em 0 0 0;
+}
+.dellist {
+	font-weight: bold;
+	text-align:center;
+}
+.delbuttons {
+	text-align:center;
+	padding-bottom:4px;
+}
+.managehead {
+	background:#2C2C2C;
+	color:#6393CD;
+}
+.postlists {
+	background:#FFFFFF;
+	width:100%;
+	color:#800000;
+}
+.row1 {
+	background:#2C2C2C;
+	color:#6393CD;
+}
+.row2 {
+	background:#575757;
+	color:#6393CD;
+}
+.unkfunc {
+	background:inherit;
+	color: #789922;
+}
+.reflink {
+	font-size: .8em;
+	font-weight: bold;
+}
+.filesize {
+	background-color:#212121;
+	border: solid 1px #575757;
+	padding:2px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	text-decoration:none;
+	color: #999999;
+	font-size: .8em;
+}
+.filesize a {
+	color: #789922;
+}
+.filetitle {
+	background:inherit;
+	font-size:1.2em;
+	color:#3941AC;
+	font-weight:bold;
+}
+.postername {
+	color:#B4B9CD;
+	font-weight:bold;
+}
+.postertrip {
+	color:#AAFFAA;
+	font-weight:bold;
+}
+.omittedposts {
+	color:#999999;
+}
+.reply {
+	background:url('/icons/lightning.png') right bottom no-repeat;
+	background-color:#2C2C2C;
+	color: #698CC0;
+	border: solid 1px #575757;
+	margin: 0;
+	padding: 0px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+blockquote {
+	margin: .5em .5em .5em 1em;
+}
+.reply blockquote {
+	margin: .5em;
+}
+.doubledash {
+	display: none;
+ 	vertical-align:top;
+	clear:both;
+	float:left;
+}
+.replytitle {
+	font-size: 1.2em;
+	color:#0061AA;
+	font-weight:bold;
+}
+.commentpostername {
+	color:#B4B9CD;
+	font-weight:800;
+}
+.thumbnailmsg {
+	font-size: .8em;
+	color:#999999;
+}
+hr {
+	height:3px;
+	border-width: 0px;
+	background:url('/icons/line.png') center no-repeat;
+}
+table {
+	border-style: none;
+}
+table td {
+	border-style: none;
+}
+.nothumb {
+	background-color: #555555;
+	border-style: dotted;
+	margin: .3em .5em;
+}
+.abbrev {
+	color:#999999;
+}
+.highlight, div[id*=pstprev] {
+	background:#111111;
+	color:#EEEEEE;
+	border:2px dashed #789922;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+.extrafunctions {
+	color:#008000;
+}
+span.spoiler, span[onmouseout*="color='black'"] {
+	background: #575757;
+	color: #575757;
+}
+span.spoiler:hover, span[onmouseover*="color='white'"]:hover {
+	color: #48B0FD;
+}
+.theader, .passvalid, .replymode {
+	background:#2C2C2C;
+	text-align:center;
+	padding:2px;
+	color:#006AB9;
+	clear: both;
+	font-weight: bold;
+	margin-bottom: .5em;
+	border: solid 1px #575757;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px ;
+	border-radius: 5px ;
+}
+.managehead {
+	padding:0px;
+}
+.postlists {
+	padding:0px;
+}
+.oldpost, .notabene {
+	color:#33EEFA;
+	font-weight:bold;
+}
+.menu {
+	border: none;
+}
+dl.menu dt {
+	background:#111111;
+	border: solid 1px #575757;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px ;
+	border-radius: 5px ;
+	margin-top: 1em;
+	padding-left: .5em;
+	cursor: pointer;
+	color: #698CC0;
+	font-weight: normal;
+}
+dl.menu dd {
+	margin-left: .5em;
+	padding-left: .5em;
+	border-left: solid 1px #575757;
+	background:#212121;
+}
+dl.menu dd:hover {
+	background: #575757;
+}
+dl.menu dd.hidden {
+	display: none;
+}
+a[target=_blank] img {
+	padding:2px;
+}
+img[src*="captcha"] {
+	background: #CCCCCC;
+}
+pre {
+	background:#2C2C2C;
+	color:#CCCCCC;
+}
+a.highslide img {
+	visibility: hidden !important;
+	width: 1px !important;
+}
+a.highslide:before {
+	content: url('/icons/inc_neut.png') !important;
+	visibility: visible !important;
+	position: relative !important;
+	top: 2px !important;
+}
+.u {
+	text-decoration: underline;
+} 
+.s {
+	text-decoration: line-through;
+} 
+.o {
+text-decoration: overline;
+}
+span.mod {
+color: #FFAB3F;
+}

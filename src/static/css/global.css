@@ -32,9 +32,6 @@ font-size: 0.8em;
 }
 p {
 }
-a:link, a:visited {
-color: #205c90;
-}
 dt {
 font-weight: bold;
 }
@@ -47,69 +44,6 @@ quotes: "“" "”" "‘" "’"
 
 * html { overflow: hidden;  }
 * html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
-
-div #postarea {
-/*top: -1.5em;
-width: 225px; */
-background-color: white;
-border: 1px solid #999;
--webkit-border-radius: 10px;
--webkit-box-shadow: 0px 0px 5px #BBB;
-padding: 0px 13px 10px 13px;
-margin-left: 1em;
-font-size: 82%;
-margin-right: 5px;
-width: 500px;
-}
-
-div#postarea.reply {
-background-color: #D6FFD9;
-}
-
-#postarea h3{
-padding: 0px 0px 0px;
-margin: 5px 0;
-}
-
-div.formControls {
-margin: 1em 0;
-}
-input[type="text"]:focus,
-input[type="password"]:focus,
-textarea:focus {
-background-color: #ffffe0;
-}
-label {
-font-weight:bold;
-}
-input[type="checkbox"] + label:hover {
-background: #ddd;
-outline: 0.1em solid #ddd;
-}
-
-.field {
-clear: both;
-margin-top: 0;
-}
-.field input[type="text"] {
-}
-input#title {
-width: 100%;
-}
-
-input[type="checkbox"] + label:hover {
-background: #ddd;
-outline: 0.1em solid #ddd;
-}
-
-#title input {
-font-family: "Helvetica Neue", Arial, FreeSans, sans-serif;
-font-weight: bold;
-line-height: 125%;
-color: Black;
-letter-spacing: -0.05em;
-font-size: 1.625em; /* */
-}
 
 #topmenu {
 position:fixed;
@@ -175,10 +109,6 @@ margin-bottom: 0em;
 .reflink a {
 color: inherit;
 text-decoration: none;
-}
-
-.reflink a:hover{
-color: #800000;
 }
 
 .reply .filesize {
@@ -277,7 +207,7 @@ div#controls {
   position: absolute;
   top: 0px;
   right: 0px;
-  padding: 4px 2px;
+  padding: 10px;
   border-bottom: dotted 1px red;
   border-left: dotted 1px red;
 }
@@ -310,4 +240,11 @@ a.board:nth-child(odd) {
 div.allboards {
   padding: 10px;
 }
+
+.threadnum {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 
