@@ -2,6 +2,9 @@
 <div id="controls" >
   <span id="show">N</span>
   <div class="links">
+    {% for style in ["gaech", "photon", "futaba", "neutron"] %}
+    <a class="setstyle" set="{{style}}" href="#" >{{style}}</a>
+    {% endfor %}
     <a href="javascript:notify.req()">enable notify</a>
   </div>
 </div>
