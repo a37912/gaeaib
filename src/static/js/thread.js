@@ -101,7 +101,7 @@ set_style = function(name) {
     }
   );
 
-  $.cookie("style", name);
+  $.cookie("style", name, {path: "/"});
 
   return true;
 };
