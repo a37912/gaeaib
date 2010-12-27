@@ -201,6 +201,8 @@ z-index: 2999;
 
 .watcher {
 display: none;
+float: left;
+margin: 3px;
 }
 
 div#controls {
@@ -254,3 +256,13 @@ div.allboards {
   font-style: italic;
   padding: 2px 6px;
 }
+
+.post_quota_err {
+  background-image: url("/static/images/trollface.png");
+}
+
+.post_quota_preerr {
+  background-color: #F0E0D6;
+}
+
+
