@@ -2,6 +2,7 @@
 import logging
 from time import time
 from uuid import uuid4 as uuid
+from cgi import escape
 from tipfy import RequestHandler, Response, NotFound, get_config
 from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
 from tipfy.ext.jinja2 import render_template
@@ -183,3 +184,18 @@ class ApiLastImage(RequestHandler):
           for info in bbq
       ]
     )
+
+class ApiMarkup(RequestHandler):
+  def post(self):
+    text = self.request.form.get("text", "")
+
+    ret = {
+      'html' : markup(
+        board = 'test',
+        postid = '123',
+        data = escape(text),
+      )
+    }
+
+    return json_response(ret)
+

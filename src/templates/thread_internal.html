@@ -24,8 +24,8 @@
 
 <label>
   <span class="postername {{thread.op.typ}}">{{ thread.op.name|escape }}</span>
-  {{thread.op.rainbow_html}}
-  {{thread.op.time}}
+  {{postmacro.rb(thread.op)}}
+  {{postmacro.ptime(thread.op)}}
 </label>
 
 {% if reply %}

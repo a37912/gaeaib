@@ -149,6 +149,10 @@ def get_rules():
       handler = "aib.api.ApiLastImage",
     ),
     Rule(
+      "/api/markup",
+      handler = "aib.api.ApiMarkup",
+    ),
+    Rule(
       "/winry/delete/<board>/<int:thread>/<int:post>",
       endpoint = "admin:delete",
       handler = "aib.api.Delete",

@@ -48,10 +48,8 @@
 
 <label>
   <span class="postername {{thread.op.typ}}">{{ thread.op.name|escape }}</span>
-  <span class="rainbow" cid="{{thread.op.post}}" rainbow="{{thread.op.rainbow}}"></span>
-  <canvas id="rc-{{thread.op.post}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas> 
-
-  {{thread.op.time}}
+  {{postmacro.rb(thread.op)}}
+  {{postmacro.ptime(thread.op)}}
 </label>
 
 {% if reply %}

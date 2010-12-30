@@ -215,3 +215,25 @@ sendform = function(e) {
 }
 
 $("form").submit(sendform);
+
+markup_preview = function(data) {
+  $("#testpost").html(data.html);
+
+};
+
+testpost = function() {
+  $.ajax( 
+    {
+      url: "/api/markup",
+      dataType : "json",
+      type : "POST",
+      success : markup_preview,
+      data : {
+        "text" : $("#id_text").val()
+      }
+    }
+  );
+}
+
+$("#post_preview").click(testpost);
+$("#id_text").blur(testpost);

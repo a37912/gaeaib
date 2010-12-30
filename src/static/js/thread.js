@@ -78,10 +78,12 @@ setup_post = function(ct) {
   ct.find("a.fullimg").prettyPhoto(
       {
         theme:'dark_rounded',
-        overlay_gallery: false,
+        overlay_gallery: false
 
       }
   );
+
+  ct.find("time.posttime").easydate();
 };
 
 set_style = function(name) {
@@ -272,7 +274,7 @@ $(document).ready(function() {
                 }, 3000
               );
 
-            },
+            }
           }
         );
 
@@ -299,4 +301,43 @@ $(document).ready(function() {
   $("a.setstyle").click ( set_style );
 
 }); // end doc ready
+
+$.easydate.locales.ruRU = {
+  "future_format": "%s %t",
+  "past_format": "%t %s",
+  "second": ["секунду", "секунды", "секунд"],
+  "minute": ["минуту", "минуты", "минут"],
+  "hour": ["час", "часа", "часов"],
+  "day": ["день", "дня", "дней"],
+  "week": ["неделю", "недели", "недель"],
+  "month": ["месяц", "месяца", "месяцев"],
+  "year": ["год", "года", "лет"],
+  "yesterday": "вчера",
+  "tomorrow": "завтра",
+  "now": "сейчас",
+  "ago": "назад",
+  "in": "в"
+};
+$.easydate.__ = function(str, n, settings) {
+  if(isNaN(n)) {
+    return $.easydate.locales.ruRU[str];
+  }
+
+  var plural=-1;
+
+  if(n%10==1 && n%100!=11) {
+   plural =  0 
+  } else {
+    if(n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) {
+      plural = 1;
+    } else {
+      plural = 2
+    }
+  }
+
+
+  ret= $.easydate.locales.ruRU[str][plural];
+
+  return ret;
+}
 

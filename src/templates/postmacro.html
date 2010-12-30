@@ -15,3 +15,12 @@
 {% macro tsubj(thread) -%}
 {% if thread.subject %}{{ thread.subject|escape }}{% else %}Тред номер {{thread.id}}{% endif %}
 {%- endmacro %}
+
+{% macro ptime(post) -%}
+<time class="posttime" datetime="{{post.timestamp}}">{{post.time}} UTC</time>
+{%- endmacro %}
+
+{% macro rb(post) -%}
+<span class="rainbow" cid="{{post.post}}" rainbow="{{post.rainbow}}"></span>
+<canvas id="rc-{{post.post}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas> 
+{%- endmacro %}

@@ -18,7 +18,7 @@
 
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
-        {{post.time}}
+        {{postmacro.ptime(post)}}
         {% if post.agent %}
         <span class="agent">{{post.agent|escape}}</span>
         {% endif %}
