@@ -53,8 +53,9 @@ rainbow_draw_span = function()
 set_postref_preview =function() {
   console.log("set reflink")
   var postid = $(this).attr("postid");
+  var board=$(this).attr("board") || _board;
 
-  $(this).mouseover( function(e) {handle_preview(postid, e)} );
+  $(this).mouseover( function(e) {handle_preview(postid, board, e)} );
 
 }
 set_reflink_handler = function() {
@@ -159,6 +160,7 @@ $(document).ready(function() {
 
     console.log("show");
 
+    $('.previewstat').remove();
     $('body').append(np);
     setup_post(np);
     console.log("show!");
@@ -212,7 +214,7 @@ $(document).ready(function() {
   no_preview = false;
   no_preview_hide = false;
   preview_cache = new Object();
-  handle_preview = function(postid, e) {
+  handle_preview = function(postid, board, e) {
         if (no_preview) {
           return;
         }
@@ -221,19 +223,33 @@ $(document).ready(function() {
 
         var copy = $("#post-"+postid);
 
-        if(copy.length!=0) {
+        if(board==_board && copy.length!=0) {
           console.log("copy");
           copy = copy.clone();
           return show_preview(copy, postid, e);
         }
 
-        var key = _board+"/"+postid;
+        var key = board+"/"+postid;
         var cache = preview_cache[key];
         if (cache) {
           return preview(e,cache, "ok");
         }
 
-        var url = "/api/post/"+_board+"/"+postid;
+        // move out
+        var stat = $("<div/>");
+        stat.addClass("previewstat nothumb");
+        stat.text("...");
+
+        stat.css("position", "absolute");
+
+        stat.css("top", e.pageY+"px");
+        stat.css("left", e.pageX+"px");
+
+        $("body").append(stat);
+
+
+
+        var url = "/api/post/"+board+"/"+postid;
 
         $.ajax(
           {
@@ -246,6 +262,17 @@ $(document).ready(function() {
               }
             },
             dataType: 'json',
+            error: function(d,s) {
+              no_preview = false;
+
+              stat.text("error");
+
+              setTimeout(function() {
+                stat.remove();
+                }, 3000
+              );
+
+            },
           }
         );
 

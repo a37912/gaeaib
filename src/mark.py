@@ -5,7 +5,12 @@ from cgi import escape
 
 POST_LINK = (
     "&gt;&gt;([0-9]+)",
-    r'<a frmpostid="##postid##" postid="\1" class="postref" href="/##board##/p\1">&gt;&gt;\1</a>',
+    r'<a frmpostid="##postid##" postid="\1" board="##board##" class="postref inboard" href="/##board##/p\1">&gt;&gt;\1</a>',
+)
+
+POST_LINK_FULL = (
+    "&gt;&gt;/([a-z]+)/([0-9]+)",
+    r'<a frmpostid="##postid##" postid="\2" board="\1" class="postref outboard" href="/\1/p\2">&gt;&gt;/\1/\2</a>',
 )
 
 BOLD1 = (
@@ -34,7 +39,7 @@ SPOILER = (
 )
 
 AHREF = (
-    r"(http:\/\/[^ <]*)",
+    r"((http|https):\/\/[^ <]*)",
     r'<a href="http://hiderefer.com/?\1">\1</a>' ,
 )
 
@@ -47,6 +52,7 @@ states = {
     FULL : {
       "fmt" : [
         POST_LINK,
+        POST_LINK_FULL,
         BOLD1,
         BOLD2,
         ITALIC,
@@ -74,6 +80,7 @@ states = {
       "end" : '</p>',
       "fmt" : [
         POST_LINK,
+        POST_LINK_FULL,
         SPOILER,
         BOLD1,
         BOLD2,
@@ -89,6 +96,7 @@ states = {
       "change" : [],
       "fmt" : [
         POST_LINK,
+        POST_LINK_FULL,
         SPOILER,
         BOLD1,
         BOLD2,
