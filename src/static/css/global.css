@@ -145,6 +145,10 @@ color: #FF0000;
 font-weight: normal;
 }
 
+span.modpost {
+  color:red;
+}
+
 .vip {
 color: #336600;
 font-weight: normal;
