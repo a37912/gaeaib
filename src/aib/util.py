@@ -58,9 +58,8 @@ def option_saem(request, data):
   if data.get('name') != 'SAEM':
     return
 
-  rb = rainbow.make_rainbow(data)
+  rb = rainbow.make_rainbow(data.get("rainbow"), data.get("post"))
   data['rainbow'] = rb
-  data['rainbow_html'] = rainbow.rainbow(rb)
 
 
 def option_useragent(request, data):
