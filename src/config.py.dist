@@ -28,6 +28,10 @@ config['aib.forms'] = {
 }
 
 config['aib'] = {
+    "chanlist" : (
+      "0chan.ru",
+      "2-ch.ru",
+    ),
     "boardlist" : (
      ( 'b', 'Beating heart'),
      ( 'a', 'Anime',),

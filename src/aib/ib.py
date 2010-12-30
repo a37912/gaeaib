@@ -20,6 +20,21 @@ mark.install_jinja2()
 
 import antiwipe
 
+class StyleSetMW(object):
+  CHAN = re.compile("^http://(%s).*" % str.join("|", 
+      get_config("aib", "chanlist")
+    )
+  )
+
+  def post_dispatch(self, handler, response):
+    ref = handler.request.referrer or ""
+
+    if re.match(self.CHAN, ref):
+      response.set_cookie("style", "photon")
+
+    return response
+
+
 ## View: Main page - board list
 #
 class Index(RequestHandler):
@@ -53,7 +68,7 @@ class Boardlist(RequestHandler):
 #
 # @param board - string board name
 class Board(RequestHandler):
-  middleware = [RedirMW]
+  middleware = [RedirMW, StyleSetMW]
 
   PAGES = get_config("aib.ib", "board_pages")
   NAMES = dict(get_config("aib", "boardlist"))
