@@ -144,8 +144,8 @@ sendform = function(e) {
   var button = $("#post_submit");
 
   try {
-    _gaq.push('_trackPageview', "/post/");
-    _gaq.push('_trackPageview', "/post/" + _board);
+    _gaq.push(['_trackPageview', "/post/"]);
+    _gaq.push(['_trackPageview', "/"+_board+"/post" ]);
 
   } catch(err) {
     console.err("gaq fail " + err);
