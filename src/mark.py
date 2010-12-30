@@ -77,6 +77,7 @@ states = {
     QUOTE : {
       "match" : r"^&gt;[^&]",
       "start" : '<p class="unkfunc">',
+      "line" : (r'$', '<br/>'),
       "end" : '</p>',
       "fmt" : [
         POST_LINK,
