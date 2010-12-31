@@ -82,8 +82,27 @@ setup_post = function(ct) {
 
       }
   );
+  
+  var format = function(date)
+  {
+      return date.toLocaleString();
+  };
 
-  ct.find("time.posttime").easydate();
+  switch( $.cookie("clock") ) {
+    case "easy":
+      ct.find("time.posttime").easydate({
+        units:units,
+        uneasy_format: format  });
+      break;
+    case "":
+    case undefined:
+    case "local":
+      ct.find("time.posttime").easydate({
+        units:[],
+        uneasy_format: format
+      });
+      break;
+  } ;
 };
 
 set_style = function(name) {
@@ -340,4 +359,9 @@ $.easydate.__ = function(str, n, settings) {
 
   return ret;
 }
-
+units = [
+    { name: "now", limit: 5 },
+    { name: "second", limit: 60, in_seconds: 1 },
+    { name: "minute", limit: 3600, in_seconds: 60 },
+    { name: "hour", limit: 3600*3, in_seconds: 3600  },
+]; 

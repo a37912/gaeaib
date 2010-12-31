@@ -6,6 +6,13 @@
     {% for style in ["gaech", "photon", "futaba", "neutron"] %}
     <a class="setstyle" set="{{style}}" href="#" >{{style}}</a> <b>|</b>
     {% endfor %}
+    <br/>
+    <b>Время</b>:
+    {% for name,val in [ ["гринвич", "utc"], ["местное", "local"], ["простое", "easy"]] %}
+    <a href="javascript:$.cookie('clock', '{{val}}', {path: '/'})">{{name}}</a>
+    {% endfor %}
+    <br/>
+    <b>Новые посты</b>:
     <a href="javascript:notify.req()">enable notify</a>
   </div>
 </div>
