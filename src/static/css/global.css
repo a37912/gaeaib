@@ -269,4 +269,7 @@ div.allboards {
   background-color: #F0E0D6;
 }
 
-
+.postdata {
+  max-height: 20em;
+  overflow: auto;
+}
