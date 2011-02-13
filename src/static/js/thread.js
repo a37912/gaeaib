@@ -123,7 +123,7 @@ set_style = function(name) {
     }
   );
 
-  $.cookie("style", name, {path: "/"});
+  c("style", name);
 
   return true;
 };
@@ -365,3 +365,7 @@ units = [
     { name: "minute", limit: 3600, in_seconds: 60 },
     { name: "hour", limit: 3600*3, in_seconds: 3600  },
 ]; 
+
+c = function(key, val) {
+  $.cookie(key, val, {path:"/", expires: 356});
+}

@@ -9,7 +9,7 @@
     <br/>
     <b>Время</b>:
     {% for name,val in [ ["гринвич", "utc"], ["местное", "local"], ["простое", "easy"]] %}
-    <a href="javascript:$.cookie('clock', '{{val}}', {path: '/'})">{{name}}</a>
+    <a href="javascript:c('clock', '{{val}}')">{{name}}</a>
     {% endfor %}
     <br/>
     <b>Новые посты</b>:
