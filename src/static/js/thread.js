@@ -1,3 +1,7 @@
+c = function(key, val) {
+  $.cookie(key, val, {path:"/", expires: 356});
+}
+
 function DrawRainbow(colors, elementId, face){
   var canvas = document.getElementById(elementId);
   if (canvas.getContext){  
@@ -366,6 +370,4 @@ units = [
     { name: "hour", limit: 3600*3, in_seconds: 3600  },
 ]; 
 
-c = function(key, val) {
-  $.cookie(key, val, {path:"/", expires: 356});
-}
+
