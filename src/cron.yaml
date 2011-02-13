@@ -1,7 +1,7 @@
 cron:
-- description: remove unused blobs
-  url: /winry/clean_blob
-  schedule: every 52 hours
+#- description: remove unused blobs
+#  url: /winry/clean_blob
+#  schedule: every 52 hours
 
 #- description: remove old threads
 #  url: /winry/clean_thread
