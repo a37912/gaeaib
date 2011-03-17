@@ -47,7 +47,7 @@ class CleanThread(RequestHandler):
 
 def do_clean_thread(cursor=None):
   thq = ThreadIndex.all(keys_only=True)
-  thq.filter("post_count <", 5)
+  thq.filter("post_count", 1)
 
   if cursor:
     thq.with_cursor(cursor)
@@ -60,13 +60,16 @@ def do_clean_thread(cursor=None):
 
   thread = db.get(thread_idx.parent())
 
-  board = Board.get_by_key_name(thread.board)
+  if thread:
 
-  if len(thread.posts) < 5: # FIXME: magic number
-    db.delete(thread)
-    logging.info("purged thread")
+    board = Board.get_by_key_name(thread.board)
+
+    if len(thread.posts) == 1:
+      db.delete(thread)
+    else:
+      logging.error("crap, post count %d, %r" % (len(thread.posts), thread_idx))
   else:
-    assert False, "oops invalid post count"
+    logging.error("crap, no thread for %r" % thread_idx)
 
   deferred.defer(do_clean_thread, thq.cursor())
 
@@ -126,15 +129,19 @@ def do_clean_board(cursor=None):
 TMAX = get_config('aib.ib', 'thread_per_page') * get_config('aib.ib','board_pages')
 
 def fill_board(board):
-  threads = Thread.all(keys_only=True)
-  threads.filter("board", board)
-  threads.order("-__key__")
+  logging.info("fill board %s" % board.code)
+  threads = Thread.all()
+  threads.filter("board", board.code)
+  threads.order("-id")
 
   for thread in threads.fetch(TMAX):
+
+    logging.info("here is thread %r" % thread)
 
     if len(board.thread) >= TMAX:
       return
 
-    if thread.id() not in board.thread:
-      board.thread.append(  thread.id() )
+    if thread.id not in board.thread:
+      logging.info("add now")
+      board.thread.append(  thread.id )
 
