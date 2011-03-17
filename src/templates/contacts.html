@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Опять выходишь на связь?{% endblock %}
+{% block content %} 
+<center>
+<h2>Алло?</h2>
+<img src="/static/images/hello.jpg"/>
+<h2>Контакты</h2>
+
+<div class="vcard">
+  <div style="float:left">
+    <img src="/static/images/winry.jpg" />
+  </div>
+
+  <span style="padding-right: 20px;">
+  <b>&lt;-----</b>
+  </span>
+  <span class="fn">Winry Rockbell</span>
+  <span class="email">
+    &lt;<a href="mailto:winry@gaech.org"
+      >winry@gaech.org</a>&gt;</span>
+  <span class="url"><a href="/mod/">/mod/</a></span>
+</div>
+<hr/>
+<div class="vcard">
+  <div style="float:right">
+  <img src="/static/images/gomissar.jpg" />
+  </div>
+
+  <span class="fn">Gomissar</span>
+  <span class="email">
+    &lt;<a href=mailto:gomissar@42ch.org
+      >gomissar@42ch.org</a>&gt;</span>
+  <span class="url"><a href="/mod/">/mod/</a></span>
+
+  <b>----&gt;</b>
+</div>
+<hr/>
+<div class="vcard">
+  <span class="fn">Mikhail Kashkin</span>
+  <span class="url"><a href="http://www.xen.ru/cv">xen.ru</a></span>
+</div>
+</center>
+
+{% endblock %}
