@@ -20,5 +20,5 @@ indexes:
 - kind: Thread
   properties:
   - name: board
-  - name: __key__
+  - name: id
     direction: desc
