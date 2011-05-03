@@ -11,16 +11,23 @@ from mark import markup
 import rainbow
 
 def do_render_cache(cursor=None):
-  thq = Thread.all()
+  thq = Thread.all(keys_only=True)
 
   if cursor:
     thq.with_cursor(cursor)
 
-  thread = thq.get()
-
-  if not thread:
-    logging.info("stop thread clean")
+  if not thq.count(1):
     return
+
+  for thread in thq.fetch(100):
+    deferred.defer(process, thread, _queue='render')
+
+
+  deferred.defer(do_render_cache, thq.cursor() )
+
+def process(thread_key):
+  logging.info('process %r' % thread_key)
+  thread = db.get(thread_key)
 
   render = Render(thread = thread)
 
@@ -47,7 +54,6 @@ def do_render_cache(cursor=None):
 
   render.save()
 
-  deferred.defer(do_render_cache, thq.cursor(), _queue="render")
 
 
 class RenderCache(RequestHandler):
