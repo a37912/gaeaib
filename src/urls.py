@@ -195,5 +195,9 @@ def get_rules():
       endpoint = 'tasks/deferred',
       handler = 'tipfy.ext.taskqueue:DeferredHandler'
     ),
+    Rule(
+      '/_ah/prospective_search',
+      handler = 'aib.matcher.Handle',
+    ),
     
   ]

@@ -9,6 +9,7 @@ from google.appengine.ext import db
 from google.appengine.api import images
 from google.appengine.api import users
 from google.appengine.ext import deferred
+from google.appengine.api import prospective_search as  matcher
 
 from google.appengine.api import channel
 from django.utils.simplejson import dumps
@@ -170,22 +171,33 @@ def save_post(request, data, board, thread):
   thread_db.posts.append(data)
 
   db.put( (thread_db, board_db))
+
+  # move this to task
   Cache.remove("board", board)
 
   r = Render(thread=thread_db)
-  r.add(data, new)
+  r.post_html = ''
+  r.add(data, new) # WARNING: side effect on data
   r.save()
 
   deferred.defer(rss.add, board, thread, board_db.counter, 
 	data.get("text_html") )
   deferred.defer(index_regen, thread_db.key())
 
-  if not new:
-    deferred.defer(
-        watchers_post_notify,
-        board, thread, r.post_html, 
-        len(thread_db.posts), board_db.counter
-    )
+  # matcher FTW
+  match_msg = Post(board = board, thread = thread,)
+  match_msg.data = dict(
+    board = board,
+    thread = thread,
+    html = r.post_html,
+    last = board_db.counter,
+    count = len(thread_db.posts),
+    evt = 'newpost'
+  )
+
+  matcher.match(match_msg, topic='post',
+      result_task_queue='postnotify')
+
 
   return board_db.counter, thread
 
@@ -193,47 +205,6 @@ def index_regen(tkey):
   index = ThreadIndex(parent=tkey, key_name="idx")
   index.put()
 
-def watchers_post_notify(board, thread, html, count, last):
-  key = "upt-%s-%d" % (board, thread)
-  send = { 
-      "html" : html, 
-      "evt" : "newpost" ,
-      "count" : count,
-      "last" : last,
-  }
-
-  watchers = memcache.get(key) or []
-  watchers_send(
-      watchers_clean(watchers),
-      key,
-      send
-  )
-
-def watchers_send(watchers, key, data):
-  for wtime,person in watchers:
-    try:
-      channel.send_message(person+key, dumps(data))
-    except channel.Error:
-      pass
-
-
-WATCHERS_MAX = get_config('aib.util', 'watches_max')
-WATCHER_TIME = get_config('aib.util', 'watch_time')
-
-def watchers_clean(watchers, exclude=None):
-  now = time()
-  nwatchers = []
-
-  for wtime,person_check in watchers[:WATCHERS_MAX]:
-    if (now - wtime) > WATCHER_TIME:
-      continue
-
-    if person_check == exclude:
-      continue
-
-    nwatchers.append((wtime, person_check))
-
-  return nwatchers
 
 POST_QUOTA = get_config('aib.antiwipe', 'quota')
 def post_level(ip):
@@ -325,3 +296,5 @@ def delete_post(board, thread_num, post_num, rape_msg):
   r.save()
   
   return last_deletion
+
+from .matcher import Post

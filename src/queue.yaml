@@ -6,3 +6,7 @@ queue:
 - name: render
   rate: 50/s
   bucket_size: 50
+
+- name: postnotify
+  rate: 50/s
+  bucket_size: 50

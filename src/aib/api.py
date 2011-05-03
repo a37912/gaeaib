@@ -12,6 +12,7 @@ from google.appengine.ext import db
 from google.appengine.ext import blobstore
 from google.appengine.api import channel
 from google.appengine.api import images
+from google.appengine.api import prospective_search as  matcher
 
 from django.utils.simplejson import dumps
 import util
@@ -132,35 +133,27 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   def post(self, board, thread):
     # FIXME: move subscribe crap somewhere out
 
-    key = "upt-%s-%d" % (board, thread)
     person_cookie = self.get_secure_cookie("person", True)
     person = person_cookie.get("update", str(uuid()))
 
     person_cookie['update'] = person
 
-    watchers = memcache.get(key) or []
+    subid = "%s/board%s/%d" %(person, board, thread, )
 
-    nwatchers = util.watchers_clean(watchers, person)
-    nwatchers.insert(0, (time(),person))
+    query = 'thread:%d board:%s' %(thread, board)
+    matcher.subscribe(util.Post, query, subid,
+        topic='post',
+        lease_duration_sec=self.WATCH_TIME)
 
-    memcache.set(key, nwatchers, time=self.WATCH_TIME)
-
-    token = memcache.get(person+key)
+    token = memcache.get(subid)
 
     if not token:
-      logging.debug("cr: %r + %r" % (person, key))
-      token = channel.create_channel(person+key)
-      memcache.set(person+key, token)
+      token = channel.create_channel(subid)
+      memcache.set(subid, token)
 
     post_level = util.post_level(self.request.remote_addr)
 
     rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
-
-    util.watchers_send(watchers, key, {
-      "evt" : "enter",
-      "rainbow" : rb,
-      }
-    )
 
     return json_response( 
         {
