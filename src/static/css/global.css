@@ -43,7 +43,8 @@ quotes: "“" "”" "‘" "’"
 }
 
 * html { overflow: hidden;  }
-* html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
+html body { height: 100%; overflow: auto; width: 100%; margin: 0px; }
+#bodyContent { padding : 8px }
 
 #topmenu {
 position:fixed;
