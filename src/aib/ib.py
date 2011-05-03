@@ -20,6 +20,13 @@ mark.install_jinja2()
 
 import antiwipe
 
+REDIRECT = ['http://danbooru.donmai.us/post/index?tags=winry_rockbell']
+
+def redirect_out():
+  import random
+  [url] = random.sample(REDIRECT, 1)
+  return redirect(url)
+
 class StyleSetMW(object):
   CHAN = re.compile("^http://(%s).*" % str.join("|", 
       get_config("aib", "chanlist")
@@ -120,7 +127,13 @@ class Post(RequestHandler, SecureCookieMixin):
 
     if not antiwipe.check(self.request.remote_addr):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
-      return redirect("http://winry.on.nimp.org" )
+      return redirect_out()
+
+    if not ajax:
+      person_cookie = self.get_secure_cookie("person", True)
+      if not person_cookie.get("update"):
+        return redirect_out()
+
 
     # validate post form
     form = PostForm(self.request.form)
