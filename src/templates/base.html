@@ -23,13 +23,19 @@
       {% include "controls.html" %}
       {% endblock %}
       {% block content %}{% endblock %}
-      <div class="footer" > 
-        Winry Rockbell | 
-        <a href="/contacts">Contacts</a> |
-        <a href="/about">Statement</a> | <a href="/api">API</a> |
-        <a href="http://github.com/a37912/gaeaib/" >GAE AIB</a> |
-        Twitter: <a href="http://twitter.com/42chorg">@42chorg</a>
-      </div>
+      <footer>
+        <ul class="links">
+          <li><a href="/about">Statement</a></li>
+          <li><a href="/api">API</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="http://github.com/a37912/gaeaib/">Соус</a></li>
+          <li><a href="http://twitter.com/42chorg">@42chorg</a></li>
+        </ul>
+        <ul class="sosueme">
+          <li class="main">© 2010 Winry Rokbell</li>
+          <li>Гайкочан βeta </li>
+        </ul>
+      </footer>
       {% block scripts %}{% endblock %}
     </div>
     

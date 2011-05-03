@@ -273,3 +273,48 @@ div.allboards {
   max-height: 20em;
   overflow: auto;
 }
+
+/* @group Footer */
+
+footer {
+  margin: 25px 0 0 0;
+  padding: 20px 0 15px 0;
+  font-size: 12px;
+  border-top: 2px solid #ddd;
+  background: #f1f1f1;
+}
+
+footer ul.links {
+  margin: 0 0 5px 0;
+  height: 16px;
+}
+
+footer ul.links li {
+  list-style-type: none;
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+footer ul.links li.blog {
+  font-weight: bold;
+}
+
+footer ul.sosueme {
+  margin: 0 0 5px 0;
+  height: 16px;
+}
+
+footer ul.sosueme li {
+  list-style-type: none;
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+footer ul.sosueme li.main {
+  font-weight: bold;
+  color: #000;
+}
+
+footer ul.sosueme li a {
+  color: #666;
+}
