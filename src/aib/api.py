@@ -16,7 +16,7 @@ from google.appengine.api import prospective_search as  matcher
 
 from django.utils.simplejson import dumps
 import util
-from models import Board, Thread, Cache
+from models import Board, BoardCounter, Thread, Cache
 from mark import markup
 import rainbow
 
@@ -44,7 +44,7 @@ class ApiPost(RequestHandler):
 
 class ApiLastPost(RequestHandler):
   def get(self, board):
-    board = Board.get_by_key_name(board)
+    board = BoardCounter.get_by_key_name(board)
 
     return json_response(board.counter if board else None)
 
@@ -71,7 +71,7 @@ class ApiBoard(RequestHandler):
 
 class ApiBoardList(RequestHandler):
   def get(self):
-    boardq = Board.all()
+    boardq = BoardCounter.all()
 
     return json_response(
         [
@@ -88,10 +88,9 @@ class ApiBoardBumped(RequestHandler):
   DEF_COUNT = 5
   BOARDS = dict(get_config("aib", "boardlist"))
   def load(self, lim=None):
-    boardq = Board.all(keys_only=True)
+    boardq = BoardCounter.all(keys_only=True)
     boardq.order("-date_modify")
     boardq.filter("old", True)
-    boardq.filter("named", False)
 
     if not lim:
       lim = self.DEF_COUNT
@@ -99,6 +98,7 @@ class ApiBoardBumped(RequestHandler):
     return [
           k.name() 
           for k in boardq.fetch(lim)
+          if k.name() not in self.BOARDS
     ]
   def get(self, lim=None):
 

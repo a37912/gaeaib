@@ -15,7 +15,7 @@ from google.appengine.api import channel
 from django.utils.simplejson import dumps
 from tipfy import NotFound, get_config
 import rainbow
-from models import Board, Thread, ThreadIndex, Cache
+from models import Board, BoardCounter, Thread, ThreadIndex, Cache
 from render import Render
 import rss
 from mark import markup
@@ -34,7 +34,8 @@ def get_threads(board, page=0, fmt_name="page"):
 
   per_page = get_config('aib.ib', 'thread_per_page')
 
-  threads = Board.load(board) or []
+  board_db = Board.get_by_key_name(board)
+  threads = board_db.thread if board_db else []
   threads = threads[per_page*page:per_page*(page+1)]
   logging.info("threadlist in %r : %r" % (board, threads))
 
@@ -95,12 +96,18 @@ OVER = get_config("aib", "overlay")
 # @param thread - thread id where to post or "new"
 def save_post(request, data, board, thread):
 
-  board_db = Board.get_by_key_name(board)
+  def board_increment():
+    board_db = BoardCounter.get_by_key_name(board)
 
-  if not board_db:
-    board_db = Board(key_name = board, thread = [])
+    if not board_db:
+      board_db = BoardCounter(key_name = board, thread = [])
 
-  board_db.counter += 1
+    board_db.counter += 1
+    board_db.put()
+
+    return board_db.counter
+
+  postid = db.run_in_transaction(board_increment,)
 
   # create new thread
   new = False
@@ -109,7 +116,7 @@ def save_post(request, data, board, thread):
     if data.get("sage"):
       raise NotFound() # FIXME: move to form
 
-    thread = board_db.counter
+    thread = postid
     posts = []
     thread_db = Thread.create(thread, board)
     thread_db.posts = []
@@ -117,33 +124,25 @@ def save_post(request, data, board, thread):
   else:
     thread = int(thread)
 
-    if thread in board_db.thread and not data.get("sage"):
-      board_db.thread.remove(thread)
-
     thread_db = Thread.load(thread, board)
 
     if not thread_db:
       raise NotFound()
 
-  if not data.get("sage"):
-    board_db.thread.insert(0, thread)
-
   per_page = get_config('aib.ib', 'thread_per_page')
   pages = get_config('aib.ib', 'board_pages')
-
-  board_db.thread = board_db.thread[:per_page*pages]
 
   rb = rainbow.make_rainbow(request.remote_addr, board, thread)
   data['rainbow'] = rb
   data['overlay'] = board in OVER
   
   data['text_html'] = markup(
-        board=board, postid=board_db.counter,
+        board=board, postid=postid,
         data=escape(data.get('text')),
   )
 
   # save thread and post number
-  data['post'] = board_db.counter
+  data['post'] = postid
   data['thread'] = thread
   now = datetime.now()
   data['time'] = now.strftime("%Y-%m-%d, %H:%M")
@@ -169,28 +168,28 @@ def save_post(request, data, board, thread):
       func(request, data)
 
   thread_db.posts.append(data)
-
-  db.put( (thread_db, board_db))
-
-  # move this to task
-  Cache.remove("board", board)
+  thread_db.put()
 
   r = Render(thread=thread_db)
   r.post_html = ''
   r.add(data, new) # WARNING: side effect on data
   r.save()
 
-  deferred.defer(rss.add, board, thread, board_db.counter, 
-	data.get("text_html") )
-  deferred.defer(index_regen, thread_db.key())
+  deferred.defer(save_post_defer,
+      board, thread,
+      r.post_html, data.get('text_html'),
+      postid,
+      len(thread_db.posts),
+      data.get("sage"),
+  )
 
-  # matcher FTW
+  # send notify
   match_msg = Post(board = board, thread = thread,)
   match_msg.data = dict(
     board = board,
     thread = thread,
     html = r.post_html,
-    last = board_db.counter,
+    last = postid,
     count = len(thread_db.posts),
     evt = 'newpost'
   )
@@ -198,8 +197,37 @@ def save_post(request, data, board, thread):
   matcher.match(match_msg, topic='post',
       result_task_queue='postnotify')
 
+  return postid, thread
 
-  return board_db.counter, thread
+
+def save_post_defer(board, thread, html, text_html, postid, count, sage):
+
+  # drop board cache
+  # TODO: replace by snippets
+  Cache.remove("board", board)
+
+  index_regen(Thread.gen_key(thread, board))
+
+  rss.add(board, thread, postid, text_html)
+
+  if not sage:
+    bump(board, thread)
+
+  # TODO: generate last 5 messages here
+  # thread_snippet(board, thread)
+
+def bump(board, thread):
+
+  board_db = Board.get_by_key_name(board)
+
+  if not board_db:
+    board_db = Board(key_name=board)
+
+  if thread in board_db.thread:
+    board_db.thread.remove(thread)
+
+  board_db.thread.insert(0, thread)
+  board_db.put()
 
 def index_regen(tkey):
   index = ThreadIndex(parent=tkey, key_name="idx")

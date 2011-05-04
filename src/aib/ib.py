@@ -66,7 +66,7 @@ class Boardlist(RequestHandler):
         boards =  get_config("aib", "boardlist"),
         allboards = map(
           boardlink,
-          models.Board.all().fetch(self.BOARDLIM)
+          models.BoardCounter.all().fetch(self.BOARDLIM)
         ),
     )
 
@@ -131,8 +131,8 @@ class Post(RequestHandler, SecureCookieMixin):
 
     if not ajax:
       person_cookie = self.get_secure_cookie("person", True)
-      if not person_cookie.get("update"):
-        return redirect_out()
+      #if not person_cookie.get("update"):
+      #  return redirect_out()
 
 
     # validate post form

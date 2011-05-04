@@ -10,9 +10,8 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: Board
+- kind: BoardCounter
   properties:
-  - name: named
   - name: old
   - name: date_modify
     direction: desc

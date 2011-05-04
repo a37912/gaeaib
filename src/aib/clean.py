@@ -4,7 +4,7 @@ from google.appengine.ext.blobstore import BlobInfo
 from google.appengine.ext import deferred, db
 from tipfy import RequestHandler, Response, get_config
 
-from aib.models import Thread, ThreadIndex, Board, Cache
+from aib.models import Thread, ThreadIndex, Board, BoardCounter, Cache
 #import restore
 
 class CleanBlob(RequestHandler):
@@ -115,6 +115,10 @@ def do_clean_board(cursor=None):
   if not board:
     logging.info("stop board clean")
     return
+
+  board_c = BoardCounter(key_name=board.key().name())
+  board_c.counter = board._entity.get('counter')
+  board_c.put()
 
   threads = Thread.load_list(board.thread, board.key().name())
 

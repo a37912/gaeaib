@@ -7,22 +7,12 @@ from tipfy.ext.db import PickleProperty
 from aetycoon import DerivedProperty, CompressedProperty, TransformProperty 
 from jinja2.utils import escape
 
-class Board(db.Model):
+class BoardCounter(db.Model):
+  NAMES = dict(get_config("aib", "boardlist"))
   OLD_LIM = 50
 
-  thread = db.ListProperty(int, indexed=False)
   counter = db.IntegerProperty(default=0)
   date_modify = db.DateTimeProperty(auto_now=True)
-
-  NAMES = dict(get_config("aib", "boardlist"))
-
-  @DerivedProperty
-  def old(self):
-    return self.counter > self.OLD_LIM
-
-  @DerivedProperty
-  def named(self):
-    return self.code in self.NAMES
 
   @property
   def code(self):
@@ -32,21 +22,23 @@ class Board(db.Model):
   def name(self):
     return self.NAMES.get(self.code)
 
-  @classmethod
-  def load_counter(cls, board):
-    ent = cls.get_by_key_name(board)
-    if not ent:
-      return 1
-    ent.counter+=1
-    ent.put()
+  @DerivedProperty
+  def old(self):
+    return self.counter > self.OLD_LIM
 
-    return ent.counter
 
-  @classmethod
-  def load(cls, board):
-    ent = cls.get_by_key_name(board)
+class Board(db.Model):
+  NAMES = dict(get_config("aib", "boardlist"))
 
-    return ent.thread if ent else None
+  thread = db.ListProperty(int, indexed=False)
+
+  @property
+  def code(self):
+    return self.key().name()
+
+  @property
+  def name(self):
+    return self.NAMES.get(self.code)
 
 class ThreadIndex(db.Model):
   @DerivedProperty
