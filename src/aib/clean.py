@@ -116,9 +116,11 @@ def do_clean_board(cursor=None):
     logging.info("stop board clean")
     return
 
+  """
   board_c = BoardCounter(key_name=board.key().name())
   board_c.counter = board._entity.get('counter')
   board_c.put()
+  """
 
   threads = Thread.load_list(board.thread, board.key().name())
 
