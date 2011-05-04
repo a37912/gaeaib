@@ -125,6 +125,7 @@ class Unban(RequestHandler):
 
     return Response("free")
 
+MONTH = 2592000
 class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   middleware = [SessionMiddleware]
 
@@ -133,7 +134,7 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   def post(self, board, thread):
     # FIXME: move subscribe crap somewhere out
 
-    person_cookie = self.get_secure_cookie("person", True)
+    person_cookie = self.get_secure_cookie("person", True, max_age=MONTH)
     person = person_cookie.get("update", str(uuid()))
 
     person_cookie['update'] = person
