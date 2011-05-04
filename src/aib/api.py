@@ -85,8 +85,8 @@ class ApiBoardList(RequestHandler):
     )
 
 class ApiBoardBumped(RequestHandler):
-  DEF_COUNT = 5
   BOARDS = dict(get_config("aib", "boardlist"))
+  DEF_COUNT = 5+ len(BOARDS)
   def load(self, lim=None):
     boardq = BoardCounter.all(keys_only=True)
     boardq.order("-date_modify")
