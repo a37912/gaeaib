@@ -131,8 +131,11 @@ class Post(RequestHandler, SecureCookieMixin):
 
     if not ajax:
       person_cookie = self.get_secure_cookie("person", True)
-      #if not person_cookie.get("update"):
-      #  return redirect_out()
+      if not person_cookie.get("update"):
+        ua = self.request.environ.get('HTTP_USER_AGENT', '')
+        logging.info("cookie trapped: %r" % ua )
+
+        return redirect_out()
 
 
     # validate post form
