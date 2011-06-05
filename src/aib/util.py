@@ -74,6 +74,15 @@ def option_useragent(request, data):
   else:
     data['agent'] = 'gays heaven'
 
+
+def option_trollsign(request, data):
+
+  from random import randint
+  if not randint(0, 4):
+      data['typ'] = 'modpost'
+      data['name'] = 'Winry'
+
+
 def option_modsign(request, data):
   mods = get_config("aib.ib", "mod_name")
 
