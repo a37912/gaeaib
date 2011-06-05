@@ -13,6 +13,7 @@ from google.appengine.ext import blobstore
 from google.appengine.api import channel
 from google.appengine.api import images
 from google.appengine.api import prospective_search as  matcher
+from google.appengine.runtime.apiproxy_errors import OverQuotaError
 
 from django.utils.simplejson import dumps
 import util
@@ -142,15 +143,22 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
     subid = "%s/board%s/%d" %(person, board, thread, )
 
     query = 'thread:%d board:%s' %(thread, board)
-    matcher.subscribe(util.Post, query, subid,
-        topic='post',
-        lease_duration_sec=self.WATCH_TIME)
+
+
 
     token = memcache.get(subid)
 
     if not token:
       token = channel.create_channel(subid)
       memcache.set(subid, token)
+
+    try:
+        matcher.subscribe(util.Post, query, subid,
+        topic='post',
+        lease_duration_sec=self.WATCH_TIME)
+    except OverQuotaError:
+        logging.error("subscribe failed")
+        token = None
 
     post_level = util.post_level(self.request.remote_addr)
 
