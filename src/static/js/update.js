@@ -99,7 +99,11 @@ sendupdate = function() {
         type: "POST",
         success: function(data) {
           console.log(data.token);
-          listen_updates(data.token);
+          if(data.token) {
+            listen_updates(data.token);
+          } else {
+            console.log("dont listen");
+          }
           post_quota(data.post_quota);
           WATCHER_TIME = data.watcher_time * 1000;
         }
