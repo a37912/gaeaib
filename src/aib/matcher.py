@@ -19,7 +19,9 @@ class Handle(RequestHandler):
       try:
         channel.send_message(sub_id, dumps(send))
       except channel.InvalidChannelClientIdError:
-        pass
+        logging.error("inval client id %r" % sub_id)
+      except channel.InvalidMessageError:
+        logging.error("inval msg: %r" % dumps(send))
 
     return Response("ok")
 
