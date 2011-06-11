@@ -129,15 +129,6 @@ class Post(RequestHandler, SecureCookieMixin):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
       return redirect_out()
 
-    if not ajax:
-      person_cookie = self.get_secure_cookie("person", True)
-      if not person_cookie.get("update"):
-        ua = self.request.environ.get('HTTP_USER_AGENT', '')
-        logging.info("cookie trapped: %r" % ua )
-
-        return redirect_out()
-
-
     # validate post form
     form = PostForm(self.request.form)
 
