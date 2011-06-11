@@ -76,8 +76,7 @@ def get_rules():
     Rule( 
       "/<board>/<int:thread>/post/ajax", 
       endpoint = "board",
-      handler = "aib.ib.Post",
-      defaults = {"ajax" : True},
+      handler = "aib.ib.AjaxPost",
     ),
     Rule( 
       "/<board>/<int:thread>/update", 

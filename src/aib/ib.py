@@ -12,6 +12,7 @@ from tipfy.ext.session import SessionMiddleware, SecureCookieMixin, CookieMixin
 
 from forms import PostForm
 from util import get_threads, save_post, get_post, delete_post
+from django.utils.simplejson import dumps
 
 import models
 from redir import RedirMW
@@ -120,7 +121,7 @@ class Post(RequestHandler, SecureCookieMixin):
   def get(self, board, thread):
     return redirect("/%s/%d" %( board, thread) )
 
-  def post(self, board, thread, ajax=False):
+  def post(self, board, thread):
     if not re.match('^\w+$', board):
       raise NotFound
     logging.info("post called")
@@ -133,7 +134,8 @@ class Post(RequestHandler, SecureCookieMixin):
     form = PostForm(self.request.form)
 
     if not form.validate():
-      return redirect("/%s/" % board)
+      logging.info("form errors: %r" % form.errors)
+      return self.response_error(form.errors, board)
 
     logging.info("data: %r" % form.data)
     logging.info("form: %r" % self.request.form)
@@ -145,10 +147,43 @@ class Post(RequestHandler, SecureCookieMixin):
     cookie = self.get_secure_cookie(key)
     cookie["win"] = key
 
-    if ajax:
-      return Response('{"post":%d }' % post)
+    return self.response_ok(board, thread, post)
 
+
+  def response_ok(self, board, thread, post):
     return redirect("/%s/%d/" % (board, thread))
+
+
+  def response_error(self, errors, board):
+    return redirect("/%s/" % board)
+
+
+def ajax_response(f):
+  def ajax_response_(*a, **kw):
+    ret = f(*a, **kw)
+    return Response(dumps(ret))
+
+  return ajax_response_
+
+class AjaxPost(Post):
+
+  @ajax_response
+  def response_ok(self, board, thread, post):
+    return {
+        "post": post,
+        "board": board,
+        "thread": thread,
+        "status": "ok",
+    }
+
+
+  @ajax_response
+  def response_error(self, errors, board):
+    return {
+        "status": "error",
+        "errors": errors,
+    }
+
 
 ## View: show all posts in thread
 #
