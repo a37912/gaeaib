@@ -198,5 +198,10 @@ def get_rules():
       '/_ah/prospective_search',
       handler = 'aib.matcher.Handle',
     ),
+
+    Rule(
+      '/_ah/channel/<any(connected,disconnected):mode>/',
+      handler = 'aib.ib.ClientHandler',
+    ),
     
   ]

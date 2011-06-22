@@ -1,5 +1,7 @@
 socket = new Object();
 
+omiches = new Object();
+
 function listen_updates(token) {
 
   try {
@@ -52,12 +54,22 @@ function listen_updates(token) {
         notify.show("thread " + thread_name + " updated");
       }
 
-      refresh_inthread();
+    }  else if (o.evt == "online") {
 
-    } else if(o.evt == "enter") {
-      var now = new Date()
-      inthread[o.rainbow] = now.getTime();
-      refresh_inthread();
+      for (x in o.rb) {
+        $('.rainbow-'+o.rb[x]).addClass('rainbow-online');
+      }
+
+      $('.rainbow-online').each(function() {
+          for(x in o.rb) {
+              if ($(this).hasClass('rainbow-'+o.rb[x])) {
+                  return;
+              }
+          }
+
+          $(this).removeClass('rainbow-online');
+        }
+      )
     }
     
     //np.slideUp(0).slideDown(300);
@@ -115,32 +127,9 @@ sendupdate = function() {
   if(WATCHER_TIME) {
     setTimeout(sendupdate, WATCHER_TIME)
   }
-  refresh_inthread();
 }
 
 inthread = new Object();
-
-refresh_inthread = function() {
- var _inthread = new Array();
- $(".thread .watcher").remove();
- var now = new Date();
- now = now.getTime();
- for (rainbow in inthread) {
-    var entertime = inthread[rainbow];
-
-    if ((now - entertime) > WATCHER_TIME) {
-      continue;
-    }
-
-    _inthread[rainbow] = entertime;
-    
-    var watcher_box = '<div class="watcher">'+rainbow+'</div>';
-    $(".thread").append(watcher_box);
-
-
- }
- inthread = _inthread;
-}
 
 sendupdate();
 

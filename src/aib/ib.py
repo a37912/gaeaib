@@ -4,6 +4,7 @@ import re
 
 from google.appengine.ext import db
 from google.appengine.api import users
+from google.appengine.api import memcache
 
 from tipfy import RequestHandler, redirect, Response, NotFound, get_config
 from tipfy.ext.jinja2 import render_response, render_template
@@ -236,3 +237,38 @@ class DeletePost(RequestHandler, SecureCookieMixin, CookieMixin):
 
     return redirect("/%s/%d" %( board, thread) )
 
+
+class ClientHandler(RequestHandler):
+  def post(self, mode):
+    client = self.request.form.get('from')
+    rb, person, board, thread = client.split('/')
+    thread = int(thread)
+
+    logging.info("client %s %s %d - %r" % (rb, board, thread, mode))
+
+    online = memcache.get('online-%s-%d' % (board, thread)) or []
+    while rb in online:
+        online.remove(rb)
+
+    if mode == 'connected':
+        online.append(rb)
+
+    memcache.set('online-%s-%d' % (board, thread), online)
+
+    # send notify
+    from .matcher import Post
+    from google.appengine.api import prospective_search as  matcher
+
+    match_msg = Post(board = board, thread = thread,)
+    match_msg.data = dict(
+      board = board,
+      thread = thread,
+      rb = online,
+      evt = 'online',
+    )
+
+    matcher.match(match_msg, topic='post',
+      result_task_queue='postnotify')
+
+
+    return Response("yep")

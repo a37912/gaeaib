@@ -1,5 +1,5 @@
 {% import 'postmacro.html' as postmacro %}
-<table id="post-{{post.post}}" class="tablepost" >
+<table id="post-{{post.post}}" class="tablepost rainbow-{{post.rainbow}}" >
   <tbody>
     <tr>
       <td class="doubledash">&gt;&gt;</td>
@@ -13,9 +13,7 @@
         </a>
         <label>
           <span class="commentpostername {{post.typ}}">{{ post.name|escape }}</span>
-          <span class="rainbow" cid="{{post.post}}" rainbow="{{post.rainbow}}"></span>
-	  <canvas id="rc-{{post.post}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas> 
-
+          {{postmacro.rb(post)}}
         </label>
         {% if post.sage %}<label><b>SAGE</b></label>{% endif %}
         {{postmacro.ptime(post)}}

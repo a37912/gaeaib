@@ -135,15 +135,13 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   def post(self, board, thread):
     # FIXME: move subscribe crap somewhere out
 
+    rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
     person_cookie = self.get_secure_cookie("person", True, max_age=MONTH)
     person = person_cookie.get("update", str(uuid()))
 
     person_cookie['update'] = person
 
-    subid = "%s/board%s/%d" %(person, board, thread, )
-
-    query = 'thread:%d board:%s' %(thread, board)
-
+    subid = "%s/%s/%s/%d" %(rb, person, board, thread, )
 
 
     token = memcache.get(subid)
@@ -153,6 +151,8 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
       memcache.set(subid, token)
 
     try:
+        query = 'thread:%d board:%s' %(thread, board)
+
         matcher.subscribe(util.Post, query, subid,
         topic='post',
         lease_duration_sec=self.WATCH_TIME)
@@ -161,8 +161,6 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
         token = None
 
     post_level = util.post_level(self.request.remote_addr)
-
-    rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
 
     return json_response( 
         {

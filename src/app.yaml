@@ -47,6 +47,7 @@ admin_console:
 
 inbound_services:
 - warmup
+- channel_presence
 
 builtins:
 - datastore_admin: on

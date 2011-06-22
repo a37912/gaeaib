@@ -275,6 +275,10 @@ div.allboards {
   overflow: auto;
 }
 
+.rainbow-online span.rainbow:after {
+  content: "online";
+}
+
 /* @group Footer */
 
 footer {
