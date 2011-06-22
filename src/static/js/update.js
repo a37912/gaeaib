@@ -1,7 +1,5 @@
 socket = new Object();
 
-omiches = new Object();
-
 function listen_updates(token) {
 
   try {
@@ -54,22 +52,13 @@ function listen_updates(token) {
         notify.show("thread " + thread_name + " updated");
       }
 
+      refresh_online(refresh_online.last_online);
+
     }  else if (o.evt == "online") {
 
-      for (x in o.rb) {
-        $('.rainbow-'+o.rb[x]).addClass('rainbow-online');
-      }
+        refresh_online(o.rb);
+        refresh_online.last_online = o.rb;
 
-      $('.rainbow-online').each(function() {
-          for(x in o.rb) {
-              if ($(this).hasClass('rainbow-'+o.rb[x])) {
-                  return;
-              }
-          }
-
-          $(this).removeClass('rainbow-online');
-        }
-      )
     }
     
     //np.slideUp(0).slideDown(300);
@@ -83,6 +72,25 @@ try {
 } catch (e) {
   thread = "";
 }
+
+refresh_online = function(online) {
+  for (x in online) {
+    $('.rainbow-'+online[x]).addClass('rainbow-online');
+  }
+
+  $('.rainbow-online').each(function() {
+      for(x in online) {
+          if ($(this).hasClass('rainbow-'+online[x])) {
+              return;
+          }
+      }
+
+      $(this).removeClass('rainbow-online');
+    }
+  )
+};
+
+refresh_online.last_online = [];
 
 post_quota_level = "post_quota_ok";
 
