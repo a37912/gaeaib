@@ -132,33 +132,32 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
 
   WATCH_TIME = get_config("aib.util", "watch_time")
 
-  def post(self, board, thread):
+  def post(self, board, thread=None):
     # FIXME: move subscribe crap somewhere out
 
-    rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
     person_cookie = self.get_secure_cookie("person", True, max_age=MONTH)
     person = person_cookie.get("update", str(uuid()))
 
     person_cookie['update'] = person
 
-    subid = "%s/%s/%s/%d" %(rb, person, board, thread, )
-
-
-    token = memcache.get(subid)
+    token = memcache.get(person)
 
     if not token:
-      token = channel.create_channel(subid)
-      memcache.set(subid, token)
+      token = channel.create_channel(person)
+      memcache.set(person, token)
 
-    try:
-        query = 'thread:%d board:%s' %(thread, board)
+    if thread:
+        subid = '%s/%s/%d' % (person, board, thread)
 
-        matcher.subscribe(util.Post, query, subid,
-        topic='post',
-        lease_duration_sec=self.WATCH_TIME)
-    except OverQuotaError:
-        logging.error("subscribe failed")
-        token = None
+        try:
+            query = 'thread:%d board:%s' %(thread, board)
+
+            matcher.subscribe(util.Post, query, subid,
+            topic='post',
+            lease_duration_sec=self.WATCH_TIME)
+        except OverQuotaError:
+            logging.error("subscribe failed")
+            token = None
 
     post_level = util.post_level(self.request.remote_addr)
 

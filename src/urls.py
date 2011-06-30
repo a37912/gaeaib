@@ -84,6 +84,12 @@ def get_rules():
       handler = "aib.api.UpdateToken",
     ),
     Rule( 
+      "/<board>/update", 
+      endpoint = "board:update",
+      handler = "aib.api.UpdateToken",
+    ),
+
+    Rule( 
       "/<board>/<int:thread>/rss", 
       endpoint = "board:update",
       handler = "aib.rss.ViewThread",

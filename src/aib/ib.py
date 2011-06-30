@@ -240,8 +240,20 @@ class DeletePost(RequestHandler, SecureCookieMixin, CookieMixin):
 
 class ClientHandler(RequestHandler):
   def post(self, mode):
+
     client = self.request.form.get('from')
-    rb, person, board, thread = client.split('/')
+
+    if '/' in client:
+      return Response("no")
+
+    last = memcache.get('last-seen-%s' % client)
+
+    if not last:
+      return Response("no")
+
+    # FIXME: will not run
+
+    rb, board, thread = last.split('/')
     thread = int(thread)
 
     logging.info("client %s %s %d - %r" % (rb, board, thread, mode))

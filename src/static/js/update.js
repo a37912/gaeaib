@@ -1,5 +1,14 @@
 socket = new Object();
 
+try {
+ ls = window['localStorage'];
+} catch(err) {
+ ls = new Object();
+}
+
+th_key = _board + "/" + thread;
+
+
 function listen_updates(token) {
 
   try {
@@ -28,15 +37,44 @@ function listen_updates(token) {
     console.log("socket connected");
   };
   socket.onmessage = function(evt) {
-    o = JSON.parse(evt.data);
+
+    message(evt.data);
+
+  }
+}
+
+function message(data) {
+
+    o = JSON.parse(data);
 
     if (o.evt == "newpost") {
+
+      if(thread != '') {
+        var container = $(".thread");
+      } else {
+        var container = $("#postarea");
+      }
+
+      if(notify) {
+        thread_name = "/" + o.board + "/" + o.thread;
+        notify.show("thread " + thread_name + " updated");
+      }
+
+      if( (o.thread != thread) || (o.board != _board)) {
+          var msg = 'new post in <a href="/' + o.board + "/"+  o.thread + '/">>>/'+o.board+'/'+o.thread+'</a>';
+          var warn = $('<p class="warn">' + msg + '</p>');
+
+          container.append(warn);
+
+          ls[o.board+'/'+o.thread] = data;
+
+          return;
+      }
 
       if ($("#post-" + o.last).length > 0) {
         return;
       }
 
-      var container = $(".thread");
 
       if ($(".tablepost").length != (o.count-2)) {
         var warn = $('<p class="warn">hmmm...</p>');
@@ -47,11 +85,7 @@ function listen_updates(token) {
       container.append(np);
       setup_post(np);
 
-      if(notify) {
-        thread_name = "/" + _board + "/" + thread;
-        notify.show("thread " + thread_name + " updated");
-      }
-
+      
       refresh_online(refresh_online.last_online);
 
     }  else if (o.evt == "online") {
@@ -60,11 +94,6 @@ function listen_updates(token) {
         refresh_online.last_online = o.rb;
 
     }
-    
-    //np.slideUp(0).slideDown(300);
-
-
-  }
 }
 
 try {
@@ -107,12 +136,17 @@ post_quota = function(level) {
   $("textarea#id_text").addClass(post_quota_level);
 }
 
-WATCHER_TIME = 18*1000;
-
-update_timer = null;
 sendupdate = function() {
-  if (thread != "") {
-    $.ajax(
+
+  var date = new Date();
+
+  if(ls['open'] > date.getTime() - 2000) {
+    return;
+  }
+
+  ls['open'] = date.getTime() + 10000;
+
+  $.ajax(
       {
         url: "update",
         dataType: 'json',
@@ -125,21 +159,15 @@ sendupdate = function() {
             console.log("dont listen");
           }
           post_quota(data.post_quota);
-          WATCHER_TIME = data.watcher_time * 1000;
         }
       }
-    )
-  }
+  )
 
-  clearTimeout(update_timer);
-  if(WATCHER_TIME) {
-    setTimeout(sendupdate, WATCHER_TIME)
-  }
 }
 
-inthread = new Object();
-
 sendupdate();
+
+inthread = new Object();
 
 sendform = function(e) {
   var button = $("#post_submit");
@@ -214,6 +242,30 @@ sendform = function(e) {
   e.preventDefault();
   sendupdate();
 }
+
+function ls_loop() {
+    var date = new Date();
+
+    if(socket.readyState == 1) {
+        ls['open'] = date.getTime();
+    } else {
+        if(ls['open']  < (date.getTime() - 3427)) {
+          sendupdate();
+        }
+    }
+
+    var data = ls.getItem(th_key);
+
+    if(data) {
+        message(data);
+
+        ls.removeItem(th_key);
+    }
+
+    setTimeout(ls_loop, 100);
+}
+
+ls_loop();
 
 $("form").submit(sendform);
 

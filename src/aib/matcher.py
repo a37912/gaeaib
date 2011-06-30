@@ -15,9 +15,15 @@ class Handle(RequestHandler):
     send = post.data
 
     for sub_id in self.request.form.getlist('id'):
-      logging.info("send post to %s" % sub_id)
+      if '/' in sub_id:
+        person, board, thread = sub_id.split('/')
+      else:
+        person = sub_id
+
+      logging.info("send post to %s" % person)
+
       try:
-        channel.send_message(sub_id, dumps(send))
+        channel.send_message(person, dumps(send))
       except channel.InvalidChannelClientIdError:
         logging.error("inval client id %r" % sub_id)
       except channel.InvalidMessageError:
