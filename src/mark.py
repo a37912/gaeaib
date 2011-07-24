@@ -13,6 +13,11 @@ POST_LINK_FULL = (
     r'<a frmpostid="##postid##" postid="\2" board="\1" class="postref outboard" href="/\1/p\2">&gt;&gt;/\1/\2</a>',
 )
 
+BOARDRINK = (
+    "&gt;&gt;([a-z]+)",
+    r'<a href="/\1/">&gt;&gt;\1</a>',
+)
+
 BOLD1 = (
     "\*\*([^\*_]+)\*\*",
     r"<b>\1</b>",
@@ -53,6 +58,7 @@ states = {
       "fmt" : [
         POST_LINK,
         POST_LINK_FULL,
+        BOARDRINK,
         BOLD1,
         BOLD2,
         ITALIC,
