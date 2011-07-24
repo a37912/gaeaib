@@ -1,7 +1,10 @@
 {% import 'postmacro.html' as postmacro %}
 <div class="thread">
   <div class="threadnum" >
-    <a href="/{{board}}/{{thread.id}}">{{postmacro.tsubj(thread)}}</a>
+    <a href="/{{thread.board}}/{{thread.id}}">{{postmacro.tsubj(thread)}}</a>
+    {% if board != thread.board %}
+    @{{thread.board }}
+    {% endif %}
   </div>
 
   <div class="oppost">
@@ -29,7 +32,7 @@
 </label>
 
 {% if reply %}
-  <a class="g-button" href="{{ thread.id }}/" >Ответить</a>
+<a class="g-button" href="/{{thread.board}}/{{ thread.id }}/" >Ответить</a>
 {% else %}
 
 {% if thread.op.agent %}

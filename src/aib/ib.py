@@ -88,11 +88,6 @@ class Board(RequestHandler):
     if page > self.PAGES:
       raise NotFound()
 
-    if page == 0:
-      cache = models.Cache.load("board", board)
-      if cache:
-        return Response(cache.data)
-
     data = {}
     data['threads'] = get_threads(board,page=page) # last threads
     data['show_captcha'] = True
@@ -105,11 +100,6 @@ class Board(RequestHandler):
     data['overlay'] = board in self.OVER
 
     html = render_template("board.html", **data)
-
-    if page == 0:
-      cache = models.Cache.create("board", board)
-      cache.data = html
-      cache.put()
 
     return Response(html)
 

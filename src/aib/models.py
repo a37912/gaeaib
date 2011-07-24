@@ -31,6 +31,7 @@ class Board(db.Model):
   NAMES = dict(get_config("aib", "boardlist"))
 
   thread = db.ListProperty(int, indexed=False)
+  linked = PickleProperty()
 
   @property
   def code(self):
@@ -71,6 +72,34 @@ class Thread(db.Model):
   board = db.StringProperty()
   id = db.IntegerProperty()
 
+  @DerivedProperty
+  def boards(self):
+
+    ret = self.linked_boards(self.posts[0])
+
+    ret.append('image' if self.posts[0].get('image') else 'plain')
+
+    ret = list(set(ret))
+    ret.insert(0, self.board)
+
+    return ret
+
+  @classmethod
+  def linked_boards(cls, post):
+    import re
+    txt = post.get('text')
+
+    if not txt:
+      return []
+
+    #headline = txt[:txt.find('\n')]
+
+    return [
+      tag
+      for link,tag in
+      re.findall('(>>(\w+))', txt)
+    ]
+
   @property
   def safe_subject(self):
     return escape(self.subject)
@@ -109,14 +138,14 @@ class Thread(db.Model):
         board=board, id=number)
 
   @classmethod
-  def load_list(cls, numbers, board):
+  def load_list(cls, threads):
 
     keys = [
       cls.gen_key(num, board)
-      for num in numbers
+      for board,num in threads
     ]
 
-    return zip( numbers, db.get(keys))
+    return db.get(keys)
 
 class GenKey(object):
 

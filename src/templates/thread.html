@@ -53,7 +53,7 @@
 </label>
 
 {% if reply %}
-  <a class="g-button" href="{{ thread.id }}/" >Ответить</a>
+<a class="g-button" href="/{{thread.board}}/{{ thread.id }}/" >Ответить</a>
 {% else %}
 
 {% if thread.op.agent %}

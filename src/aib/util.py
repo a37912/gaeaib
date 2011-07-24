@@ -32,19 +32,26 @@ def get_threads(board, page=0, fmt_name="page"):
   else:
     fmt = thread_plain
 
-  per_page = get_config('aib.ib', 'thread_per_page')
+
+  threads = []
 
   board_db = Board.get_by_key_name(board)
-  threads = board_db.thread if board_db else []
+  if board_db:
+    threads = board_db.linked
+
+    if not threads:
+      threads = [ (board, th) for th in board_db.thread]
+
+  per_page = get_config('aib.ib', 'thread_per_page')
   threads = threads[per_page*page:per_page*(page+1)]
   logging.info("threadlist in %r : %r" % (board, threads))
 
   # grab data from cache
-  data =  Thread.load_list(threads, board)
+  data =  Thread.load_list(threads)
 
-  return [ fmt(num,th) for num,th in data if th ]
+  return [ fmt(th) for th in data if th ]
 
-def thread_plain(num,thread):
+def thread_plain(thread):
 
   return {
     "posts" : thread.posts,
@@ -53,7 +60,7 @@ def thread_plain(num,thread):
   }
 
 
-def thread_page(num,thread):
+def thread_page(thread):
   return thread
 
 def option_saem(request, data):
@@ -185,7 +192,7 @@ def save_post(request, data, board, thread):
   r.save()
 
   deferred.defer(save_post_defer,
-      board, thread,
+      thread_db.boards, thread,
       r.post_html, data.get('text_html'),
       postid,
       len(thread_db.posts),
@@ -209,34 +216,49 @@ def save_post(request, data, board, thread):
   return postid, thread
 
 
-def save_post_defer(board, thread, html, text_html, postid, count, sage):
+def save_post_defer(boards, thread, html, text_html, postid, count, sage):
 
-  # drop board cache
-  # TODO: replace by snippets
-  Cache.remove("board", board)
+  index_regen(Thread.gen_key(thread, boards[0]))
 
-  index_regen(Thread.gen_key(thread, board))
-
-  rss.add(board, thread, postid, text_html)
+  rss.add(boards[0], thread, postid, text_html)
 
   if not sage:
-    bump(board, thread)
+    bump(boards, thread)
 
   # TODO: generate last 5 messages here
   # thread_snippet(board, thread)
 
-def bump(board, thread):
+def bump(boards, thread):
 
-  board_db = Board.get_by_key_name(board)
+  board_db = Board.get_by_key_name(boards)
+  main = boards[0]
 
-  if not board_db:
-    board_db = Board(key_name=board)
+  for x,(name,board) in enumerate(zip(boards,board_db)):
+    if not board:
+      board = Board(key_name=name)
+      board.linked = []
+      board_db[x] = board
 
-  if thread in board_db.thread:
-    board_db.thread.remove(thread)
+    if not board.linked and board.thread:
+      board.linked = [
+        (board.code, th)
+        for th in
+        board.thread
+      ]
 
-  board_db.thread.insert(0, thread)
-  board_db.put()
+    if (main,thread) in board.linked:
+      board.linked.remove((main,thread))
+
+    board.linked.insert(0, (main,thread))
+
+  main_db = board_db[0]
+  if thread in main_db.thread:
+    main_db.thread.remove(thread)
+
+  main_db.thread.insert(0, thread)
+
+  db.put(board_db)
+
 
 def index_regen(tkey):
   index = ThreadIndex(parent=tkey, key_name="idx")
