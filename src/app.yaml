@@ -34,6 +34,11 @@ handlers:
   script: main.py
   login: admin
 
+- url: /belki/post/.*
+  script: main.py
+  login: required
+
+
 - url: /.*
   script: main.py
 
