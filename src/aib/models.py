@@ -66,6 +66,7 @@ class ThreadIndex(db.Model):
 class Thread(db.Model):
 
   REPLIES_MAIN = get_config("aib.ib", 'replies_main')
+  PROMOTE = get_config('aib.ib', 'promote_boards', {})
   posts = PickleProperty()
 
   subject = db.StringProperty(indexed=False)
@@ -78,6 +79,7 @@ class Thread(db.Model):
     ret = self.linked_boards(self.posts[0])
 
     ret.append('image' if self.posts[0].get('image') else 'plain')
+    ret.extend(self.PROMOTE.get(self.board) or [])
 
     ret = list(set(ret))
     ret.insert(0, self.board)
@@ -99,6 +101,7 @@ class Thread(db.Model):
       for link,tag in
       re.findall('(>>(\w+))', txt)
     ]
+
 
   @property
   def safe_subject(self):
