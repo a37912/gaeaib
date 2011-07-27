@@ -132,7 +132,6 @@ class Post(RequestHandler, SecureCookieMixin):
   def post(self, board, thread):
     if not re.match('^\w+$', board):
       raise NotFound
-    logging.info("post called")
 
     if not antiwipe.check(self.request.remote_addr):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
@@ -146,9 +145,6 @@ class Post(RequestHandler, SecureCookieMixin):
     if not form.validate():
       logging.info("form errors: %r" % form.errors)
       return self.response_error(form.errors, board)
-
-    logging.info("data: %r" % form.data)
-    logging.info("form: %r" % self.request.form)
 
     # if ok, save
     post, thread = save_post(self.request, form.data, board, thread)
