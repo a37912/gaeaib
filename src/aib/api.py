@@ -136,7 +136,7 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
     # FIXME: move subscribe crap somewhere out
 
     rb = rainbow.make_rainbow(self.request.remote_addr, board, thread)
-    person_cookie = self.get_secure_cookie("person", True, max_age=MONTH)
+    person_cookie = self.get_secure_cookie("person", True, max_age=MONTH*12)
     person = person_cookie.get("update", str(uuid()))
 
     person_cookie['update'] = person

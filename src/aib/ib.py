@@ -112,6 +112,23 @@ class Post(RequestHandler, SecureCookieMixin):
   def get(self, board, thread):
     return redirect("/%s/%d" %( board, thread) )
 
+  def person(self):
+    MONTH = 2592000
+    import time
+
+    person_cookie = self.get_secure_cookie("person", True, max_age=MONTH*12)
+
+    count = person_cookie.get("postcount", 0)
+    regtime = person_cookie.get("regtime", time.time())
+
+    person_cookie.update({
+        "postcount": count+1,
+        "regtime": regtime
+    })
+    logging.info("person: %d %d" % (count, regtime))
+
+    self.p = person_cookie
+
   def post(self, board, thread):
     if not re.match('^\w+$', board):
       raise NotFound
@@ -120,6 +137,8 @@ class Post(RequestHandler, SecureCookieMixin):
     if not antiwipe.check(self.request.remote_addr):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
       return redirect_out()
+
+    self.person()
 
     # validate post form
     form = PostForm(self.request.form)
