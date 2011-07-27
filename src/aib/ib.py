@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import re
+from md5 import md5
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -103,6 +104,9 @@ class Board(RequestHandler):
 
     return Response(html)
 
+def obfuscate_ip(ip):
+  return md5(ip).hexdigest()
+
 ## View: saves new post
 #
 # @param board - string board name
@@ -135,7 +139,8 @@ class Post(RequestHandler, SecureCookieMixin):
 
     self.person()  # move to MW?
 
-    if not antiwipe.check(self.request.remote_addr, self.p):
+    ip = obfuscate_ip(self.request.remote_addr)
+    if not antiwipe.check(self.p, ip=ip, board=board, thread=thread):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
       return redirect_out()
 
