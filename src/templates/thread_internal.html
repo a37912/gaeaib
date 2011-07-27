@@ -13,7 +13,7 @@
 
   <span class="reflink">
     <a class="reflink" name="p{{thread.op.post}}" href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
-      threadid="{{thread.id}}"
+      threadid="{{thread.id}}"  board="{{thread.board}}"
     >#{{thread.op.post}}</a>
   </span>
   <br/>
@@ -42,7 +42,7 @@
 <span class="reflink">
   <a class="reflink" name="p{{thread.op.post}}" 
     href="#p{{thread.op.post}}" postid="{{thread.op.post}}"
-    threadid="{{thread.id}}"
+    threadid="{{thread.id}}"  board="{{thread.board}}"
   >#{{thread.op.post}}</a>
 </span>
 
@@ -55,6 +55,7 @@
 <span class="omittedposts">Пропущено {{ thread.skip }}</span>
 {% endif %}
 {% for post in thread.tail_posts %}
+{% set board=thread.board %}
 {% include 'post.html' %}
 {% endfor %}
 <!--NPHERE-->

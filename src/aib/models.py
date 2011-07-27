@@ -79,12 +79,16 @@ class Thread(db.Model):
     ret = self.linked_boards(self.posts[0])
 
     ret.append('image' if self.posts[0].get('image') else 'plain')
-    ret.extend(self.PROMOTE.get(self.board) or [])
+    ret.extend(self.promote_boards())
 
     ret = list(set(ret))
     ret.insert(0, self.board)
 
     return ret
+
+  def promote_boards(self):
+    return self.PROMOTE.get(self.board) or []
+
 
   @classmethod
   def linked_boards(cls, post):

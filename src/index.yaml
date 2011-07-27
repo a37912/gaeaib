@@ -18,6 +18,6 @@ indexes:
 
 - kind: Thread
   properties:
-  - name: board
+  - name: boards
   - name: id
     direction: desc

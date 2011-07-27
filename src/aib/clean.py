@@ -121,14 +121,17 @@ def do_clean_board(cursor=None):
   board_c.counter = board._entity.get('counter')
   board_c.put()
   """
+  keys = board.linked
+  if not keys:
+    keys = [ (board.code, th) for th in board.thread]
 
-  threads = Thread.load_list(board.thread, board.key().name())
+  threads = Thread.load_list(keys)
 
-  board.thread = [th for (th,data) in threads if data]
+  board.linked = [th for (th,data) in zip(keys, threads) if data]
   fill_board(board)
 
   board.put()
-  Cache.remove("board", board.key().name())
+  #Cache.remove("board", board.key().name())
 
   deferred.defer(do_clean_board, thq.cursor())
 
@@ -137,17 +140,17 @@ TMAX = get_config('aib.ib', 'thread_per_page') * get_config('aib.ib','board_page
 def fill_board(board):
   logging.info("fill board %s" % board.code)
   threads = Thread.all()
-  threads.filter("board", board.code)
+  threads.filter("boards", board.code)
   threads.order("-id")
 
   for thread in threads.fetch(TMAX):
 
     logging.info("here is thread %r" % thread)
 
-    if len(board.thread) >= TMAX:
+    if len(board.linked) >= TMAX:
       return
 
-    if thread.id not in board.thread:
+    if (thread.board,thread.id) not in board.linked:
       logging.info("add now")
-      board.thread.append(  thread.id )
+      board.linked.append( (thread.board,thread.id) )
 
