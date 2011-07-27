@@ -153,7 +153,7 @@ class Post(RequestHandler, SecureCookieMixin):
       return self.response_error(form.errors, board)
 
     # if ok, save
-    post, thread = save_post(self.request, form.data, board, thread)
+    post, thread = save_post(self.request, form.data, board, thread, self.request.remote_addr)
     
     key = board + "%d" % post
     cookie = self.get_secure_cookie(key)

@@ -203,5 +203,13 @@ def get_rules():
       '/_ah/channel/<any(connected,disconnected):mode>/',
       handler = 'aib.ib.ClientHandler',
     ),
+    Rule(
+      "/_ah/xmpp/subscription/subscribe/",
+      handler = 'xmppib.handlers.SubRequest',
+    ),
+    Rule(
+      "/_ah/xmpp/message/chat/",
+       handler = 'xmppib.handlers.Post',
+    ),
     
   ]

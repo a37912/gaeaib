@@ -110,7 +110,7 @@ OVER = get_config("aib", "overlay")
 # @param data - valid cleaned data from form
 # @param board - string board name
 # @param thread - thread id where to post or "new"
-def save_post(request, data, board, thread):
+def save_post(request, data, board, thread, ip):
 
   def board_increment():
     board_db = BoardCounter.get_by_key_name(board)
@@ -148,7 +148,7 @@ def save_post(request, data, board, thread):
   per_page = get_config('aib.ib', 'thread_per_page')
   pages = get_config('aib.ib', 'board_pages')
 
-  rb = rainbow.make_rainbow(request.remote_addr, board, thread)
+  rb = rainbow.make_rainbow(ip, board, thread)
   data['rainbow'] = rb
   data['overlay'] = board in OVER
   
@@ -200,11 +200,13 @@ def save_post(request, data, board, thread):
   )
 
   # send notify
-  match_msg = Post(board = board, thread = thread,)
+  thread_flag = 'new' if new else 'sage' if data.get("sage") else 'bump'
+  match_msg = Post(board = board, thread = thread, thread_flag = thread_flag)
   match_msg.data = dict(
     board = board,
     thread = thread,
     html = r.post_html,
+    text = data.get('text'),
     last = postid,
     count = len(thread_db.posts),
     evt = 'newpost'

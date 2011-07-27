@@ -52,6 +52,9 @@ admin_console:
 inbound_services:
 - warmup
 - channel_presence
+- xmpp_subscribe
+- xmpp_message
+- xmpp_presence
 
 builtins:
 - datastore_admin: on
