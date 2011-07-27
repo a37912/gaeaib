@@ -20,7 +20,7 @@ from redir import RedirMW
 import mark
 mark.install_jinja2()
 
-import antiwipe
+import antiwipe.utils as antiwipe
 
 REDIRECT = ['http://danbooru.donmai.us/post/index?tags=winry_rockbell']
 
@@ -133,11 +133,12 @@ class Post(RequestHandler, SecureCookieMixin):
     if not re.match('^\w+$', board):
       raise NotFound
 
-    if not antiwipe.check(self.request.remote_addr):
+    self.person()  # move to MW?
+
+    if not antiwipe.check(self.request.remote_addr, self.p):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
       return redirect_out()
 
-    self.person()
 
     # validate post form
     form = PostForm(self.request.form)

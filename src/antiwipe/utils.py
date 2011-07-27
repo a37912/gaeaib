@@ -3,7 +3,7 @@ from time import time
 import logging
 from tipfy import get_config
 
-def check(ip):
+def check(ip, person):
 
   stat_interval = get_config('aib.antiwipe', "wipe_stat_interval")
 
