@@ -49,7 +49,12 @@ class Post(RequestHandler):
     if th:
       th = int(th.group(1))
     else:
-      th = 'new'
+      th = re.search('^>>/(\w+)/(\d+)', headline)
+      if th:
+        board,th = th.groups()
+        th = int(th)
+      else:
+        th = 'new'
 
     thq = ThreadIndex.all(keys_only=True)
     thq.filter("board", board)
