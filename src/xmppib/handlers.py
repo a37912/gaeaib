@@ -93,7 +93,7 @@ class Post(RequestHandler):
     MSG = "Posted http://42ch.org/%s/%d/#p%d" %(board, thread, post)
 
     #
-    query = 'board:%s thread:%d' %(board, th)
+    query = 'board:%s thread:%d' %(board, thread)
     matcher.subscribe(MatchPost, query, jid, topic='post')
 
 
