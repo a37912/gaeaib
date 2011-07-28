@@ -30,6 +30,19 @@ def sub(jid, board):
     query = 'board:%s thread_flag:new' % (board,)
     matcher.subscribe(MatchPost, query, jid, topic='post')
 
+def thread_lookup(th, board):
+    thq = ThreadIndex.all(keys_only=True)
+    thq.filter("board", board)
+    thq.filter("post_numbers", int(th))
+
+    thread = thq.get()
+    if not thread:
+      return
+
+    _board, _thread = thread.parent().name().split('/')
+    return int(_thread)
+
+
 class Post(RequestHandler):
   def post(self):
     logging.info("chat form: %r" % self.request.form)
@@ -47,23 +60,16 @@ class Post(RequestHandler):
 
     th = re.search('^>>(\d+)', headline)
     if th:
-      th = int(th.group(1))
+      th = thread_lookup(th.group(1), board)
     else:
       th = re.search('^>>/(\w+)/(\d+)', headline)
       if th:
         board,th = th.groups()
-        th = int(th)
+        th = thread_lookup(th, board)
       else:
         th = 'new'
 
-    thq = ThreadIndex.all(keys_only=True)
-    thq.filter("board", board)
-    thq.filter("post_numbers", th)
-
-    thread = thq.get()
-    _board, _thread = thread.parent().name().split('/')
-    th = int(_thread)
-    if not thread:
+    if not th:
       xmpp.send_message(frm, "WINRY WINRY WINRY", from_jid=to)
       return Response("ya")
 
