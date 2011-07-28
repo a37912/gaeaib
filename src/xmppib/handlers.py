@@ -27,8 +27,9 @@ class SubRequest(RequestHandler):
     return Response("ya")
 
 def sub(jid, board):
+    subid = '%s/%s' % (jid, board)
     query = 'board:%s thread_flag:new' % (board,)
-    matcher.subscribe(MatchPost, query, jid, topic='post')
+    matcher.subscribe(MatchPost, query, subid, topic='post')
 
 def thread_lookup(th, board):
     thq = ThreadIndex.all(keys_only=True)
@@ -94,7 +95,8 @@ class Post(RequestHandler):
 
     #
     query = 'board:%s thread:%d' %(board, thread)
-    matcher.subscribe(MatchPost, query, jid, topic='post')
+    sub_id = '%s/%s/%d' % (jid, board, thread)
+    matcher.subscribe(MatchPost, query, sub_id, topic='post')
 
 
     xmpp.send_message(frm, MSG, from_jid=to,)

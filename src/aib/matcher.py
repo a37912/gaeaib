@@ -17,12 +17,16 @@ class Handle(RequestHandler):
     send = post.data
 
     for sub_id in self.request.form.getlist('id'):
-
       logging.info("send post to %s" % sub_id)
+
+      if send.get('evt') == 'online' and '@' in sub_id:
+        continue
+
       if '@' in sub_id:
+        jid = sub_id.split('/')[0]
         whoami = '%(board)s@bankaiapp.appspotchat.com' % send
         MSG = """Posted http://42ch.org/%(board)s/%(thread)d/#p%(last)d\n\n%(text)s""" % send
-        xmpp.send_message(sub_id, MSG, from_jid=whoami)
+        xmpp.send_message(jid, MSG, from_jid=whoami)
         continue
 
       try:
