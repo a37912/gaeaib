@@ -18,9 +18,7 @@ def rainbow(ctx, hexcode):
 
   lines = draw.rb(colors) 
 
-  return '<img src="data:image/png,%s" width=20 heigh=20 />' % urllib.quote(
-          draw.data(lines)
-        )
+  return urllib.quote(draw.data(lines))
 
 def install_jinja2():
   from tipfy.ext.jinja2 import get_env

@@ -1,8 +1,8 @@
 import png
 import StringIO
 
-W = 100
-H = 100
+W = 20
+H = 20
 
 buff = StringIO.StringIO()
 writer = png.Writer(size=(W,H), bitdepth=4)
@@ -72,17 +72,30 @@ def draw4(off_x, off_y, width, heigh, color):
 
 
 def rb(colors):
-    draw1(off_x=0, off_y=00, width=50, heigh=50, color=colors[1])
-    draw2(off_x=0, off_y=50, width=50, heigh=50, color=colors[1])
-    draw3(off_x=0, off_y=50, width=50, heigh=50, color=colors[4])
+  ret = []
+  for l in lines:
+    row = []
+    for x in l[::3]:
+      row.extend(colors[x])
 
-    draw1(off_x=50, off_y=50, width=50, heigh=50, color=colors[2])
-    draw3(off_x=50, off_y=0, width=50, heigh=50, color=colors[3])
-    draw4(off_x=50, off_y=50, width=50, heigh=50, color=colors[3])
+    ret.append(row)
 
-    draw2(off_x=50, off_y=0, width=50, heigh=50, color=colors[0])
+  return ret
 
-    draw4(off_x=0, off_y=00, width=50, heigh=50, color=colors[5])
+def prepare():
+    colors = [ [x]*3 for x in range(6)]
+
+    draw1(off_x=0, off_y=00, width=10, heigh=10, color=colors[1])
+    draw2(off_x=0, off_y=10, width=10, heigh=10, color=colors[1])
+    draw3(off_x=0, off_y=10, width=10, heigh=10, color=colors[4])
+
+    draw1(off_x=10, off_y=10, width=10, heigh=10, color=colors[2])
+    draw3(off_x=10, off_y=0, width=10, heigh=10, color=colors[3])
+    draw4(off_x=10, off_y=10, width=10, heigh=10, color=colors[3])
+
+    draw2(off_x=10, off_y=0, width=10, heigh=10, color=colors[0])
+
+    draw4(off_x=0, off_y=00, width=10, heigh=10, color=colors[5])
 
 
     return lines
@@ -94,3 +107,6 @@ def data(lines):
   writer.write(buff, img.rows)
 
   return buff.getvalue()
+
+
+prepare()
