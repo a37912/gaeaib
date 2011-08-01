@@ -21,6 +21,9 @@
 {%- endmacro %}
 
 {% macro rb(post) -%}
+{#
 <span class="rainbow rainbow-{{post.rainbow}}" cid="{{post.post}}" rainbow="{{post.rainbow}}"></span>
 <canvas id="rc-{{post.post}}" width="20" height="20" style="border: 1px solid darkGray;"></canvas> 
+#}
+{{ post.rainbow | rainbow }}
 {%- endmacro %}

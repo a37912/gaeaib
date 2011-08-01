@@ -1,41 +1,32 @@
 # -*- coding: utf-8 -*-
 import logging
+from jinja2 import contextfilter, Markup
+
 from md5 import md5
 
 from tipfy import get_config
 
-TWRAPER = "<span class='rainbow'>%s</span>"
-TEMPLATE='<span style="background: rgb(%d, %d, %d);">&nbsp;</span>'
+import urllib
+import draw
 
 ## Tag flter: renders color codes to html
-def rainbow(codes):
-  if not codes:
-    return ""
+@contextfilter
+def rainbow(ctx, hexcode):
+  colors = []
+  for x in range(6):
+    colors.append([int(c,16) for c in hexcode[x:x+3]])
 
-  logging.info("rainbow this: %s" % str(codes))
-  return TWRAPER % reduce(
-      lambda x,a:a+x,
-      map( lambda color: TEMPLATE %tuple(color), codes)
-  )
+  lines = draw.rb(colors) 
 
-## Helper: calculates 5 colors for post
-def old_make_rainbow(*a):
-  # remove this shit 
-  secret = 'YOBA'# FIXME
-  a = map(str,a)
-  a.insert(0,secret)
-  key = str.join("-", a)
+  return '<img src="data:image/png,%s" width=20 heigh=20 />' % urllib.quote(
+          draw.data(lines)
+        )
 
-  codes = [[]]
-  for x in md5(key).digest()[:15]:
-    codes[-1].append(ord(x))
+def install_jinja2():
+  from tipfy.ext.jinja2 import get_env
+  environment = get_env()
+  environment.filters['rainbow'] = rainbow
 
-    if len(codes[-1]) == 3:
-      codes.append([])
-
-  logging.info("code: %s" % str(codes))
-
-  return codes[:-1]
 
 def make_rainbow(*a):
   """ function makes rainbow codes """
@@ -46,4 +37,3 @@ def make_rainbow(*a):
   rb_hash = md5(key).hexdigest()[:18]
   logging.info("rainbow code: %s" % rb_hash)
   return rb_hash
-  

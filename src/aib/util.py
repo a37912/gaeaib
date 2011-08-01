@@ -15,6 +15,8 @@ from google.appengine.api import channel
 from django.utils.simplejson import dumps
 from tipfy import NotFound, get_config
 import rainbow
+rainbow.install_jinja2()
+
 from models import Board, BoardCounter, Thread, ThreadIndex, Cache
 from render import Render
 import rss
