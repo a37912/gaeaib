@@ -112,6 +112,9 @@ def obfuscate_ip(ip):
 # @param board - string board name
 # @param thread - thread id where to post or "new"
 class Post(RequestHandler, SecureCookieMixin):
+  NEWFAG = get_config("aib", "newfag", None)
+  OLDFAG = get_config("aib", "oldfag_level")
+
   middleware = [SessionMiddleware]
   def get(self, board, thread):
     return redirect("/%s/%d" %( board, thread) )
@@ -126,7 +129,7 @@ class Post(RequestHandler, SecureCookieMixin):
     regtime = person_cookie.get("regtime", time.time())
 
     person_cookie.update({
-        "postcount": count+1,
+        "postcount": count,
         "regtime": regtime
     })
     logging.info("person: %d %d" % (count, regtime))
@@ -144,6 +147,12 @@ class Post(RequestHandler, SecureCookieMixin):
       logging.warning("wipe redirect: %r" % self.request.remote_addr)
       return redirect_out()
 
+    # enforce 733t m0d3
+    if self.NEWFAG and \
+            not self.p.get("postcount") > self.OLDFAG and \
+            (board,thread) not in self.NEWFAG:
+        logging.warning("why so newfag?")
+        return redirect("/%s/%d/" % self.NEWFAG[0])
 
     # validate post form
     form = PostForm(self.request.form)
@@ -158,6 +167,9 @@ class Post(RequestHandler, SecureCookieMixin):
     key = board + "%d" % post
     cookie = self.get_secure_cookie(key)
     cookie["win"] = key
+
+    if not self.NEWFAG or (board,thread) not in self.NEWFAG:
+        self.p["postcount"] += 1
 
     return self.response_ok(board, thread, post)
 

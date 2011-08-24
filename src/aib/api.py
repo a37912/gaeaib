@@ -131,6 +131,8 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
   middleware = [SessionMiddleware]
 
   WATCH_TIME = get_config("aib.util", "watch_time")
+  NEWFAG = get_config("aib", "newfag", None)
+  OLDFAG = get_config("aib", "oldfag_level")
 
   def post(self, board, thread):
     # FIXME: move subscribe crap somewhere out
@@ -161,6 +163,12 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
         token = None
 
     post_level = util.post_level(self.request.remote_addr)
+
+    if self.NEWFAG and \
+      not person_cookie.get("postcount") > self.OLDFAG and \
+      (board, thread) not in self.NEWFAG:
+          post_level = "err"
+
 
     return json_response( 
         {
