@@ -54,7 +54,7 @@ inbound_services:
 - channel_presence
 - xmpp_subscribe
 - xmpp_message
-- xmpp_presence
+#- xmpp_presence
 
 builtins:
 - datastore_admin: on
