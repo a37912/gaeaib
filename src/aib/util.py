@@ -234,14 +234,16 @@ def bump(boards, thread):
   board_db = Board.get_by_key_name(boards)
   main = boards[0]
 
-  threads = get_config('aib.ib', 'thread_per_page') * \
-    get_config('aib.ib', 'board_pages')
+  per_page = get_config('aib.ib', 'thread_per_page')
+  pages = get_config('aib.ib', 'board_pages')
+  threads = per_page * pages
 
   def hide(linked, board):
     for _board, thread in list(linked):
         if board == _board:
             linked.remove((board, thread))
 
+  add = 0
   for x,(name,board) in enumerate(zip(boards,board_db)):
     if not board:
       board = Board(key_name=name)
@@ -257,11 +259,12 @@ def bump(boards, thread):
 
     if main[-1] == '~':
       hide(board.linked, main)
+      add = per_page/3
 
     if (main,thread) in board.linked:
       board.linked.remove((main,thread))
 
-    board.linked.insert(0, (main,thread))
+    board.linked.insert(add, (main,thread))
     board.linked = board.linked[:threads]
 
   main_db = board_db[0]
@@ -269,7 +272,7 @@ def bump(boards, thread):
   if thread in main_db.thread:
     main_db.thread.remove(thread)
 
-  main_db.thread.insert(0, thread)
+  main_db.thread.insert(add, thread)
   main_db.thread = main_db.thread[:threads]
 
   db.put(board_db)
