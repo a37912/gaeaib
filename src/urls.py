@@ -37,6 +37,13 @@ def get_rules():
       handler="aib.ib.Index",
       defaults = {"tpl" : "about.html" }
     ),
+    Rule(
+      "/xmpp",
+      endpoint="index",
+      handler="aib.ib.Index",
+      defaults = {"tpl" : "xmpp.html" }
+    ),
+
     Rule( 
       "/boardlist", 
       endpoint="list", 
