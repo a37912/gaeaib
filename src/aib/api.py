@@ -164,10 +164,12 @@ class UpdateToken(RequestHandler, SecureCookieMixin, CookieMixin):
 
     post_level = util.post_level(self.request.remote_addr)
 
+    """
     if self.NEWFAG and \
       not person_cookie.get("postcount") > self.OLDFAG and \
       (board, thread) not in self.NEWFAG:
           post_level = "err"
+    """
 
 
     return json_response( 

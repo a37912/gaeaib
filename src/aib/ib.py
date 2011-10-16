@@ -127,12 +127,13 @@ class Post(RequestHandler, SecureCookieMixin):
 
     count = person_cookie.get("postcount", 0)
     regtime = person_cookie.get("regtime", time.time())
+    up = person_cookie.get("update")
 
     person_cookie.update({
         "postcount": count,
         "regtime": regtime
     })
-    logging.info("person: %d %d" % (count, regtime))
+    logging.info("person: %d %d %r" % (count, regtime, up))
 
     self.p = person_cookie
 
@@ -150,9 +151,11 @@ class Post(RequestHandler, SecureCookieMixin):
     # enforce 733t m0d3
     if self.NEWFAG and \
             not self.p.get("postcount") > self.OLDFAG and \
-            (board,thread) not in self.NEWFAG:
+            (board,thread) not in self.NEWFAG and \
+            thread == 'new':
+        board += u'~'
+
         logging.warning("why so newfag?")
-        return redirect("/%s/%d/" % self.NEWFAG[0])
 
     # validate post form
     form = PostForm(self.request.form)

@@ -147,9 +147,6 @@ def save_post(request, data, board, thread, ip):
     if not thread_db:
       raise NotFound()
 
-  per_page = get_config('aib.ib', 'thread_per_page')
-  pages = get_config('aib.ib', 'board_pages')
-
   rb = rainbow.make_rainbow(ip, board, thread)
   data['rainbow'] = rb
   data['overlay'] = board in OVER
@@ -237,6 +234,14 @@ def bump(boards, thread):
   board_db = Board.get_by_key_name(boards)
   main = boards[0]
 
+  threads = get_config('aib.ib', 'thread_per_page') * \
+    get_config('aib.ib', 'board_pages')
+
+  def hide(linked, board):
+    for _board, thread in list(linked):
+        if board == _board:
+            linked.remove((board, thread))
+
   for x,(name,board) in enumerate(zip(boards,board_db)):
     if not board:
       board = Board(key_name=name)
@@ -250,16 +255,22 @@ def bump(boards, thread):
         board.thread
       ]
 
+    if main[-1] == '~':
+      hide(board.linked, main)
+
     if (main,thread) in board.linked:
       board.linked.remove((main,thread))
 
     board.linked.insert(0, (main,thread))
+    board.linked = board.linked[:threads]
 
   main_db = board_db[0]
+
   if thread in main_db.thread:
     main_db.thread.remove(thread)
 
   main_db.thread.insert(0, thread)
+  main_db.thread = main_db.thread[:threads]
 
   db.put(board_db)
 

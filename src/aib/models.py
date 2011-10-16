@@ -84,6 +84,9 @@ class Thread(db.Model):
     ret = list(set(ret))
     ret.insert(0, self.board)
 
+    if self.board[-1] == '~':
+        ret.insert(1, self.board[:-1])
+
     return ret
 
   def promote_boards(self):
